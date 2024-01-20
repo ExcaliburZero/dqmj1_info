@@ -6,9 +6,12 @@ u32 checksum @ 0x0C;
 u32 atm @ 0x188;
 struct monster {
     u8 monster_name[0x09];
-    u8 unknown[0x7];
+    u8 unkown_a[0x3];
+    u16 species; // Confirmed, but does not appear to auto update rank + traits + resistances, does update family
+    u8 unknown_b;
+    u8 unkown_c; // changed, but did not notice any effect
     u8 sex; // 0=+, 1=-, 2=+-
-    u8 unknown_b[0x61];
+    u8 unknown_d[0x61];
     
     u8 level; // Confirmed
     u8 unknown_2;
@@ -50,7 +53,7 @@ struct monster {
     u8 unknown_17[0xA];
     u8 equipment;
 
-    // Skill sets
+    // Skill sets // TODO: change to arrays of 3 elements
     u8 first_skill_set_id;
     u8 second_skill_set_id;
     u8 third_skill_set_id;

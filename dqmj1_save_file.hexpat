@@ -48,8 +48,23 @@ struct monster {
     // Note: Exp to next level is not stored, it is re-calculated based on the monster's level
     u8 unknown_17[0xB];
     u8 equipment;
-    u8 unknown_last[0x64];
+
+    // Skill sets
+    u8 first_skill_set_id;
+    u8 second_skill_set_id;
+    u8 third_skill_set_id;
+    u8 first_skill_set_points;
+    u8 second_skill_set_points;
+    u8 third_skill_set_points;
+    u8 first_set_num_unlocked_skills;
+    u8 second_set_num_unlocked_skills;
+    u8 third_set_num_unlocked_skills;
+
+    u8 unknown_20;
+    u16 unallocated_skill_points; // TODO: confirm size
+    u8 unknown_last[0x59];
 };
 //monster first_monster @ 0x6CE;
 monster first_monster @ 0x65C;
 monster second_monster @ 0x7F0;
+monster third_monster @ 0x984;

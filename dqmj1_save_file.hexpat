@@ -63,7 +63,11 @@ struct monster {
 
     u8 unknown_20;
     u16 unallocated_skill_points; // TODO: confirm size
-    u8 unknown_last[0x59];
+    u8 first_skill_set_skills[0x1E]; // TODO: confirm size
+    u8 unkown_21;
+    u8 second_skill_set_skills[0x1E]; // TODO: confirm size
+    // TODO: find exact location and size of third skill set skills
+    u8 unknown_last[0x1C];
 };
 //monster first_monster @ 0x6CE;
 monster first_monster @ 0x65C;

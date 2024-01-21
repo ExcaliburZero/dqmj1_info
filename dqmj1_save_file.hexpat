@@ -1,10 +1,3 @@
-u24 magic @ 0x00;
-u32 gold @ 0x184; // TODO: confirm size
-u32 playtime @ 0x2C; // TODO: confirm extent and format
-u32 extra_magic[0x02] @ 0x04;
-u32 checksum @ 0x0C;
-u8 player_name[0x06] @ 0x32; // TODO: confirm extent
-u32 atm @ 0x188;
 struct monster {
     u8 monster_name[0x09];
     u8 unkown_a[0x3];
@@ -73,7 +66,16 @@ struct monster {
     // TODO: find exact location and size of third skill set skills
     u8 unknown_last[0x1C];
 };
-//monster first_monster @ 0x6CE;
+
+u24 magic @ 0x00;
+u32 extra_magic[0x02] @ 0x04;
+u32 checksum @ 0x0C;
+
+u32 playtime @ 0x2C; // TODO: confirm extent and format
+u8 player_name[0x06] @ 0x32; // TODO: confirm extent
+u32 gold @ 0x184; // TODO: confirm size
+u32 atm @ 0x188;
+
 monster first_monster @ 0x65C;
 monster second_monster @ 0x7F0;
 monster third_monster @ 0x984;

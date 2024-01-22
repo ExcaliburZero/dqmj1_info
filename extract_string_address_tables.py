@@ -30,13 +30,20 @@ def main(argv: List[str]):
 
     string_locations = {
         pathlib.Path("arm9.bin"): (0x02000000, [
-            StringAddressTable("monster_species_names", 0x0207785c, 0x02078058),
-            StringAddressTable("skill_set_names", 0x020763e0, 0x020767e0),
-            StringAddressTable("skill_names", 0x02076be8, 0x02077058),
-            StringAddressTable("mnamemes", 0x02075fe0, 0x020763dc),
-            StringAddressTable("unknown_a", 0x02074ce0, 0x02074ddc),
-            StringAddressTable("tactic_names", 0x02074a88, 0x02074aa4),
-            StringAddressTable("skill_descriptions", 0x02074fe0, 0x020753dc),
+            StringAddressTable("monster_species_names", 0x0207785c, 0x0207805c),
+            StringAddressTable("skill_set_names", 0x020763e0, 0x020767e4),
+            StringAddressTable("skill_names", 0x02076be8, 0x0207705c),
+            StringAddressTable("mnamemes", 0x02075fe0, 0x020763e0),
+            StringAddressTable("unknown_a", 0x02074ce0, 0x02074de0),
+            StringAddressTable("tactic_names", 0x02074a88, 0x02074aa8),
+            StringAddressTable("skill_descriptions", 0x02074fe0, 0x020753e0),
+            StringAddressTable("skill_set_names_and_descriptions", 0x020753e0, 0x020757e0),
+            StringAddressTable("item_names", 0x020767e4, 0x02076be8),
+            StringAddressTable("trait_names", 0x020757e0, 0x02075be0),
+            StringAddressTable("enemy_scout_names", 0x02075be0, 0x02075fe0),
+            StringAddressTable("unknown_b", 0x0207705c, 0x0207785c),
+            StringAddressTable("unknown_c", 0x02074a04, 0x02074a14),
+            StringAddressTable("color_names", 0x02074a54, 0x02074a6c),
         ]),
     }
 

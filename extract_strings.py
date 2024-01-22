@@ -26,7 +26,7 @@ def main(argv: List[str]):
 
     string_locations = {
         pathlib.Path("arm9.bin"): (0x02000000, [
-            StringTable("many_strings", 0x0207805c, 0x02083de3)
+            StringTable("many_strings", 0x0207805c, 0x02083de3),
         ]),
     }
 

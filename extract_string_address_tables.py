@@ -30,7 +30,8 @@ def main(argv: List[str]):
 
     string_locations = {
         pathlib.Path("arm9.bin"): (0x02000000, [
-            StringAddressTable("monster_species_names", 0x0207785c, 0x02078058)
+            StringAddressTable("monster_species_names", 0x0207785c, 0x02078058),
+            StringAddressTable("skill_set_names", 0x020763e0, 0x020767e0),
         ]),
     }
 

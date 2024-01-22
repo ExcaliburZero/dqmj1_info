@@ -33,6 +33,10 @@ def main(argv: List[str]):
             StringAddressTable("monster_species_names", 0x0207785c, 0x02078058),
             StringAddressTable("skill_set_names", 0x020763e0, 0x020767e0),
             StringAddressTable("skill_names", 0x02076be8, 0x02077058),
+            StringAddressTable("mnamemes", 0x02075fe0, 0x020763dc),
+            StringAddressTable("unknown_a", 0x02074ce0, 0x02074ddc),
+            StringAddressTable("tactic_names", 0x02074a88, 0x02074aa4),
+            StringAddressTable("skill_descriptions", 0x02074fe0, 0x020753dc),
         ]),
     }
 

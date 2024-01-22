@@ -32,6 +32,7 @@ def main(argv: List[str]):
         pathlib.Path("arm9.bin"): (0x02000000, [
             StringAddressTable("monster_species_names", 0x0207785c, 0x02078058),
             StringAddressTable("skill_set_names", 0x020763e0, 0x020767e0),
+            StringAddressTable("skill_names", 0x02076be8, 0x02077058),
         ]),
     }
 
@@ -61,7 +62,7 @@ def main(argv: List[str]):
                             buffer[0] + buffer[1] * 0x100 + buffer[2] * 0x10000 + buffer[3] * 0x1000000
                         )
                         matches = mined_strings[mined_strings["global_address"] == string_address]["string"]
-                        string = matches.iloc[0] if len(matches) > 0 else None
+                        string = matches.iloc[0] if len(matches) > 0 else "ADDRESS_NOT_FOUND_DURING_DATA_MINING"
                         strings.append((file_subpath, table.name, num_found, hex(num_found), hex(start + j + offset), hex(start + j), string_address, string))
 
                         buffer = []
@@ -76,7 +77,7 @@ def main(argv: List[str]):
                         buffer[0] + buffer[1] * 0x100 + buffer[2] * 0x10000 + buffer[3] * 0x1000000
                     )
                     matches = mined_strings[mined_strings["global_address"] == string_address]["string"]
-                    string = matches.iloc[0] if len(matches) > 0 else None
+                    string = matches.iloc[0] if len(matches) > 0 else "ADDRESS_NOT_FOUND_DURING_DATA_MINING"
                     strings.append((file_subpath, table.name, num_found, hex(num_found), hex(start + j + offset), hex(start + j), string_address, string))
 
                     buffer = []

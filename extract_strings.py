@@ -26,7 +26,8 @@ def main(argv: List[str]):
 
     string_locations = {
         pathlib.Path("arm9.bin"): (0x02000000, [
-            StringTable("many_strings", 0x0207805c, 0x02083de3),
+            StringTable("strings_a", 0x020735f0, 0x020749e8),
+            StringTable("strings_b", 0x0207805c, 0x02083de3),
         ]),
     }
 
@@ -48,7 +49,7 @@ def main(argv: List[str]):
                 num_before = len(strings)
                 buffer = []
                 for i, byte in enumerate(file_bytes[start:start + length]):
-                    if byte == 0x00:
+                    if byte == 0x00 and len(buffer) == 0:
                         continue
                     elif byte == 0xFF:
                         string = "".join(buffer)
@@ -75,6 +76,7 @@ def byte_to_char(byte: int) -> str:
     char_upper = chr((byte - A) + ord("A"))
 
     mapping = {
+        0x0: "",
         0x1: "1",
         0x2: "2",
         0x3: "3",

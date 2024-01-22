@@ -55,6 +55,9 @@ def main(argv: List[str]):
             StringAddressTable("skill_targeting_types", 0x02074a28, 0x02074a3c),
             StringAddressTable("unknown_h", 0x02074ae8, 0x02074b2c),
             StringAddressTable("unknown_i", 0x02074be0, 0x02074c60),
+            StringAddressTable("unknown_j", 0x02084018, 0x02084118),
+            StringAddressTable("unknown_k", 0x02083ebc, 0x02083efc),
+            StringAddressTable("battle_messages", 0x02084318, 0x02084b18),
         ]),
     }
 

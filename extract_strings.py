@@ -28,6 +28,7 @@ def main(argv: List[str]):
         pathlib.Path("arm9.bin"): (0x02000000, [
             StringTable("strings_a", 0x020735f0, 0x020749e8),
             StringTable("strings_b", 0x0207805c, 0x02083de3),
+            StringTable("strings_c", 0x02084b18, 0x0208a7b8),
         ]),
     }
 

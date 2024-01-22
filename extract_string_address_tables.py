@@ -44,6 +44,15 @@ def main(argv: List[str]):
             StringAddressTable("unknown_b", 0x0207705c, 0x0207785c),
             StringAddressTable("unknown_c", 0x02074a04, 0x02074a14),
             StringAddressTable("color_names", 0x02074a54, 0x02074a6c),
+            StringAddressTable("day_and_night", 0x020749ec, 0x020749f4),
+            StringAddressTable("nsbmd_filenames", 0x02074de0, 0x02074fe0),
+            StringAddressTable("unknown_d", 0x02074c60, 0x02074ddc),
+            StringAddressTable("unknown_e", 0x02074b2c, 0x02074b74),
+            StringAddressTable("unknown_f", 0x02074a6c, 0x02074a88),
+            StringAddressTable("battle_and_field_and_anywhere", 0x020749f4, 0x02074a04),
+            StringAddressTable("unknown_g", 0x02074a3c, 0x02074a54),
+            StringAddressTable("battle_targets", 0x02074a14, 0x02074a28),
+            StringAddressTable("skill_targeting_types", 0x02074a28, 0x02074a3c),
         ]),
     }
 

@@ -21,11 +21,13 @@ def main(argv: List[str]):
         file_bytes = input_stream.read()
 
     buffer = []
-    for byte in file_bytes[start:start + length]:
+    for i, byte in enumerate(file_bytes[start:start + length]):
         if byte == 0x00:
             continue
         elif byte == 0xFF:
-            print("".join(buffer))
+            string = "".join(buffer)
+            if string != "":
+                print(string, hex(i + start))
             buffer = []
         else:
             char = byte_to_char(byte)
@@ -49,10 +51,14 @@ def byte_to_char(byte: int) -> str:
         0x9: "9",
         0xa: " ",
         0x55: "Ü",
+        0x71: "?",
+        0x87: "+",
         0x8d: "II",
         0x8e: "III",
         0x9b: "'",
+        0xac: ".",
         0xad: "&",
+        0xfe: "\\n",
     }
 
     if char_lower.islower() and char_lower.isascii():

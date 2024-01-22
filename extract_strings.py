@@ -76,7 +76,7 @@ def byte_to_char(byte: int) -> str:
     char_upper = chr((byte - A) + ord("A"))
 
     mapping = {
-        0x0: "",
+        0x0: "0",
         0x1: "1",
         0x2: "2",
         0x3: "3",

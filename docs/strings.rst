@@ -17,6 +17,10 @@ Each character in a string is 1 byte in length. Strings end with :code:`0xFF` an
 
     Add link to a page with a table showing all of the character mappings.
 
+.. todo::
+
+    Can strings start with the character "0"? If so how would that "0" be differentiated from padding?
+
 Examples
 ========
 

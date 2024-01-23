@@ -15,6 +15,8 @@ Species
 *******
 Each monster has a 16bit unsigned integer noting its species (ex. Slime, Dracky, etc.).
 
+For information on which species ids correspond with which monster species, see `this table <https://github.com/ExcaliburZero/dqmj1_info/blob/master/data/monsters.csv>`_.
+
 ****
 Rank
 ****

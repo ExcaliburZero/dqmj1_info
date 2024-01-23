@@ -13,6 +13,10 @@ DQMJ1 Unofficial Documentation
    strings
    monsters
 
+This is documentation on technical details of the Nintendo DS game `Dragon Quest Monster: Joker <https://en.wikipedia.org/wiki/Dragon_Quest_Monsters:_Joker>`_.
+
+This documentation is made by fans of the game. It has **not** been endorsed by and has **no** affiliation with Tose or Square Enix.
+
 Data
 ----
 * :ref:`Strings <strings>` are text stored as data in the game.

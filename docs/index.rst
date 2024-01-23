@@ -8,7 +8,8 @@ Welcome to DQMJ1 Unofficial Documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+
+   strings
 
 
 

@@ -8,6 +8,12 @@ DQMJ1 Unofficial Documentation
 
 .. toctree::
    :maxdepth: 1
+   :hidden:
 
    strings
    monsters
+
+Data
+----
+* :ref:`Strings <strings>` are text stored as data in the game.
+* :ref:`Monsters <monsters>` are individual monsters that belong to the player or are encountered in battle.

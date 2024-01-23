@@ -8,6 +8,15 @@ Character encoding
 ******************
 Each character in a string is 1 byte in length. Strings end with :code:`0xFF` and may have one or more :code:`0x00` after the end for padding purposes. Strings are typically padded out into an integer number of doublewords (32bits / 4 bytes).
 
+* :code:`00` to :code:`09` are the digits "0" to "9"
+* :code:`0a` is a space " "
+* :code:`0b` to :code:`24` are capital Latin letters "A" - "Z"
+* :code:`25` to :code:`3E` are lowercase Latin letters "a" - "z"
+
+.. todo::
+
+    Add link to a page with a table showing all of the character mappings.
+
 Examples
 ========
 

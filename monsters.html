@@ -2,10 +2,12 @@
 <html class="no-js" lang="en" data-content_root="./">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="#" /><link rel="search" title="Search" href="search.html" />
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="Strings" href="strings.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 --><title>Index - DQMJ1 Unofficial Documentation</title>
-<link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
+        <title>Monsters - DQMJ1 Unofficial Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=36a5483c" />
     
@@ -132,7 +134,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -152,9 +154,9 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <ul>
+  <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="strings.html">Strings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="monsters.html">Monsters</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Monsters</a></li>
 </ul>
 
 </div>
@@ -174,7 +176,8 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -182,16 +185,38 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
-          
-<section class="genindex-section">
-  <h1 id="index">Index</h1>
-  <div class="genindex-jumpbox"></div>
+          <section id="monsters">
+<h1>Monsters<a class="headerlink" href="#monsters" title="Link to this heading">#</a></h1>
+<p>Individual monsters have various information describing them.</p>
+<section id="name">
+<h2>Name<a class="headerlink" href="#name" title="Link to this heading">#</a></h2>
+<p>Each monster has a name, given by the player. The name is encoded as a <a class="reference internal" href="strings.html#strings"><span class="std std-ref">string</span></a>. The name can have up to 8 characters.</p>
+</section>
+<section id="species">
+<h2>Species<a class="headerlink" href="#species" title="Link to this heading">#</a></h2>
+<p>Each monster has a 16bit unsigned integer noting its species (ex. Slime, Dracy, etc.).</p>
+</section>
+<section id="rank">
+<h2>Rank<a class="headerlink" href="#rank" title="Link to this heading">#</a></h2>
+<p>Each monster has a 8bit unsigned integer noting its rank (ex. F, E, D, C, etc.). Note that while monster species each have an associated rank, the rank for each individual monster is stored separate from the species id and thus could be incosistent with the monster species’ rank if edited.</p>
+<ul class="simple">
+<li><p>1=F</p></li>
+<li><p>2=E</p></li>
+<li><p>3=D</p></li>
+<li><p>4=C</p></li>
+<li><p>5=B</p></li>
+<li><p>6=A</p></li>
+<li><p>7=S</p></li>
+<li><p>8=X</p></li>
+<li><p>9=???</p></li>
+</ul>
+</section>
 </section>
 
         </article>
@@ -200,7 +225,17 @@
         
         <div class="related-pages">
           
-          
+          <a class="prev-page" href="strings.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Strings</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -219,8 +254,29 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Monsters</a><ul>
+<li><a class="reference internal" href="#name">Name</a></li>
+<li><a class="reference internal" href="#species">Species</a></li>
+<li><a class="reference internal" href="#rank">Rank</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

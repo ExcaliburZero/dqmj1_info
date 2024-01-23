@@ -7,9 +7,10 @@ Welcome to DQMJ1 Unofficial Documentation!
 ==========================================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    strings
+   monsters
 
 
 

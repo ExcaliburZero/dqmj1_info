@@ -12,6 +12,7 @@ DQMJ1 Unofficial Documentation
 
    strings
    monsters
+   save_files
 
 This is documentation on technical details of the Nintendo DS game `Dragon Quest Monster: Joker <https://en.wikipedia.org/wiki/Dragon_Quest_Monsters:_Joker>`_.
 
@@ -21,3 +22,4 @@ Data
 ----
 * :ref:`Strings <strings>` are text stored as data in the game.
 * :ref:`Monsters <monsters>` are individual monsters that belong to the player or are encountered in battle.
+* :ref:`Save files <save_files>` are files that record the player's progress and latest save state in the game.

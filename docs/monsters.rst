@@ -11,7 +11,7 @@ Each monster has a name, given by the player. The name is encoded as a :ref:`str
 *******
 Species
 *******
-Each monster has a 16bit unsigned integer noting its species (ex. Slime, Dracy, etc.).
+Each monster has a 16bit unsigned integer noting its species (ex. Slime, Dracky, etc.).
 
 ****
 Rank

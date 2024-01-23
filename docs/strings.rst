@@ -20,10 +20,10 @@ First example
 
 Would decode to "slime".
 
+:code:`37 30 2D 31 29` being the characters, :code:`FF` denoting the end of the string, and :code:`00 00` being padding to make the string an integer number of doublewords (32bits).
+
 Second example
 --------------
-
-:code:`37 30 2D 31 29` being the characters, :code:`FF` denoting the end of the string, and :code:`00 00` being padding to make the string an integer number of doublewords (32bits).
 
 .. code-block::
 

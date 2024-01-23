@@ -29,3 +29,7 @@ Each monster has a 8bit unsigned integer noting its rank (ex. F, E, D, C, etc.).
 * 7=S
 * 8=X
 * 9=???
+
+.. todo::
+
+    Add remaining sections.

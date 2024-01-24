@@ -3,9 +3,10 @@ struct monster {
     u8 unkown_a[0x3];
     u16 species; // Confirmed, but does not appear to auto update rank + traits + resistances, does update family
     u8 rank; // 1=F, 2=E, 3=D, 4=C, 5=B, 6=A, 7=S, 8=X, 9=???
-    u8 unkown_c; // changed, but did not notice any effect
+    u8 unkown_c; // changed, but did not notice any effect. It is based indirectly on the monster's species, but not sure what it is
     u8 sex; // 0=+, 1=-, 2=+-
-    u8 unknown_d[0x61];
+    u32 unknown_d;
+    u8 unknown_e[0x5d];
     
     u8 level; // Confirmed
     u8 unknown_2;

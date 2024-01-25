@@ -8,8 +8,10 @@ struct monster {
     u32 unknown_d;
     u8 unknown_de[4];
     u8 unknown_e[24];
-    u8 unknown_f[31];
-    u8 unknown_g[34];
+    u8 unknown_f[29];
+    u8 unknown_f2[2];
+    u8 unknown_g[29];
+    u8 unknown_g2[5];
     
     u8 level; // Confirmed
     u8 unknown_2;

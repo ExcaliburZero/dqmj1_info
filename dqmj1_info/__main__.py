@@ -7,6 +7,7 @@ import sys
 
 from . import extract_strings
 
+
 def main(argv: List[str]):
     logging.basicConfig(level=logging.DEBUG, format="%(levelname)s> %(message)s")
 
@@ -27,7 +28,9 @@ def main(argv: List[str]):
     logging.info(f"Created output directory: {output_directory}")
 
     strings_csv = output_directory / "strings_without_context.csv"
-    extract_strings.main(["--data_directory", str(input_directory), "--output_csv", str(strings_csv)])
+    extract_strings.main(
+        ["--data_directory", str(input_directory), "--output_csv", str(strings_csv)]
+    )
     logging.info(f"Finished writing extracted strings to: {strings_csv}")
 
 

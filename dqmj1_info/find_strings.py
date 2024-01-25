@@ -7,6 +7,7 @@ import sys
 
 # TODO: endianess
 
+
 @dataclass(frozen=True)
 class StringPattern:
     string: str
@@ -17,27 +18,22 @@ class StringPattern:
             return None
 
         match = []
-        changes = [
-            b - a
-            for a, b in zip(ints[:-1], ints[1:])
-        ]
+        changes = [b - a for a, b in zip(ints[:-1], ints[1:])]
         for a, b in zip(self.pattern, changes):
             if a != b:
                 return None
-            
-        match = ints[:len(self.string)]
+
+        match = ints[: len(self.string)]
 
         return match
 
     @staticmethod
     def from_str(string: str) -> "StringPattern":
         character_ints = [ord(c) for c in string]
-        pattern = [
-            b - a
-            for a, b in zip(character_ints[:-1], character_ints[1:])
-        ]
+        pattern = [b - a for a, b in zip(character_ints[:-1], character_ints[1:])]
 
         return StringPattern(string=string, pattern=pattern)
+
 
 def main(argv: List[str]):
     parser = argparse.ArgumentParser()
@@ -56,22 +52,22 @@ def main(argv: List[str]):
                 if not string.isalpha():
                     continue
 
-                #string = string[1:] # Remove first character since it is probably uppercase
+                # string = string[1:] # Remove first character since it is probably uppercase
                 max_length = max(max_length, len(string))
 
                 string_patterns.append(StringPattern.from_str(string))
 
-    #for pattern in string_patterns:
+    # for pattern in string_patterns:
     #    print(pattern)
 
     for filepath in args.files:
-        #print("====", filepath, "====")
+        # print("====", filepath, "====")
         with open(filepath, "rb") as input_stream:
             file_bytes = input_stream.read()
 
         byte_buffer = collections.deque(maxlen=max_length)
         for i, byte in enumerate(file_bytes):
-            #print(byte, byte_buffer)
+            # print(byte, byte_buffer)
             byte_buffer.append(byte)
 
             for pattern in string_patterns:
@@ -79,9 +75,12 @@ def main(argv: List[str]):
                     match = pattern.match(list(byte_buffer)[j:])
                     if match:
                         match = [hex(b) for b in match]
-                        print(f"{filepath}:{hex(i + 1 - ((len(byte_buffer) - j)))}:", match, "matched_to:", pattern.string)
-        
-
+                        print(
+                            f"{filepath}:{hex(i + 1 - ((len(byte_buffer) - j)))}:",
+                            match,
+                            "matched_to:",
+                            pattern.string,
+                        )
 
 
 if __name__ == "__main__":

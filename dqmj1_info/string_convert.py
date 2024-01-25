@@ -3,6 +3,7 @@ from typing import List
 import argparse
 import sys
 
+
 def main(argv: List[str]):
     parser = argparse.ArgumentParser()
 
@@ -13,11 +14,10 @@ def main(argv: List[str]):
     converted_text = convert_string_to_hex(args.text)
     print(converted_text)
 
+
 def convert_string_to_hex(text: str) -> List[str]:
-    return [
-        hex(char_to_hex(c))
-        for c in text
-    ]
+    return [hex(char_to_hex(c)) for c in text]
+
 
 def char_to_hex(c: str) -> int:
     if c == c.upper():

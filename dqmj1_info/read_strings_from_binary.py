@@ -5,6 +5,7 @@ import argparse
 import collections
 import sys
 
+
 def main(argv: List[str]):
     parser = argparse.ArgumentParser()
 
@@ -21,7 +22,7 @@ def main(argv: List[str]):
         file_bytes = input_stream.read()
 
     buffer = []
-    for i, byte in enumerate(file_bytes[start:start + length]):
+    for i, byte in enumerate(file_bytes[start : start + length]):
         if byte == 0x00:
             continue
         elif byte == 0xFF:
@@ -33,9 +34,10 @@ def main(argv: List[str]):
             char = byte_to_char(byte)
             buffer.append(char)
 
+
 def byte_to_char(byte: int) -> str:
     a = 0x25
-    A = 0x0b
+    A = 0x0B
     char_lower = chr((byte - a) + ord("a"))
     char_upper = chr((byte - A) + ord("A"))
 
@@ -49,16 +51,16 @@ def byte_to_char(byte: int) -> str:
         0x7: "7",
         0x8: "8",
         0x9: "9",
-        0xa: " ",
+        0xA: " ",
         0x55: "Ü",
         0x71: "?",
         0x87: "+",
-        0x8d: "II",
-        0x8e: "III",
-        0x9b: "'",
-        0xac: ".",
-        0xad: "&",
-        0xfe: "\\n",
+        0x8D: "II",
+        0x8E: "III",
+        0x9B: "'",
+        0xAC: ".",
+        0xAD: "&",
+        0xFE: "\\n",
     }
 
     if char_lower.islower() and char_lower.isascii():
@@ -68,10 +70,10 @@ def byte_to_char(byte: int) -> str:
     elif byte in mapping:
         return mapping[byte]
     else:
-        #return "?"
-        #return "[" + char + "]"
+        # return "?"
+        # return "[" + char + "]"
         return "[" + hex(byte) + "]"
 
-        
+
 if __name__ == "__main__":
     main(sys.argv[1:])

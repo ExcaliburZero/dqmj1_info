@@ -9,8 +9,9 @@ DATA_SIZE = 10613
 DATA_CHECKSUM_START = 0xC
 DATA_CHECKSUM_END = 0xF
 
-#ENDIANESS = "big"
-ENDIANESS = "little" #confirmed for DQJ2 save files
+# ENDIANESS = "big"
+ENDIANESS = "little"  # confirmed for DQJ2 save files
+
 
 @dataclass
 class SaveDataRaw:
@@ -28,17 +29,16 @@ class SaveDataRaw:
         for i, b in enumerate(checksum_bytes):
             self.raw[i + DATA_CHECKSUM_START] = b
 
-
     @staticmethod
     def from_sav(input_stream: IO[bytes]) -> "SaveDataRaw":
         return SaveDataRaw(bytearray(input_stream.read(HEADER_SIZE + DATA_SIZE * 4)))
-    
+
     @staticmethod
     def __checksum(data: List[bytes]) -> int:
         num = 0
         j = 0
         while j < DATA_SIZE:
-            value = int.from_bytes(data[j * 4:j * 4 + 4], ENDIANESS)
+            value = int.from_bytes(data[j * 4 : j * 4 + 4], ENDIANESS)
 
             num += value
             num = num & 0xFFFFFFFF
@@ -52,6 +52,7 @@ class SaveDataRaw:
 
     def write_sav(self, output_stream: IO[bytes]) -> None:
         output_stream.write(self.raw)
+
 
 if __name__ == "__main__":
     with open(sys.argv[1], "rb") as input_stream:

@@ -8,6 +8,7 @@ import pandas as pd
 
 ENDIANESS = "little"
 
+
 @dataclass
 class EnemyKind:
     species_id: int
@@ -23,7 +24,7 @@ class EnemyKind:
         input_stream.read(51)
         skil_set = int.from_bytes(input_stream.read(1), ENDIANESS)
         input_stream.read(75)
-        
+
         return EnemyKind(species_id=i, traits=traits, skill_set=skil_set)
 
     @staticmethod
@@ -35,6 +36,7 @@ class EnemyKind:
             entries.append(EnemyKind.from_bin(i, input_stream))
 
         return entries
+
 
 def main(argv: List[str]):
     parser = argparse.ArgumentParser()
@@ -48,6 +50,7 @@ def main(argv: List[str]):
         table = EnemyKind.read_bin(input_stream)
 
     pd.DataFrame(table).to_csv(args.output_csv, index=False)
+
 
 if __name__ == "__main__":
     main(sys.argv[1:])

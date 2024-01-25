@@ -5,8 +5,10 @@ import logging
 import pathlib
 import sys
 
+from . import enmy_kind_tbl
 from . import extract_strings
 from . import extract_string_address_tables
+from . import monster_species_table
 
 
 def main(argv: List[str]):
@@ -62,6 +64,38 @@ def main(argv: List[str]):
         ]
     )
     logging.info(f"Finished writing extracted string tables to: {strings_by_table_csv}")
+
+    ###
+    # Extract EnmyKindTbl
+    ###
+    enmy_kind_tbl_csv = output_directory / "EnmyKindTbl.csv"
+    enmy_kind_tbl.main(
+        [
+            "--table_filepath",
+            str(input_directory / "data" / "EnmyKindTbl.bin"),
+            "--output_csv",
+            str(enmy_kind_tbl_csv),
+        ]
+    )
+    logging.info(f"Finished extracting EnmyKindTbl.bin to: {enmy_kind_tbl_csv}")
+
+    ###
+    # Create monster species table
+    ###
+    monster_species_table_csv = output_directory / "monster_species.csv"
+    monster_species_table.main(
+        [
+            "--strings_csv",
+            str(strings_by_table_csv),
+            "--enmy_kind_tbl_csv",
+            str(enmy_kind_tbl_csv),
+            "--output_csv",
+            str(monster_species_table_csv),
+        ]
+    )
+    logging.info(
+        f"Finished creating monster species table: {monster_species_table_csv}"
+    )
 
 
 if __name__ == "__main__":

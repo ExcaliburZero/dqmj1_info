@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import IO, List
 
 import argparse
+import logging
 import sys
 
 import pandas as pd
@@ -48,6 +49,8 @@ def main(argv: List[str]):
 
     with open(args.table_filepath, "rb") as input_stream:
         table = EnemyKind.read_bin(input_stream)
+
+    logging.debug(f"Read {len(table)} entries from: {args.table_filepath}")
 
     pd.DataFrame(table).to_csv(args.output_csv, index=False)
 

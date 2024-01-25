@@ -57,7 +57,9 @@ def main(argv: List[str]):
                 num_before = len(strings)
                 buffer = []
                 for i, byte in enumerate(file_bytes[start : start + length]):
-                    if byte == 0x00 and len(buffer) == 0:
+                    # Note: The skipping of 0x0A at possible string start is due to an edge case I
+                    # saw at 0x0207d792
+                    if (byte == 0x00 or byte == 0x0A) and len(buffer) == 0:
                         continue
                     elif byte == 0xFF:
                         string = "".join(buffer)

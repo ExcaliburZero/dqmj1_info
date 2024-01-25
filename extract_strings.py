@@ -29,6 +29,7 @@ def main(argv: List[str]):
             StringTable("strings_a", 0x020735f0, 0x020749e8),
             StringTable("strings_b", 0x0207805c, 0x02083de3),
             StringTable("strings_c", 0x02084b18, 0x0208a7b8),
+            StringTable("strings_d", 0x0209072c, 0x02091753),
         ]),
     }
 

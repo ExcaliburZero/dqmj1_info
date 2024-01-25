@@ -6,7 +6,10 @@ struct monster {
     u8 unkown_c; // changed, but did not notice any effect. It is based indirectly on the monster's species, but not sure what it is
     u8 sex; // 0=+, 1=-, 2=+-
     u32 unknown_d;
-    u8 unknown_e[0x5d];
+    u8 unknown_de[4];
+    u8 unknown_e[24];
+    u8 unknown_f[31];
+    u8 unknown_g[34];
     
     u8 level; // Confirmed
     u8 unknown_2;

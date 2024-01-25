@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import IO, List
 
 import argparse
+import ast
 import logging
 import sys
 
@@ -22,11 +23,22 @@ def main(argv: List[str]):
     strings = pd.read_csv(args.strings_csv)
     enmy_kind_tbl = pd.read_csv(args.enmy_kind_tbl_csv)
 
+    enmy_kind_tbl["traits"] = enmy_kind_tbl["traits"].apply(
+        lambda x: ast.literal_eval(x)
+    )
+
     monster_names = strings[strings["table_name"] == "monster_species_names"]
+    trait_names = strings[strings["table_name"] == "trait_names"]
     skill_set_names = strings[strings["table_name"] == "skill_set_names"]
 
     def get_monster_name(species_id: int) -> str:
         return monster_names[monster_names["index_dec"] == species_id]["string"].iloc[0]
+
+    def get_trait_name(trait_id: int) -> str:
+        try:
+            return trait_names[trait_names["index_dec"] == trait_id]["string"].iloc[0]
+        except IndexError:
+            raise ValueError(f"Failed to find trait for id: {trait_id}")
 
     def get_skill_set_name(skill_set_id: int) -> str:
         return skill_set_names[skill_set_names["index_dec"] == skill_set_id][
@@ -40,13 +52,19 @@ def main(argv: List[str]):
                 row["species_id"],
                 get_monster_name(row["species_id"]),
                 row["traits"],
+                [
+                    get_trait_name(t)
+                    for t in row["traits"]
+                    if not pd.isnull(get_trait_name(t))
+                ],
                 row["skill_set"],
                 get_skill_set_name(row["skill_set"]),
             )
         )
 
     data = pd.DataFrame(
-        data_raw, columns=["index", "name", "trait_ids", "skill_set_id", "skill_set"]
+        data_raw,
+        columns=["index", "name", "trait_ids", "traits", "skill_set_id", "skill_set"],
     )
 
     pd.DataFrame(data).to_csv(args.output_csv, index=False)

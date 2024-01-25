@@ -1,6 +1,7 @@
 /old/
 .vscode/
 docs/_build
+notes.txt
 
 .~lock.*
 

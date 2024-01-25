@@ -48,7 +48,8 @@ struct monster {
     u32 exp; // TODO: confirm the size
     // Note: Exp to next level is not stored, it is re-calculated based on the monster's level
     u8 tactic;
-    u8 unknown_17[0xA];
+    u8 unknown_17[0x6];
+    u8 unknown_18[0x4];
     u8 equipment;
 
     // Skill sets // TODO: change to arrays of 3 elements

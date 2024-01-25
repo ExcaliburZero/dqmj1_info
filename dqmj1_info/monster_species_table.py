@@ -31,6 +31,19 @@ def main(argv: List[str]):
     trait_names = strings[strings["table_name"] == "trait_names"]
     skill_set_names = strings[strings["table_name"] == "skill_set_names"]
 
+    ranks = {
+        0: "",
+        1: "F",
+        2: "E",
+        3: "D",
+        4: "C",
+        5: "B",
+        6: "A",
+        7: "S",
+        8: "X",
+        9: "???",
+    }
+
     def get_monster_name(species_id: int) -> str:
         return monster_names[monster_names["index_dec"] == species_id]["string"].iloc[0]
 
@@ -51,6 +64,7 @@ def main(argv: List[str]):
             (
                 row["species_id"],
                 get_monster_name(row["species_id"]),
+                ranks[row["rank"]],
                 row["traits"],
                 [
                     get_trait_name(t)
@@ -64,7 +78,15 @@ def main(argv: List[str]):
 
     data = pd.DataFrame(
         data_raw,
-        columns=["index", "name", "trait_ids", "traits", "skill_set_id", "skill_set"],
+        columns=[
+            "index",
+            "name",
+            "rank",
+            "trait_ids",
+            "traits",
+            "skill_set_id",
+            "skill_set",
+        ],
     )
 
     pd.DataFrame(data).to_csv(args.output_csv, index=False)

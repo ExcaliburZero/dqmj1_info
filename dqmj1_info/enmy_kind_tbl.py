@@ -13,20 +13,24 @@ ENDIANESS = "little"
 @dataclass
 class EnemyKind:
     species_id: int
+    rank: int
     traits: List[int]
     skill_set: int
 
     @staticmethod
     def from_bin(i: int, input_stream: IO[bytes]) -> "EnemyKind":
         input_stream.read(4)
-        input_stream.read(4)
+
+        rank_and_something_else = int.from_bytes(input_stream.read(4), ENDIANESS)
+        rank = rank_and_something_else & 0x0F
+
         input_stream.read(8)
         traits = [b for b in input_stream.read(5)]
         input_stream.read(51)
         skil_set = int.from_bytes(input_stream.read(1), ENDIANESS)
         input_stream.read(75)
 
-        return EnemyKind(species_id=i, traits=traits, skill_set=skil_set)
+        return EnemyKind(species_id=i, rank=rank, traits=traits, skill_set=skil_set)
 
     @staticmethod
     def read_bin(input_stream: IO[bytes]) -> List["EnemyKind"]:

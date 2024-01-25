@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import List
 
 import argparse
+import logging
 import pathlib
 import sys
 
@@ -36,14 +37,14 @@ def main(argv: List[str]):
     strings = []
     for file_subpath, (offset, tables) in sorted(string_locations.items()):
         filepath = data_directory / file_subpath
-        print(filepath)
+        logging.debug(f"Extracting strings from: {filepath}")
 
         with open(filepath, "rb") as input_stream:
             file_bytes = input_stream.read()
-            print(len(file_bytes))
+            logging.debug(f"Read {len(file_bytes)} bytes from {filepath}")
 
             for table in tables:
-                print(table)
+                logging.debug(f"Reading table: {table}")
 
                 start = table.start - offset
                 length = table.end - table.start
@@ -67,7 +68,7 @@ def main(argv: List[str]):
                         buffer.append(char)
 
                 num_after = len(strings)
-                print("\t", num_after - num_before)
+                logging.debug(f"Read {num_after - num_before} strings from table.")
 
     pd.DataFrame(strings, columns=["filepath", "table_name", "global_address", "local_offset", "string"]).to_csv(output_csv, index=False)
 

@@ -70,7 +70,10 @@ struct monster {
     u8 skills[0x1E]; // TODO: confirm size
     u8 traits[0x1F]; // TODO: confirm size
     // TODO: find exact location and size of third skill set skills
-    u8 unknown_last[0x1C];
+    u8 unknown_21[10];
+    u8 level_when_hashed;
+    u16 hash;
+    u8 unknown_last[158];
 };
 
 u24 magic @ 0x00;

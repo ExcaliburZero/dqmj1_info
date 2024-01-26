@@ -9,6 +9,7 @@ from . import enmy_kind_tbl
 from . import extract_strings
 from . import extract_string_address_tables
 from . import monster_species_table
+from . import skill_tbl
 
 
 def main(argv: List[str]):
@@ -78,6 +79,20 @@ def main(argv: List[str]):
         ]
     )
     logging.info(f"Finished extracting EnmyKindTbl.bin to: {enmy_kind_tbl_csv}")
+
+    ###
+    # Extract SkillTbl
+    ###
+    skill_tbl_csv = output_directory / "SkillTbl.csv"
+    skill_tbl.main(
+        [
+            "--table_filepath",
+            str(input_directory / "data" / "SkillTbl.bin"),
+            "--output_csv",
+            str(skill_tbl_csv),
+        ]
+    )
+    logging.info(f"Finished extracting SkillTbl.bin to: {skill_tbl_csv}")
 
     ###
     # Create monster species table

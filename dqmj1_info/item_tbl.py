@@ -13,6 +13,8 @@ ENDIANESS = "little"
 @dataclass
 class Item:
     item_id: int
+    category: int
+    weapon_type: int
     attack_increase: int
     defense_increase: int
     agility_increase: int
@@ -22,7 +24,14 @@ class Item:
 
     @staticmethod
     def from_bin(i: int, input_stream: IO[bytes]) -> "Item":
-        input_stream.read(26)
+        category = int.from_bytes(input_stream.read(1), ENDIANESS)
+
+        input_stream.read(7)
+        input_stream.read(1)
+
+        weapon_type = int.from_bytes(input_stream.read(1), ENDIANESS)
+
+        input_stream.read(16)
 
         attack_increase = int.from_bytes(input_stream.read(1), ENDIANESS)
         defense_increase = int.from_bytes(input_stream.read(1), ENDIANESS)
@@ -35,6 +44,8 @@ class Item:
 
         return Item(
             item_id=i,
+            category=category,
+            weapon_type=weapon_type,
             attack_increase=attack_increase,
             defense_increase=defense_increase,
             agility_increase=agility_increase,

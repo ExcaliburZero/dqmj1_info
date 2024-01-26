@@ -26,12 +26,32 @@ def main(argv: List[str]):
     def get_item_name(item_id: int) -> str:
         return item_names[item_names["index_dec"] == item_id]["string"].iloc[0]
 
+    def get_item_category(category: int) -> str:
+        if category == 0:
+            return "0"
+        elif category == 1:
+            return "1"
+        elif category >= 2:
+            return "Weapon"
+
+        raise ValueError()
+
+    def get_weapon_type(category: int, weapon_type: int) -> str:
+        if category < 2:
+            return f"N/A ({weapon_type})"
+
+        WEAPON_TYPES = ["Sword", "Spear", "Axe", "Hammer", "Whip", "Claw", "Staff"]
+
+        return WEAPON_TYPES[weapon_type]
+
     data_raw = []
     for _, row in item_tbl.iterrows():
         data_raw.append(
             (
                 row["item_id"],
                 get_item_name(row["item_id"]),
+                get_item_category(row["category"]),
+                get_weapon_type(row["category"], row["weapon_type"]),
                 row["attack_increase"],
                 row["defense_increase"],
                 row["agility_increase"],
@@ -46,6 +66,8 @@ def main(argv: List[str]):
         columns=[
             "id",
             "name",
+            "category",
+            "weapon_type",
             "attack_increase",
             "defense_increase",
             "agility_increase",

@@ -14,6 +14,13 @@ ENDIANESS = "little"
 class EnemyKind:
     species_id: int
     rank: int
+    sword_compat: bool
+    spear_compat: bool
+    axe_compat: bool
+    hammer_compat: bool
+    whip_compat: bool
+    claw_compat: bool
+    staff_compat: bool
     traits: List[int]
     max_hp_limit: int
     max_mp_limit: int
@@ -29,8 +36,20 @@ class EnemyKind:
 
         rank_and_something_else = int.from_bytes(input_stream.read(4), ENDIANESS)
         rank = rank_and_something_else & 0x0F
+        input_stream.read(4)
 
-        input_stream.read(8)
+        weapon_compat_and_something_else = int.from_bytes(
+            input_stream.read(4), ENDIANESS
+        )
+
+        sword_compat = weapon_compat_and_something_else & 0b1 != 0
+        spear_compat = weapon_compat_and_something_else >> 1 & 0b1 != 0
+        axe_compat = weapon_compat_and_something_else >> 2 & 0b1 != 0
+        hammer_compat = weapon_compat_and_something_else >> 3 & 0b1 != 0
+        whip_compat = weapon_compat_and_something_else >> 4 & 0b1 != 0
+        claw_compat = weapon_compat_and_something_else >> 5 & 0b1 != 0
+        staff_compat = weapon_compat_and_something_else >> 6 & 0b1 != 0
+
         traits = [b for b in input_stream.read(5)]
         input_stream.read(15)
 
@@ -48,6 +67,13 @@ class EnemyKind:
         return EnemyKind(
             species_id=i,
             rank=rank,
+            sword_compat=sword_compat,
+            spear_compat=spear_compat,
+            axe_compat=axe_compat,
+            hammer_compat=hammer_compat,
+            whip_compat=whip_compat,
+            claw_compat=claw_compat,
+            staff_compat=staff_compat,
             traits=traits,
             max_hp_limit=max_hp_limit,
             max_mp_limit=max_mp_limit,

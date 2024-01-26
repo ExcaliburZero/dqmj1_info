@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import IO, List
+from typing import Any, IO, List
 
 import argparse
 import ast
@@ -58,6 +58,25 @@ def main(argv: List[str]):
             "string"
         ].iloc[0]
 
+    def get_weapons(row: Any) -> List[str]:
+        weapons = []
+        if row["sword_compat"]:
+            weapons.append("Sword")
+        if row["spear_compat"]:
+            weapons.append("Spear")
+        if row["axe_compat"]:
+            weapons.append("Axe")
+        if row["hammer_compat"]:
+            weapons.append("Hammer")
+        if row["whip_compat"]:
+            weapons.append("Whip")
+        if row["claw_compat"]:
+            weapons.append("Claw")
+        if row["staff_compat"]:
+            weapons.append("Staff")
+
+        return weapons
+
     data_raw = []
     for _, row in enmy_kind_tbl.iterrows():
         data_raw.append(
@@ -79,6 +98,7 @@ def main(argv: List[str]):
                 row["defense_limit"],
                 row["agility_limit"],
                 row["wisdom_limit"],
+                get_weapons(row),
             )
         )
 
@@ -98,6 +118,7 @@ def main(argv: List[str]):
             "defense_limit",
             "agility_limit",
             "wisdom_limit",
+            "weapons",
         ],
     )
 

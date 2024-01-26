@@ -8,6 +8,8 @@ import sys
 from . import enmy_kind_tbl
 from . import extract_strings
 from . import extract_string_address_tables
+from . import item_table
+from . import item_tbl
 from . import monster_species_table
 from . import skill_set_table
 from . import skill_tbl
@@ -96,6 +98,20 @@ def main(argv: List[str]):
     logging.info(f"Finished extracting SkillTbl.bin to: {skill_tbl_csv}")
 
     ###
+    # Extract ItemTbl
+    ###
+    item_tbl_csv = output_directory / "ItemTbl.csv"
+    item_tbl.main(
+        [
+            "--table_filepath",
+            str(input_directory / "data" / "ItemTbl.bin"),
+            "--output_csv",
+            str(item_tbl_csv),
+        ]
+    )
+    logging.info(f"Finished extracting ItemTbl.bin to: {skill_tbl_csv}")
+
+    ###
     # Create monster species table
     ###
     monster_species_table_csv = output_directory / "monster_species.csv"
@@ -128,6 +144,22 @@ def main(argv: List[str]):
         ]
     )
     logging.info(f"Finished creating skill set table: {skill_set_table_csv}")
+
+    ###
+    # Create item set table
+    ###
+    item_table_csv = output_directory / "items.csv"
+    item_table.main(
+        [
+            "--strings_csv",
+            str(strings_by_table_csv),
+            "--item_tbl_csv",
+            str(item_tbl_csv),
+            "--output_csv",
+            str(item_table_csv),
+        ]
+    )
+    logging.info(f"Finished creating item set table: {item_table_csv}")
 
 
 if __name__ == "__main__":

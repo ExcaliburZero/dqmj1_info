@@ -73,6 +73,12 @@ def main(argv: List[str]):
                 ],
                 row["skill_set"],
                 get_skill_set_name(row["skill_set"]),
+                row["max_hp_limit"],
+                row["max_mp_limit"],
+                row["attack_limit"],
+                row["defense_limit"],
+                row["agility_limit"],
+                row["wisdom_limit"],
             )
         )
 
@@ -86,6 +92,12 @@ def main(argv: List[str]):
             "traits",
             "skill_set_id",
             "skill_set",
+            "max_hp_limit",
+            "max_mp_limit",
+            "attack_limit",
+            "defense_limit",
+            "agility_limit",
+            "wisdom_limit",
         ],
     )
 

@@ -15,6 +15,12 @@ class EnemyKind:
     species_id: int
     rank: int
     traits: List[int]
+    max_hp_limit: int
+    max_mp_limit: int
+    attack_limit: int
+    defense_limit: int
+    agility_limit: int
+    wisdom_limit: int
     skill_set: int
 
     @staticmethod
@@ -26,11 +32,31 @@ class EnemyKind:
 
         input_stream.read(8)
         traits = [b for b in input_stream.read(5)]
-        input_stream.read(51)
+        input_stream.read(15)
+
+        max_hp_limit = int.from_bytes(input_stream.read(2), ENDIANESS)
+        max_mp_limit = int.from_bytes(input_stream.read(2), ENDIANESS)
+        attack_limit = int.from_bytes(input_stream.read(2), ENDIANESS)
+        defense_limit = int.from_bytes(input_stream.read(2), ENDIANESS)
+        agility_limit = int.from_bytes(input_stream.read(2), ENDIANESS)
+        wisdom_limit = int.from_bytes(input_stream.read(2), ENDIANESS)
+
+        input_stream.read(24)
         skil_set = int.from_bytes(input_stream.read(1), ENDIANESS)
         input_stream.read(75)
 
-        return EnemyKind(species_id=i, rank=rank, traits=traits, skill_set=skil_set)
+        return EnemyKind(
+            species_id=i,
+            rank=rank,
+            traits=traits,
+            max_hp_limit=max_hp_limit,
+            max_mp_limit=max_mp_limit,
+            attack_limit=attack_limit,
+            defense_limit=defense_limit,
+            agility_limit=agility_limit,
+            wisdom_limit=wisdom_limit,
+            skill_set=skil_set,
+        )
 
     @staticmethod
     def read_bin(input_stream: IO[bytes]) -> List["EnemyKind"]:

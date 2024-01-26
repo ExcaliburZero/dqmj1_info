@@ -61,7 +61,8 @@ def main(argv: List[str]):
                     # saw at 0x0207d792
                     if (byte == 0x00 or byte == 0x0A) and len(buffer) == 0:
                         continue
-                    elif byte == 0xFF:
+                    # Note: The check against 0xFE is due ot an edge case at 0x02079c16.
+                    elif byte == 0xFF or byte == 0xFE:
                         string = "".join(buffer)
                         j = i - len(buffer)
 

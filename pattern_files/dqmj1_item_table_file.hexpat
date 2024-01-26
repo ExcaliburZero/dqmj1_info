@@ -5,7 +5,7 @@ struct item {
     u8 unknown_ab[7];
     u8 unknown_b;
     u8 weapon_type; // 0 through 6
-    u8 unknown_c[6];
+    u8 unknown_c[16];
     u8 attack_increase;
     u8 defense_increase;
     u8 agility_increase;

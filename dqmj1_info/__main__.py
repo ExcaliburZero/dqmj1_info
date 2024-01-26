@@ -9,6 +9,7 @@ from . import enmy_kind_tbl
 from . import extract_strings
 from . import extract_string_address_tables
 from . import monster_species_table
+from . import skill_set_table
 from . import skill_tbl
 
 
@@ -111,6 +112,22 @@ def main(argv: List[str]):
     logging.info(
         f"Finished creating monster species table: {monster_species_table_csv}"
     )
+
+    ###
+    # Create skill set table
+    ###
+    skill_set_table_csv = output_directory / "skill_sets.csv"
+    skill_set_table.main(
+        [
+            "--strings_csv",
+            str(strings_by_table_csv),
+            "--skill_tbl_csv",
+            str(skill_tbl_csv),
+            "--output_csv",
+            str(skill_set_table_csv),
+        ]
+    )
+    logging.info(f"Finished creating skill set table: {skill_set_table_csv}")
 
 
 if __name__ == "__main__":

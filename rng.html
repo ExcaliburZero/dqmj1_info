@@ -2,9 +2,12 @@
 <html class="no-js" lang="en" data-content_root="./">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="#" />
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="Save Files" href="save_files.html" />
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 --><title>Search - DQMJ1 Unofficial Documentation</title><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
+        <title>Random Number Generation - DQMJ1 Unofficial Documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=36a5483c" />
     
@@ -131,7 +134,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -145,17 +148,17 @@
   
   <span class="sidebar-brand-text">DQMJ1 Unofficial Documentation</span>
   
-</a><form class="sidebar-search-container" method="get" action="#" role="search">
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <ul>
+  <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="strings.html">Strings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="monsters.html">Monsters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="save_files.html">Save Files</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rng.html">Random Number Generation</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Random Number Generation</a></li>
 </ul>
 
 </div>
@@ -175,7 +178,8 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -183,23 +187,38 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
-          
-<noscript>
-<div class="admonition error">
-  <p class="admonition-title">Error</p>
-  <p>
-    Please activate JavaScript to enable the search functionality.
-  </p>
+          <section id="random-number-generation">
+<span id="rng"></span><h1>Random Number Generation<a class="headerlink" href="#random-number-generation" title="Link to this heading">#</a></h1>
+<p>DQMJ1 uses a random number generator that bases random numbers on the previously generated random number and the count of random numbers that have been generated.</p>
+<section id="stored-values">
+<h2>Stored values<a class="headerlink" href="#stored-values" title="Link to this heading">#</a></h2>
+<p>The game stores two values in RAM related to RNG:</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">RNG_VALUE</span></code> (<code class="code docutils literal notranslate"><span class="pre">0x020BEC9C</span></code>) - most recently generated 32bit random number.</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">RNG_COUNTER</span></code> (<code class="code docutils literal notranslate"><span class="pre">0x020BEC98</span></code>) - count of the number of random numbers that have been generated.</p></li>
+</ul>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>What value does the counter start at? When does it get reset? Is it kept in the save file and thus consistent between saves?</p>
 </div>
-</noscript>
+</section>
+<section id="algorithm">
+<h2>Algorithm<a class="headerlink" href="#algorithm" title="Link to this heading">#</a></h2>
+<p>The following is the algorithm that DQMJ1 uses to generate a new random 32bit number.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">new_rng_value</span> <span class="o">=</span> <span class="n">rng_value</span> <span class="o">+</span> <span class="n">rng_counter</span> <span class="o">+</span> <span class="p">(</span><span class="n">rng_value</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mh">0x795B3D1F</span>
 
-<div id="search-results"></div>
+<span class="n">rng_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="n">rng_value</span> <span class="o">=</span> <span class="n">new_rng_value</span>
+</pre></div>
+</div>
+</section>
+</section>
 
         </article>
       </div>
@@ -207,7 +226,17 @@
         
         <div class="related-pages">
           
-          
+          <a class="prev-page" href="save_files.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Save Files</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -226,8 +255,28 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Random Number Generation</a><ul>
+<li><a class="reference internal" href="#stored-values">Stored values</a></li>
+<li><a class="reference internal" href="#algorithm">Algorithm</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
@@ -236,8 +285,5 @@
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=32e29ea5"></script>
-    
-<script src="_static/searchtools.js"></script>
-<script src="_static/language_data.js"></script>
-<script src="searchindex.js"></script></body>
+    </body>
 </html>

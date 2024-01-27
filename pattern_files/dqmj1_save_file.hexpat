@@ -1,3 +1,10 @@
+struct parent_monster {
+    u16 species;
+    u8 name[0x09];
+    u16 unknown;
+    u8 scout_name[11];
+};
+
 struct monster {
     u8 monster_name[0x09];
     u8 unkown_a[0x3];
@@ -73,7 +80,11 @@ struct monster {
     u8 unknown_21[10];
     u8 level_when_hashed;
     u16 hash;
-    u8 unknown_last[158];
+    u16 unknown_22;
+    u8 scout_name[11];
+    u8 unknown_23;
+    parent_monster parents[2];
+    u8 unknown_last[0x60];
 };
 
 u24 magic @ 0x00;

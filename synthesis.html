@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Monsters" href="monsters.html" /><link rel="prev" title="DQMJ1 Unofficial Documentation" href="index.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="Random Number Generation" href="rng.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
-        <title>Strings - DQMJ1 Unofficial Documentation</title>
+        <title>Synthesis - DQMJ1 Unofficial Documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=36a5483c" />
@@ -155,11 +155,11 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul class="current">
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="strings.html">Strings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="monsters.html">Monsters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="save_files.html">Save Files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rng.html">Random Number Generation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="synthesis.html">Synthesis</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Synthesis</a></li>
 </ul>
 
 </div>
@@ -194,57 +194,25 @@
           </label>
         </div>
         <article role="main">
-          <section id="strings">
-<span id="id1"></span><h1>Strings<a class="headerlink" href="#strings" title="Link to this heading">#</a></h1>
-<p>Strings are stored in DQMJ1’s program binaries and files using a non-standard character encoding.</p>
-<section id="character-encoding">
-<h2>Character encoding<a class="headerlink" href="#character-encoding" title="Link to this heading">#</a></h2>
-<p>Each character in a string is 1 byte in length. Strings end with <code class="code docutils literal notranslate"><span class="pre">0xFF</span></code> and may have one or more <code class="code docutils literal notranslate"><span class="pre">0x00</span></code> after the end for padding purposes. Strings are typically padded out into an integer number of doublewords (32bits / 4 bytes).</p>
+          <section id="synthesis">
+<span id="id1"></span><h1>Synthesis<a class="headerlink" href="#synthesis" title="Link to this heading">#</a></h1>
+<p>Synthesis is a system where you can combine two monsters into a new, typically stronger, monster.</p>
+<section id="polarity">
+<h2>Polarity<a class="headerlink" href="#polarity" title="Link to this heading">#</a></h2>
+<p>Each monster has a polarity value which restricts which monsters it can be synthesized with.</p>
 <ul class="simple">
-<li><p><code class="code docutils literal notranslate"><span class="pre">00</span></code> to <code class="code docutils literal notranslate"><span class="pre">09</span></code> are the digits “0” to “9”</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">0a</span></code> is a space “ “</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">0b</span></code> to <code class="code docutils literal notranslate"><span class="pre">24</span></code> are capital Latin letters “A” - “Z”</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">25</span></code> to <code class="code docutils literal notranslate"><span class="pre">3E</span></code> are lowercase Latin letters “a” - “z”</p></li>
+<li><p>Positive polarity monsters (+) can by synthesized with negative and neutral monsters.</p></li>
+<li><p>Negative polarity monsters (-) can by synthesized with positive and neutral monsters.</p></li>
+<li><p>Neutral polarity monsters (+/-) can by synthesized with positive and negative monsters.</p></li>
 </ul>
-<div class="admonition-todo admonition" id="id2">
-<p class="admonition-title">Todo</p>
-<p>Add link to a page with a table showing all of the character mappings.</p>
-</div>
-<div class="admonition-todo admonition" id="id3">
-<p class="admonition-title">Todo</p>
-<p>Can strings start with the character “0”? If so how would that “0” be differentiated from padding?</p>
-</div>
-<section id="examples">
-<h3>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h3>
-<section id="first-example">
-<h4>First example<a class="headerlink" href="#first-example" title="Link to this heading">#</a></h4>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">37</span> <span class="mi">30</span> <span class="mi">2</span><span class="n">D</span> <span class="mi">31</span> <span class="mi">29</span> <span class="n">FF</span> <span class="mi">00</span> <span class="mi">00</span>
-</pre></div>
-</div>
-<p>Would decode to “slime”.</p>
-<p><code class="code docutils literal notranslate"><span class="pre">37</span> <span class="pre">30</span> <span class="pre">2D</span> <span class="pre">31</span> <span class="pre">29</span></code> being the characters, <code class="code docutils literal notranslate"><span class="pre">FF</span></code> denoting the end of the string, and <code class="code docutils literal notranslate"><span class="pre">00</span> <span class="pre">00</span></code> being padding to make the string an integer number of doublewords (32bits).</p>
-</section>
-<section id="second-example">
-<h4>Second example<a class="headerlink" href="#second-example" title="Link to this heading">#</a></h4>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span><span class="n">A</span> <span class="mi">36</span> <span class="mi">29</span> <span class="mi">34</span> <span class="mi">0</span><span class="n">A</span> <span class="mi">01</span> <span class="n">FF</span> <span class="mi">00</span> <span class="mi">1</span><span class="n">A</span> <span class="mi">36</span> <span class="mi">29</span> <span class="mi">34</span> <span class="mi">0</span><span class="n">A</span> <span class="mi">02</span> <span class="n">FF</span> <span class="mi">00</span>
-<span class="mi">1</span><span class="n">A</span> <span class="mi">33</span> <span class="mi">2</span><span class="n">D</span> <span class="mi">37</span> <span class="mi">33</span> <span class="mi">32</span> <span class="n">FF</span> <span class="mi">00</span> <span class="mi">1</span><span class="n">A</span> <span class="mi">36</span> <span class="mi">29</span> <span class="mi">34</span> <span class="mi">0</span><span class="n">A</span> <span class="mi">03</span> <span class="n">FF</span> <span class="mi">00</span>
-</pre></div>
-</div>
-<p>Would decode into 4 strings:</p>
+<p>The child monster created in sythesis will have its polarity chosen randomly with the following chances:</p>
 <ul class="simple">
-<li><p>“Prep 1”</p></li>
-<li><p>“Prep 2”</p></li>
-<li><p>“Poison”</p></li>
-<li><p>“Prep 3”</p></li>
+<li><p>Neutral = ~5.9 %</p></li>
+<li><p>Positive = ~47.06 %</p></li>
+<li><p>Negative = ~47.06 %</p></li>
 </ul>
-</section>
-</section>
-</section>
-<section id="locations">
-<h2>Locations<a class="headerlink" href="#locations" title="Link to this heading">#</a></h2>
-<p>Strings can be stored in different locations depending on the string’s puprose.</p>
-<p>Strings that are used for core-mechanics (monster species names, interface text, etc.) are typically stored in the ARM9 binary in one of various chunks of strings. These are typically referenced to by another portion of the ARM9 binary in order to organize the strings into tables.</p>
-<p>Additional strings (ex. character dialogue) can be stored in other game files (ex. <code class="code docutils literal notranslate"><span class="pre">.evt</span></code> files).</p>
+<p>The polarity of the child monster can also be influenced by giving one of the parents the Plus Sceptre or the Minus Sceptre which will make the child monster’s polarity positive and negative respectively.</p>
+<p>Equiping the one parent with the Plus Sceptre and the other with the Minus Sceptre will result in the child monster’s polarity being random (as if no sceptres were equiped).</p>
 </section>
 </section>
 
@@ -253,23 +221,15 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="monsters.html">
-              <div class="page-info">
-                <div class="context">
-                  <span>Next</span>
-                </div>
-                <div class="title">Monsters</div>
-              </div>
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-            </a>
-          <a class="prev-page" href="index.html">
+          
+          <a class="prev-page" href="rng.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Home</div>
+                <div class="title">Random Number Generation</div>
                 
               </div>
             </a>
@@ -303,16 +263,8 @@
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Strings</a><ul>
-<li><a class="reference internal" href="#character-encoding">Character encoding</a><ul>
-<li><a class="reference internal" href="#examples">Examples</a><ul>
-<li><a class="reference internal" href="#first-example">First example</a></li>
-<li><a class="reference internal" href="#second-example">Second example</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#locations">Locations</a></li>
+<li><a class="reference internal" href="#">Synthesis</a><ul>
+<li><a class="reference internal" href="#polarity">Polarity</a></li>
 </ul>
 </li>
 </ul>

@@ -12,6 +12,15 @@ u8 save_file_validation_result @ 0x0219CA9C;
 u32 skill_table_pointer @ 0x0218B628;
 u8 skill_table[0x0000B5E8] @ skill_table_pointer;
 
+u32 item_table_pointer @ 0x020B01CC;
+u8 item_table[0x4388] @ item_table_pointer;
+
+u32 monster_species_table_pointer @ 0x0218B53C;
+u8 monster_species_table[0xCB88] @ monster_species_table_pointer;
+
+u32 fld_enmy_prm_pointer @ 0x02249C18;
+u8 fld_enmy_prm[0x6E08] @ fld_enmy_prm_pointer;
+
 u8 trait_stat_increment_values_adaw[11] @ 0x0208c778;
 u8 trait_stat_increment_values_hp_mp[11] @ 0x0208c76c;
 

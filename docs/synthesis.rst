@@ -23,3 +23,13 @@ The child monster created in sythesis will have its polarity chosen randomly wit
 The polarity of the child monster can also be influenced by giving one of the parents the Plus Sceptre or the Minus Sceptre which will make the child monster's polarity positive and negative respectively.
 
 Equiping the one parent with the Plus Sceptre and the other with the Minus Sceptre will result in the child monster's polarity being random (as if no sceptres were equiped).
+
+*****
+Stats
+*****
+The stats of the parent monsters are added together and divided by 4 and passed down to the child monster.
+
+************
+Skill points
+************
+The unallocated skill points of the two parent monsters are added together and divided by 4 and passed down to the child monster.

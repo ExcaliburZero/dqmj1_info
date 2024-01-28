@@ -14,6 +14,7 @@ ENDIANESS = "little"
 class EnemyKind:
     species_id: int
     rank: int
+    race: int
     sword_compat: bool
     spear_compat: bool
     axe_compat: bool
@@ -36,6 +37,7 @@ class EnemyKind:
 
         rank_and_something_else = int.from_bytes(input_stream.read(4), ENDIANESS)
         rank = rank_and_something_else & 0x0F
+        race = (rank_and_something_else & 0xFF) >> 4
         input_stream.read(4)
 
         weapon_compat_and_something_else = int.from_bytes(
@@ -67,6 +69,7 @@ class EnemyKind:
         return EnemyKind(
             species_id=i,
             rank=rank,
+            race=race,
             sword_compat=sword_compat,
             spear_compat=spear_compat,
             axe_compat=axe_compat,

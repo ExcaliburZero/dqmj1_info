@@ -31,6 +31,7 @@ def main(argv: List[str]):
     trait_names = strings[strings["table_name"] == "trait_names"]
     skill_set_names = strings[strings["table_name"] == "skill_set_names"]
 
+    # TODO: lookup from relevant string table
     ranks = {
         0: "",
         1: "F",
@@ -42,6 +43,19 @@ def main(argv: List[str]):
         7: "S",
         8: "X",
         9: "???",
+    }
+
+    # TODO: lookup from relevant string table
+    races = {
+        0: "",
+        1: "Slime",
+        2: "Dragon",
+        3: "Nature",
+        4: "Beast",
+        5: "Material",
+        6: "Demon",
+        7: "Undead",
+        8: "Incarni",
     }
 
     def get_monster_name(species_id: int) -> str:
@@ -84,6 +98,7 @@ def main(argv: List[str]):
                 row["species_id"],
                 get_monster_name(row["species_id"]),
                 ranks[row["rank"]],
+                races[row["race"]],
                 row["traits"],
                 [
                     get_trait_name(t)
@@ -108,6 +123,7 @@ def main(argv: List[str]):
             "index",
             "name",
             "rank",
+            "race",
             "trait_ids",
             "traits",
             "skill_set_id",

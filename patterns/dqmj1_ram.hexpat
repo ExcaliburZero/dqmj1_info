@@ -9,4 +9,4 @@ u32 rng_value @ 0x020BEC9C;
 u8 save_file_validation_result @ 0x0219CA9C;
 
 u32 skill_table_pointer @ 0x0218B628;
-u8 skill_table @ skill_table_pointer;
+u8 skill_table[0x0000B5E8] @ skill_table_pointer;

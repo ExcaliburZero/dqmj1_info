@@ -12,7 +12,8 @@ struct monster {
     u8 rank; // 1=F, 2=E, 3=D, 4=C, 5=B, 6=A, 7=S, 8=X, 9=???
     u8 unkown_c; // changed, but did not notice any effect. It is based indirectly on the monster's species, but not sure what it is
     u8 sex; // 0=+, 1=-, 2=+-
-    u32 unknown_d;
+    u8 unknown_d[3];
+    u8 synthesis_plus_number;
     u8 unknown_de[4];
     u8 unknown_e[24];
     u8 unknown_f[29];
@@ -21,7 +22,7 @@ struct monster {
     u8 unknown_g2[5];
     
     u8 level; // Confirmed
-    u8 unknown_2;
+    u8 level_limit;
     
     // Stats
     //

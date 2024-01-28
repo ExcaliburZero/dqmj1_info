@@ -2,7 +2,8 @@
 
 struct monster_data {
     u32 unknown_a;
-    u32 rank_and_something_else; // Lowest 4 bits are the rank, remaining 28 bits are shifted and truncated to form monster.unknown_c
+    u8 rank_and_family; // Lower 4 bits are the rank (0x0F), higher 4 bits are the family (0xF0)
+    u8 unkown_b[]3;
     u8 unknown_c[4];
     u32 weapon_compatibility_and_something_else;
     u8 traits[5];

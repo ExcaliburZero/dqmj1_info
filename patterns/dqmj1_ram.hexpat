@@ -2,7 +2,7 @@
 
 // Note: Need to set base address to 0x02000000 before loading this pattern file
 
-monster party_monsters @ 0x020B3D8C;
+monster party_monsters[7] @ 0x020B3D8C; // TODO: is this all player's monsters?
 
 u32 rng_counter @ 0x020BEC98;
 u32 rng_value @ 0x020BEC9C;

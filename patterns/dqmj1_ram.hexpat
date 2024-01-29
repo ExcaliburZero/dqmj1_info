@@ -18,6 +18,12 @@ u8 item_table[0x4388] @ item_table_pointer;
 u32 monster_species_table_pointer @ 0x0218B53C;
 u8 monster_species_table[0xCB88] @ monster_species_table_pointer;
 
+u32 fld_mstr_prm_pointer @ 0x02249C10;
+u8 fld_mstr_prm[0x408] @ fld_mstr_prm_pointer;
+
+u32 fld_enmy_prm_start_pointer @ 0x02249C14;
+u8 fld_enmy_prm_data_start @ fld_enmy_prm_start_pointer;
+
 u32 fld_enmy_prm_pointer @ 0x02249C18;
 u8 fld_enmy_prm[0x6E08] @ fld_enmy_prm_pointer;
 
@@ -28,3 +34,8 @@ u8 strings_a[5112] @ 0x020735F0;
 u8 strings_b[48519] @ 0x0207805C;
 u8 strings_c[23712] @ 0x02084B18;
 u8 strings_d[4135] @ 0x0209072C;
+
+u8 unknown_big_struct @ 0x0224B610;
+
+
+monster another_first_party_monster @ 0x02238FD8;

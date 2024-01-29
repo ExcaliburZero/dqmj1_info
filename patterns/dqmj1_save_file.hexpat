@@ -12,3 +12,8 @@ u32 atm @ 0x188;
 monster first_monster @ 0x65C;
 monster second_monster @ 0x7F0;
 monster third_monster @ 0x984;
+
+// Probably the versions displayed on the save file window when starting the game
+u8 first_party_monster_name[9] @ 0x3E;
+u8 second_party_monster_name[9] @ 0x4A;
+u8 third_party_monster_name[9] @ 0x56;

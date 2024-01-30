@@ -37,5 +37,50 @@ u8 strings_d[4135] @ 0x0209072C;
 
 u8 unknown_big_struct @ 0x0224B610;
 
+u8 save_data_in_ram @ 0x225114C;
 
-monster another_first_party_monster @ 0x02238FD8;
+// This appears to be only partial...
+// monster another_first_party_monster @ 0x02238FD8;
+struct partial_monster {
+    u8 monster_name[0x09];
+    u8 unkown_a[0x3];
+    u16 species; // Confirmed, but does not appear to auto update rank + traits + resistances, does update family
+    u8 rank; // 1=F, 2=E, 3=D, 4=C, 5=B, 6=A, 7=S, 8=X, 9=???
+    u8 family;
+    u8 sex; // 0=+, 1=-, 2=+-
+
+    u8 unknown_d[3];
+    u8 synthesis_plus_number;
+    u8 unknown_de[112];
+    
+    u8 level; // Confirmed
+    u8 level_limit;
+    
+    u8 unknown;
+    
+    // TODO: these locations aren't quite right
+    u16 base_max_hp;
+    u16 base_max_mp;
+    u16 base_attack;
+    u16 base_defense;
+    u16 base_agility;
+    u16 base_wisdom;
+    u16 unknown_f;
+    u16 current_hp; // This appears to be healed right after loading the game (at least at a centre)
+    u16 adjusted_max_h;
+    u16 current_mp; // This appears to be healed right after loading the game (at least at a centre)
+    u16 adjusted_max_mp;
+    u16 adjusted_attack;
+    u16 adjusted_defense;
+    u16 adjusted_agility;
+    u16 adjusted_wisdom;
+    
+    u32 exp; // TODO: confirm the size
+};
+
+partial_monster monster_in_battle @ 0x02238FD8;
+
+u32 first_evt_file_ptr @ 0x223DF9C;
+u32 first_evt_file_data_start @ 0x223DFA0;
+
+u32 num_times_synthesized @ 0x20BE5A0;

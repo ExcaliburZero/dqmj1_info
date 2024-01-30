@@ -9,6 +9,8 @@ u8 player_name[0x06] @ 0x32; // TODO: confirm extent
 u32 gold @ 0x184; // TODO: confirm size
 u32 atm @ 0x188;
 
+u32 num_times_synthesized @ 0x3D8;
+
 monster first_monster @ 0x65C;
 monster second_monster @ 0x7F0;
 monster third_monster @ 0x984;

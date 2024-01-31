@@ -112,6 +112,7 @@ def byte_to_char(byte: int) -> str:
         0xA: " ",
         0x55: "Ü",
         0x57: "á",
+        0x70: "!",
         0x71: "?",
         0x87: "+",
         0x8D: "II",
@@ -121,6 +122,7 @@ def byte_to_char(byte: int) -> str:
         0xAC: ".",
         0xAD: "&",
         0xCC: "-",
+        0xCD: ",",
         0xFE: "\\n",
     }
 

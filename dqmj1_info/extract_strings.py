@@ -37,17 +37,18 @@ def main(argv: List[str]):
                 StringTable("strings_d", 0x0209072C, 0x02091753),
             ],
         ),
-        pathlib.Path("overlay") / "overlay_0000.bin": (
-            0x021a0a00,
+        pathlib.Path("overlay")
+        / "overlay_0000.bin": (
+            0x021A0A00,
             [
-                StringTable("strings_h", 0x021f5950, 0x021f66ec),
-                StringTable("strings_i", 0x021f678c, 0x021f6d6c),
-                StringTable("strings_j", 0x021f6ed8, 0x021f78b8),
-                StringTable("strings_k", 0x021f80c0, 0x021fc140),
-                StringTable("strings_l", 0x021fc224, 0x021fc940),
-                StringTable("strings_m", 0x021fcb10, 0x021fd2a0),
-                StringTable("strings_n", 0x021fd2f8, 0x021fd45c),
-                StringTable("strings_o", 0x021fd588, 0x021fd874),
+                StringTable("strings_h", 0x021F5950, 0x021F66EC),
+                StringTable("strings_i", 0x021F678C, 0x021F6D6C),
+                StringTable("strings_j", 0x021F6ED8, 0x021F78B8),
+                StringTable("strings_k", 0x021F80C0, 0x021FC140),
+                StringTable("strings_l", 0x021FC224, 0x021FC940),
+                StringTable("strings_m", 0x021FCB10, 0x021FD2A0),
+                StringTable("strings_n", 0x021FD2F8, 0x021FD45C),
+                StringTable("strings_o", 0x021FD588, 0x021FD874),
             ],
         ),
     }

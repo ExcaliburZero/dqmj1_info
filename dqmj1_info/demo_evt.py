@@ -17,8 +17,9 @@ def main(argv: List[str]):
         event = evt.Event.from_evt(input_stream)
 
     for command in event.commands:
-        if not isinstance(command, evt.UnknownCommand):
-            print(command)
+        # if not isinstance(command, evt.UnknownCommand):
+        #    print(command)
+        print(command)
 
 
 if __name__ == "__main__":

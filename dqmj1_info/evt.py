@@ -11,21 +11,40 @@ STRING_END = 0xFF
 STRING_END_PADDING = 0xCC
 
 
-class Command(abc.ABC):
+@dataclass
+class RawCommand:
+    command_type: int
+    data: bytes
+
     @staticmethod
-    def from_evt(input_stream: IO[bytes]) -> Optional["Command"]:
+    def from_evt(input_stream: IO[bytes]) -> Optional["RawCommand"]:
         type_bytes = input_stream.read(4)
         if len(type_bytes) != 4:
             return None
 
         command_type = int.from_bytes(type_bytes, ENDIANESS)
+        length = int.from_bytes(input_stream.read(4), ENDIANESS)
 
-        if command_type == 0x2A:
-            return SpeakerName.from_evt(input_stream)
-        if command_type == 0x29:
-            return ShowDialog.from_evt(input_stream)
+        data = input_stream.read(length - 8)
 
-        return UnknownCommand(command_type)
+        return RawCommand(command_type=command_type, data=data)
+
+
+class Command(abc.ABC):
+    @staticmethod
+    def from_evt(input_stream: IO[bytes]) -> Optional["Command"]:
+        raw = RawCommand.from_evt(input_stream)
+        if raw is None:
+            return None
+
+        if raw.command_type == 0x25:
+            return StartDialog.from_raw(raw)
+        if raw.command_type == 0x2A:
+            return SpeakerName.from_raw(raw)
+        if raw.command_type == 0x29:
+            return ShowDialog.from_raw(raw)
+
+        return UnknownCommand(raw)
 
 
 def bytes_to_string(bs: List[int]) -> str:
@@ -46,7 +65,9 @@ class Event:
     @staticmethod
     def from_evt(input_stream: IO[bytes]) -> "Event":
         # Magic
-        input_stream.read(4)
+
+        # TODO: figure out how to calculate correct offset
+        input_stream.read(0x1010)
 
         commands = []
         while True:
@@ -64,34 +85,14 @@ class SpeakerName(Command):
     name: str
 
     @staticmethod
-    def from_evt(input_stream: IO[bytes]) -> "Command":
+    def from_raw(raw: RawCommand) -> "Command":
         name_bytes = []
-        input_stream.read(4)
 
         # Grab the string
-        while True:
-            b = input_stream.read(1)
-            if len(b) == 0:
-                return SpeakerName("")
-
-            b = int.from_bytes(b)
-
+        for b in raw.data:
             name_bytes.append(b)
 
             if b == STRING_END:
-                break
-
-        # Move the read pointer past the padding
-        while True:
-            b = input_stream.peek(1)
-            if len(b) == 0:
-                return SpeakerName("")
-
-            b = b[0]
-
-            if b == STRING_END_PADDING:
-                input_stream.read(1)
-            else:
                 break
 
         return SpeakerName(bytes_to_string(name_bytes))
@@ -102,39 +103,26 @@ class ShowDialog(Command):
     text: str
 
     @staticmethod
-    def from_evt(input_stream: IO[bytes]) -> "Command":
+    def from_raw(raw: RawCommand) -> "Command":
         name_bytes = []
-        input_stream.read(4)
 
         # Grab the string
-        while True:
-            b = input_stream.read(1)
-            if len(b) == 0:
-                return ShowDialog("")
-
-            b = int.from_bytes(b)
-
+        for b in raw.data:
             name_bytes.append(b)
 
             if b == STRING_END:
-                break
-
-        # Move the read pointer past the padding
-        while True:
-            b = input_stream.peek(1)
-            if len(b) == 0:
-                return ShowDialog("")
-
-            b = b[0]
-
-            if b == STRING_END_PADDING:
-                input_stream.read(1)
-            else:
                 break
 
         return ShowDialog(bytes_to_string(name_bytes))
 
 
 @dataclass
+class StartDialog(Command):
+    @staticmethod
+    def from_raw(raw: RawCommand) -> "Command":
+        return StartDialog()
+
+
+@dataclass
 class UnknownCommand(Command):
-    command_type: int
+    raw: RawCommand

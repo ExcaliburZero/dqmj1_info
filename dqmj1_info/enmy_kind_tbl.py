@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import IO, List
+from typing import IO, List, Literal
 
 import argparse
 import logging
@@ -7,7 +7,7 @@ import sys
 
 import pandas as pd
 
-ENDIANESS = "little"
+ENDIANESS: Literal["little"] = "little"
 
 
 @dataclass

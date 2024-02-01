@@ -1,11 +1,11 @@
 from dataclasses import dataclass
-from typing import Dict, IO, List, Optional, Type
+from typing import Dict, IO, List, Literal, Optional, Type
 
 import abc
 
 import extract_strings
 
-ENDIANESS = "little"
+ENDIANESS: Literal["little"] = "little"
 
 STRING_END = 0xFF
 STRING_END_PADDING = 0xCC

@@ -21,7 +21,7 @@ def main(argv: List[str]):
     with open(args.file, "rb") as input_stream:
         file_bytes = input_stream.read()
 
-    buffer = []
+    buffer: List[str] = []
     for i, byte in enumerate(file_bytes[start : start + length]):
         if byte == 0x00:
             continue

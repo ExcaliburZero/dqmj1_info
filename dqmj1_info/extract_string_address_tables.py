@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List
+from typing import Any, List, Tuple
 
 import argparse
 import logging
@@ -71,7 +71,7 @@ def main(argv: List[str]):
         ),
     }
 
-    strings = []
+    strings: List[Tuple[pathlib.Path, str, int, str, str, str, str, Any]] = []
     for file_subpath, (offset, tables) in sorted(string_locations.items()):
         filepath = data_directory / file_subpath
         logging.debug(f"Reading string tables from: {filepath}")
@@ -87,7 +87,7 @@ def main(argv: List[str]):
                 length = table.end - table.start
 
                 num_before = len(strings)
-                buffer = []
+                buffer: List[int] = []
                 num_found = 0
                 for i, byte in enumerate(file_bytes[start : start + length + 1]):
                     if len(buffer) == 4:

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import Deque, List, Optional
 
 import argparse
 import collections
@@ -65,7 +65,7 @@ def main(argv: List[str]):
         with open(filepath, "rb") as input_stream:
             file_bytes = input_stream.read()
 
-        byte_buffer = collections.deque(maxlen=max_length)
+        byte_buffer: Deque[int] = collections.deque(maxlen=max_length)
         for i, byte in enumerate(file_bytes):
             # print(byte, byte_buffer)
             byte_buffer.append(byte)
@@ -74,10 +74,10 @@ def main(argv: List[str]):
                 for j in range(0, len(byte_buffer)):
                     match = pattern.match(list(byte_buffer)[j:])
                     if match:
-                        match = [hex(b) for b in match]
+                        match_hexes = [hex(b) for b in match]
                         print(
                             f"{filepath}:{hex(i + 1 - ((len(byte_buffer) - j)))}:",
-                            match,
+                            match_hexes,
                             "matched_to:",
                             pattern.string,
                         )

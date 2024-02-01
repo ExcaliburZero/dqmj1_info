@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import IO, List
+from typing import IO, List, Literal
 
 import sys
 
@@ -9,8 +9,7 @@ DATA_SIZE = 10613
 DATA_CHECKSUM_START = 0xC
 DATA_CHECKSUM_END = 0xF
 
-# ENDIANESS = "big"
-ENDIANESS = "little"  # confirmed for DQJ2 save files
+ENDIANESS: Literal["little"] = "little"
 
 
 @dataclass
@@ -24,7 +23,7 @@ class SaveDataRaw:
         )
 
     @checksum.setter
-    def checksum(self, checksum: int) -> int:
+    def checksum(self, checksum: int) -> None:
         checksum_bytes = checksum.to_bytes(4, ENDIANESS)
         for i, b in enumerate(checksum_bytes):
             self.raw[i + DATA_CHECKSUM_START] = b
@@ -34,7 +33,7 @@ class SaveDataRaw:
         return SaveDataRaw(bytearray(input_stream.read(HEADER_SIZE + DATA_SIZE * 4)))
 
     @staticmethod
-    def __checksum(data: List[bytes]) -> int:
+    def __checksum(data: bytearray) -> int:
         num = 0
         j = 0
         while j < DATA_SIZE:

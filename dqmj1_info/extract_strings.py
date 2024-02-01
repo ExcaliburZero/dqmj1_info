@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List
+from typing import List, Tuple
 
 import argparse
 import logging
@@ -53,7 +53,7 @@ def main(argv: List[str]):
         ),
     }
 
-    strings = []
+    strings: List[Tuple[pathlib.Path, str, str, str, str]] = []
     for file_subpath, (offset, tables) in sorted(string_locations.items()):
         filepath = data_directory / file_subpath
         logging.debug(f"Extracting strings from: {filepath}")
@@ -69,7 +69,7 @@ def main(argv: List[str]):
                 length = table.end - table.start
 
                 num_before = len(strings)
-                buffer = []
+                buffer: List[str] = []
                 for i, byte in enumerate(file_bytes[start : start + length]):
                     # Note: The skipping of 0x0A at possible string start is due to an edge case I
                     # saw at 0x0207d792

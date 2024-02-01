@@ -1,12 +1,12 @@
 from dataclasses import dataclass
-from typing import IO, List
+from typing import IO, List, Literal
 
 import argparse
 import sys
 
 import pandas as pd
 
-ENDIANESS = "little"
+ENDIANESS: Literal["little"] = "little"
 
 
 def main(argv: List[str]):

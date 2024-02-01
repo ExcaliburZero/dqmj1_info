@@ -22,6 +22,8 @@ class Command(abc.ABC):
 
         if command_type == 0x2A:
             return SpeakerName.from_evt(input_stream)
+        if command_type == 0x29:
+            return ShowDialog.from_evt(input_stream)
 
         return UnknownCommand(command_type)
 
@@ -64,16 +66,11 @@ class SpeakerName(Command):
     @staticmethod
     def from_evt(input_stream: IO[bytes]) -> "Command":
         name_bytes = []
-
-        print("================")
-        print(hex(input_stream.tell()))
-
         input_stream.read(4)
 
         # Grab the string
         while True:
             b = input_stream.read(1)
-            print(b)
             if len(b) == 0:
                 return SpeakerName("")
 
@@ -90,7 +87,7 @@ class SpeakerName(Command):
             if len(b) == 0:
                 return SpeakerName("")
 
-            b = int.from_bytes(b)
+            b = b[0]
 
             if b == STRING_END_PADDING:
                 input_stream.read(1)
@@ -98,6 +95,44 @@ class SpeakerName(Command):
                 break
 
         return SpeakerName(bytes_to_string(name_bytes))
+
+
+@dataclass
+class ShowDialog(Command):
+    text: str
+
+    @staticmethod
+    def from_evt(input_stream: IO[bytes]) -> "Command":
+        name_bytes = []
+        input_stream.read(4)
+
+        # Grab the string
+        while True:
+            b = input_stream.read(1)
+            if len(b) == 0:
+                return ShowDialog("")
+
+            b = int.from_bytes(b)
+
+            name_bytes.append(b)
+
+            if b == STRING_END:
+                break
+
+        # Move the read pointer past the padding
+        while True:
+            b = input_stream.peek(1)
+            if len(b) == 0:
+                return ShowDialog("")
+
+            b = b[0]
+
+            if b == STRING_END_PADDING:
+                input_stream.read(1)
+            else:
+                break
+
+        return ShowDialog(bytes_to_string(name_bytes))
 
 
 @dataclass

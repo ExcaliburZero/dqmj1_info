@@ -3,7 +3,7 @@ from typing import Dict, IO, List, Literal, Optional, Type
 
 import abc
 
-import extract_strings
+from .extract_strings import byte_to_char
 
 ENDIANESS: Literal["little"] = "little"
 
@@ -63,7 +63,7 @@ def bytes_to_string(bs: List[int]) -> str:
         if b == 0xFF:
             break
 
-        chars.append(extract_strings.byte_to_char(b))
+        chars.append(byte_to_char(b))
 
     return "".join(chars)
 

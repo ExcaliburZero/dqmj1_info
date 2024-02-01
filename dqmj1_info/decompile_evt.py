@@ -4,7 +4,7 @@ import argparse
 import pathlib
 import sys
 
-import evt
+from .evt import Event, UnknownCommand
 
 
 def main(argv: List[str]):
@@ -23,13 +23,13 @@ def main(argv: List[str]):
 
     for evt_filepath in evt_filepaths:
         with open(evt_filepath, "rb") as input_stream:
-            event = evt.Event.from_evt(input_stream)
+            event = Event.from_evt(input_stream)
 
         output_filepath = output_directory / (evt_filepath.name + ".dqmj1_script")
         with open(output_filepath, "w") as output_stream:
             for command in event.commands:
                 if not args.ignore_unknown_commands or not isinstance(
-                    command, evt.UnknownCommand
+                    command, UnknownCommand
                 ):
                     print(command, file=output_stream)
 

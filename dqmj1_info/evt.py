@@ -31,6 +31,14 @@ class RawCommand:
 
 
 class Command(abc.ABC):
+    @property
+    def type_id(self) -> int:
+        if type(self) in Command.types_by_command():
+            return Command.types_by_command()[type(self)]
+
+        assert isinstance(self, UnknownCommand)
+        return self.raw.command_type
+
     @staticmethod
     def from_evt(input_stream: IO[bytes]) -> Optional["Command"]:
         raw = RawCommand.from_evt(input_stream)
@@ -49,8 +57,16 @@ class Command(abc.ABC):
         raise NotImplemented
 
     @staticmethod
+    def types_by_command() -> Dict[Type["Command"], int]:
+        return {
+            command_class: type_id
+            for type_id, command_class in Command.commands_by_type().items()
+        }
+
+    @staticmethod
     def commands_by_type() -> Dict[int, Type["Command"]]:
         return {
+            0x15: Command_0x15,
             0x25: StartDialog,
             0x29: ShowDialog,
             0x2A: SpeakerName,
@@ -99,6 +115,23 @@ class Event:
             commands.append(command)
 
         return Event(commands=commands)
+
+
+@dataclass
+class Command_0x15(Command):
+    a: int
+    b: str
+    c: int
+    d: str
+
+    @staticmethod
+    def from_raw(raw: RawCommand) -> "Command":
+        a = int.from_bytes(raw.data[0:4], ENDIANESS)
+        b = hex(int.from_bytes(raw.data[4:8], ENDIANESS))
+        c = int.from_bytes(raw.data[8:12], ENDIANESS)
+        d = hex(int.from_bytes(raw.data[12:16], ENDIANESS))
+
+        return Command_0x15(a, b, c, d)
 
 
 @dataclass

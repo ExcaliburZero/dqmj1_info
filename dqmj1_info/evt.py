@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import IO, List, Optional
+from typing import Dict, IO, List, Optional, Type
 
 import abc
 
@@ -37,14 +37,24 @@ class Command(abc.ABC):
         if raw is None:
             return None
 
-        if raw.command_type == 0x25:
-            return StartDialog.from_raw(raw)
-        if raw.command_type == 0x2A:
-            return SpeakerName.from_raw(raw)
-        if raw.command_type == 0x29:
-            return ShowDialog.from_raw(raw)
+        commands_by_type = Command.commands_by_type()
+
+        if raw.command_type in commands_by_type:
+            return commands_by_type[raw.command_type].from_raw(raw)
 
         return UnknownCommand(type_hex=hex(raw.command_type), raw=raw)
+
+    @staticmethod
+    def from_raw(raw: RawCommand) -> Optional["Command"]:
+        raise NotImplemented
+
+    @staticmethod
+    def commands_by_type() -> Dict[int, Type["Command"]]:
+        return {
+            0x25: StartDialog,
+            0x29: ShowDialog,
+            0x2A: SpeakerName,
+        }
 
 
 def bytes_to_string(bs: List[int]) -> str:

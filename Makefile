@@ -1,7 +1,7 @@
 .PHONY = format
 
 format:
-	python -m black dqmj1_info/*.py
+	python -m black .
 
 lint:
 	python -m mypy dqmj1_info

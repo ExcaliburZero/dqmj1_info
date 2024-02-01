@@ -76,9 +76,9 @@ class Event:
                 input_stream.read(4 * 3)
                 break
 
-            input_stream.read(4)"""
+            input_stream.read(4)
 
-        print(hex(input_stream.tell()))
+        print(hex(input_stream.tell()))"""
 
         commands = []
         while True:

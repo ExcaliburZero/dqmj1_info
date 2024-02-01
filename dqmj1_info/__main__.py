@@ -1,10 +1,12 @@
 from typing import List
 
 import argparse
+import glob
 import logging
 import pathlib
 import sys
 
+from . import decompile_evt
 from . import enmy_kind_tbl
 from . import extract_strings
 from . import extract_string_address_tables
@@ -110,6 +112,21 @@ def main(argv: List[str]):
         ]
     )
     logging.info(f"Finished extracting ItemTbl.bin to: {skill_tbl_csv}")
+
+    ###
+    # Decompile scripts
+    ###
+    scripts_dir = output_directory / "scripts"
+    decompile_evt.main(
+        [
+            "--evt_filepaths",
+            *sorted(glob.glob(str(input_directory / "data" / "*.evt"))),
+            "--output_directory",
+            str(scripts_dir),
+            "--ignore_unknown_commands",
+        ]
+    )
+    logging.info(f"Finished decompiling scripts to: {scripts_dir}")
 
     ###
     # Create monster species table

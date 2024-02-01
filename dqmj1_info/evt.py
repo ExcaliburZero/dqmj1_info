@@ -44,7 +44,7 @@ class Command(abc.ABC):
         if raw.command_type == 0x29:
             return ShowDialog.from_raw(raw)
 
-        return UnknownCommand(raw)
+        return UnknownCommand(type_hex=hex(raw.command_type), raw=raw)
 
 
 def bytes_to_string(bs: List[int]) -> str:
@@ -65,9 +65,20 @@ class Event:
     @staticmethod
     def from_evt(input_stream: IO[bytes]) -> "Event":
         # Magic
+        input_stream.read(8)
 
         # TODO: figure out how to calculate correct offset
-        input_stream.read(0x1010)
+        input_stream.read(0x1010 - 8)
+        """while len(input_stream.peek()) > 0:
+            next_3_nums = input_stream.peek()[0:4 * 3]
+
+            if next_3_nums == b'\x0C\x00\x00\x00\x0C\x00\x00\x00\x0C\x00\x00\x00':
+                input_stream.read(4 * 3)
+                break
+
+            input_stream.read(4)"""
+
+        print(hex(input_stream.tell()))
 
         commands = []
         while True:
@@ -125,4 +136,5 @@ class StartDialog(Command):
 
 @dataclass
 class UnknownCommand(Command):
+    type_hex: str
     raw: RawCommand

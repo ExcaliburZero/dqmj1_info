@@ -70,6 +70,7 @@ class Command(abc.ABC):
             0x25: StartDialog,
             0x29: ShowDialog,
             0x2A: SpeakerName,
+            0xE9: ShowCreditsText,
         }
 
 
@@ -175,6 +176,24 @@ class StartDialog(Command):
     @staticmethod
     def from_raw(raw: RawCommand) -> "Command":
         return StartDialog()
+
+
+@dataclass
+class ShowCreditsText(Command):
+    text: str
+
+    @staticmethod
+    def from_raw(raw: RawCommand) -> "Command":
+        name_bytes = []
+
+        # Grab the string
+        for b in raw.data:
+            name_bytes.append(b)
+
+            if b == STRING_END:
+                break
+
+        return ShowCreditsText(bytes_to_string(name_bytes))
 
 
 @dataclass

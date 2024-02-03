@@ -170,7 +170,7 @@ class Command:
         parts = PATTERN.split(line.strip())
         parts = [p for p in parts if len(p.strip()) > 0]
 
-        command_id = eval(parts[1])
+        command_id = eval(parts[0])
         command_type = Command.get_command_type(command_id)
 
         arguments = []
@@ -180,7 +180,7 @@ class Command:
         return Command(command_type=command_type, arguments=arguments)
 
     def to_script(self) -> str:
-        start = f"{self.command_type.name} (0x{self.command_type.type_id:02x})"
+        start = f"(0x{self.command_type.type_id:02x}) {self.command_type.name}"
         end = ""
         if len(self.arguments) > 0:
             end = " " + " ".join(

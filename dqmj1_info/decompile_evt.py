@@ -29,14 +29,17 @@ def main(argv: List[str]):
 
         output_filepath = output_directory / (evt_filepath.name + ".dqmj1_script")
         with open(output_filepath, "w") as output_stream:
-            for command in event.commands:
-                commands_by_type[command.type_id].append(command)
+            if args.ignore_unknown_commands:
+                for command in event.commands:
+                    commands_by_type[command.type_id].append(command)
 
-                if (
-                    not args.ignore_unknown_commands
-                    or not command.command_type.name == "UNKNOWN"
-                ):
-                    print(command.to_script(), file=output_stream)
+                    if (
+                        not args.ignore_unknown_commands
+                        or not command.command_type.name == "UNKNOWN"
+                    ):
+                        print(command.to_script(), file=output_stream)
+            else:
+                event.write_script(output_stream)
 
     command_examples_dir = output_directory / "command_examples"
     command_examples_dir.mkdir(exist_ok=True)

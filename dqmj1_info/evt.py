@@ -139,8 +139,9 @@ class Event:
 
         return Event(commands=commands, data=data)
 
-    def write_script(self, output_stream: IO[bytes]) -> None:
-        output_stream.write(b"\x53\x43\x52\x00")
-        output_stream.write(self.data)
+    def write_script(self, output_stream: IO[str]) -> None:
+        output_stream.write("DATA ")
+        output_stream.write(repr(self.data))
+        output_stream.write("\n")
         for command in self.commands:
             print(command.to_script(), file=output_stream, flush=False)

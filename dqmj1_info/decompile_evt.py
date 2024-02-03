@@ -31,15 +31,13 @@ def main(argv: List[str]):
         with open(output_filepath, "w") as output_stream:
             if args.ignore_unknown_commands:
                 for command in event.commands:
-                    commands_by_type[command.type_id].append(command)
-
-                    if (
-                        not args.ignore_unknown_commands
-                        or not command.command_type.name == "UNKNOWN"
-                    ):
+                    if not command.command_type.name == "UNKNOWN":
                         print(command.to_script(), file=output_stream)
             else:
                 event.write_script(output_stream)
+
+            for command in event.commands:
+                commands_by_type[command.type_id].append(command)
 
     command_examples_dir = output_directory / "command_examples"
     command_examples_dir.mkdir(exist_ok=True)
@@ -49,7 +47,7 @@ def main(argv: List[str]):
         with open(filepath, "w") as output_stream:
             examples = set()
             for command in commands:
-                examples.add(str(command))
+                examples.add(command.to_script())
 
             for command_str in sorted(examples):
                 print(command_str, file=output_stream)

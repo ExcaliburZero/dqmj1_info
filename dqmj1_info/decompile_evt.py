@@ -5,7 +5,7 @@ import collections
 import pathlib
 import sys
 
-from .evt import Event, UnknownCommand
+from .evt import Event
 
 
 def main(argv: List[str]):
@@ -32,10 +32,11 @@ def main(argv: List[str]):
             for command in event.commands:
                 commands_by_type[command.type_id].append(command)
 
-                if not args.ignore_unknown_commands or not isinstance(
-                    command, UnknownCommand
+                if (
+                    not args.ignore_unknown_commands
+                    or not command.command_type.name == "UNKNOWN"
                 ):
-                    print(command, file=output_stream)
+                    print(command.to_script(), file=output_stream)
 
     command_examples_dir = output_directory / "command_examples"
     command_examples_dir.mkdir(exist_ok=True)

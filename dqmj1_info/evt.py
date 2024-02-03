@@ -1,7 +1,7 @@
 from dataclasses import dataclass
-from typing import Dict, IO, List, Literal, Optional, Type
+from typing import Any, Dict, IO, List, Literal, Optional, Type, Union
 
-import abc
+import enum
 
 from .extract_strings import byte_to_char
 
@@ -9,6 +9,15 @@ ENDIANESS: Literal["little"] = "little"
 
 STRING_END = 0xFF
 STRING_END_PADDING = 0xCC
+
+
+class ArgumentType(enum.Enum):
+    U32 = enum.auto()
+    String = enum.auto()
+    Bytes = enum.auto()
+
+
+at = ArgumentType
 
 
 @dataclass
@@ -30,14 +39,29 @@ class RawCommand:
         return RawCommand(command_type=command_type, data=data)
 
 
-class Command(abc.ABC):
+@dataclass
+class CommandType:
+    type_id: int
+    name: str
+    arguments: List[ArgumentType]
+
+
+COMMAND_TYPES = [
+    CommandType(0x25, "StartDialog", []),
+    CommandType(0x29, "ShowDialog", [at.String]),
+    CommandType(0x2A, "SpeakerName", [at.String]),
+    CommandType(0xE9, "ShowCreditsText", [at.String]),
+]
+
+
+@dataclass
+class Command:
+    command_type: CommandType
+    arguments: List[Any]
+
     @property
     def type_id(self) -> int:
-        if type(self) in Command.types_by_command():
-            return Command.types_by_command()[type(self)]
-
-        assert isinstance(self, UnknownCommand)
-        return self.raw.command_type
+        return self.command_type.type_id
 
     @staticmethod
     def from_evt(input_stream: IO[bytes]) -> Optional["Command"]:
@@ -45,36 +69,46 @@ class Command(abc.ABC):
         if raw is None:
             return None
 
-        commands_by_type = Command.commands_by_type()
+        commands_by_type = Command.commands_by_type_id()
 
         if raw.command_type in commands_by_type:
-            return commands_by_type[raw.command_type].from_raw(raw)
+            return Command.from_raw(raw, commands_by_type[raw.command_type])
 
-        return UnknownCommand(type_hex=hex(raw.command_type), raw=raw)
-
-    @staticmethod
-    def from_raw(raw: RawCommand) -> Optional["Command"]:
-        raise NotImplemented
+        return Command.from_raw(
+            raw=raw, command_type=CommandType(raw.command_type, "UNKNOWN", [at.Bytes])
+        )
 
     @staticmethod
-    def types_by_command() -> Dict[Type["Command"], int]:
-        return {
-            command_class: type_id
-            for type_id, command_class in Command.commands_by_type().items()
-        }
+    def from_raw(raw: RawCommand, command_type: CommandType) -> Optional["Command"]:
+        arguments: List[Any] = []
+
+        current = 0
+        for argument_type in command_type.arguments:
+            if argument_type == at.Bytes:
+                arguments.append(raw.data[current:])
+                current = len(raw.data)
+            elif argument_type == at.String:
+                string = bytes_to_string(raw.data[current:])
+
+                arguments.append(string)
+                current = len(raw.data)
+
+        return Command(command_type=command_type, arguments=arguments)
+
+    def to_script(self) -> str:
+        start = f"{self.command_type.name} (0x{self.command_type.type_id:02x})"
+        end = ""
+        if len(self.arguments) > 0:
+            end = " " + " ".join((repr(a) for a in self.arguments))
+
+        return start + end
 
     @staticmethod
-    def commands_by_type() -> Dict[int, Type["Command"]]:
-        return {
-            0x15: Command_0x15,
-            0x25: StartDialog,
-            0x29: ShowDialog,
-            0x2A: SpeakerName,
-            0xE9: ShowCreditsText,
-        }
+    def commands_by_type_id() -> Dict[int, CommandType]:
+        return {cmd_type.type_id: cmd_type for cmd_type in COMMAND_TYPES}
 
 
-def bytes_to_string(bs: List[int]) -> str:
+def bytes_to_string(bs: Union[List[int], bytes]) -> str:
     chars = []
     for b in bs:
         if b == 0xFF:
@@ -88,24 +122,12 @@ def bytes_to_string(bs: List[int]) -> str:
 @dataclass
 class Event:
     commands: List[Command]
+    data: bytes
 
     @staticmethod
     def from_evt(input_stream: IO[bytes]) -> "Event":
-        # Magic
-        input_stream.read(8)
-
-        # TODO: figure out how to calculate correct offset
-        input_stream.read(0x1010 - 8)
-        """while len(input_stream.peek()) > 0:
-            next_3_nums = input_stream.peek()[0:4 * 3]
-
-            if next_3_nums == b'\x0C\x00\x00\x00\x0C\x00\x00\x00\x0C\x00\x00\x00':
-                input_stream.read(4 * 3)
-                break
-
-            input_stream.read(4)
-
-        print(hex(input_stream.tell()))"""
+        input_stream.read(4)
+        data = input_stream.read(0x1010 - 4)
 
         commands = []
         while True:
@@ -115,88 +137,10 @@ class Event:
 
             commands.append(command)
 
-        return Event(commands=commands)
+        return Event(commands=commands, data=data)
 
-
-@dataclass
-class Command_0x15(Command):
-    a: int
-    b: str
-    c: int
-    d: str
-
-    @staticmethod
-    def from_raw(raw: RawCommand) -> "Command":
-        a = int.from_bytes(raw.data[0:4], ENDIANESS)
-        b = hex(int.from_bytes(raw.data[4:8], ENDIANESS))
-        c = int.from_bytes(raw.data[8:12], ENDIANESS)
-        d = hex(int.from_bytes(raw.data[12:16], ENDIANESS))
-
-        return Command_0x15(a, b, c, d)
-
-
-@dataclass
-class SpeakerName(Command):
-    name: str
-
-    @staticmethod
-    def from_raw(raw: RawCommand) -> "Command":
-        name_bytes = []
-
-        # Grab the string
-        for b in raw.data:
-            name_bytes.append(b)
-
-            if b == STRING_END:
-                break
-
-        return SpeakerName(bytes_to_string(name_bytes))
-
-
-@dataclass
-class ShowDialog(Command):
-    text: str
-
-    @staticmethod
-    def from_raw(raw: RawCommand) -> "Command":
-        name_bytes = []
-
-        # Grab the string
-        for b in raw.data:
-            name_bytes.append(b)
-
-            if b == STRING_END:
-                break
-
-        return ShowDialog(bytes_to_string(name_bytes))
-
-
-@dataclass
-class StartDialog(Command):
-    @staticmethod
-    def from_raw(raw: RawCommand) -> "Command":
-        return StartDialog()
-
-
-@dataclass
-class ShowCreditsText(Command):
-    text: str
-
-    @staticmethod
-    def from_raw(raw: RawCommand) -> "Command":
-        name_bytes = []
-
-        # Grab the string
-        for b in raw.data:
-            name_bytes.append(b)
-
-            if b == STRING_END:
-                break
-
-        return ShowCreditsText(bytes_to_string(name_bytes))
-
-
-@dataclass
-class UnknownCommand(Command):
-    type_hex: str
-    raw: RawCommand
+    def write_script(self, output_stream: IO[bytes]) -> None:
+        output_stream.write(b"\x53\x43\x52\x00")
+        output_stream.write(self.data)
+        for command in self.commands:
+            print(command.to_script(), file=output_stream, flush=False)

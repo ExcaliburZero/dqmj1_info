@@ -8,6 +8,8 @@ import sys
 
 import pandas as pd
 
+from .character_encoding import BYTE_TO_CHAR_MAP, CHAR_TO_BYTE_MAP
+
 
 @dataclass
 class StringTable:
@@ -107,49 +109,48 @@ def main(argv: List[str]):
 
 
 def byte_to_char(byte: int) -> str:
-    a = 0x25
-    A = 0x0B
-    char_lower = chr((byte - a) + ord("a"))
-    char_upper = chr((byte - A) + ord("A"))
+    mapping = BYTE_TO_CHAR_MAP
 
-    mapping = {
-        0x0: "0",
-        0x1: "1",
-        0x2: "2",
-        0x3: "3",
-        0x4: "4",
-        0x5: "5",
-        0x6: "6",
-        0x7: "7",
-        0x8: "8",
-        0x9: "9",
-        0xA: " ",
-        0x55: "Ü",
-        0x57: "á",
-        0x70: "!",
-        0x71: "?",
-        0x87: "+",
-        0x8D: "II",
-        0x8E: "III",
-        0x9A: "‘",
-        0x9B: "’",
-        0xAC: ".",
-        0xAD: "&",
-        0xCC: "-",
-        0xCD: ",",
-        0xFE: "\\n",
-    }
-
-    if char_lower.islower() and char_lower.isascii():
-        return char_lower
-    elif char_upper.isupper() and char_upper.isascii():
-        return char_upper
-    elif byte in mapping:
+    if byte in mapping:
         return mapping[byte]
     else:
         # return "?"
         # return "[" + char + "]"
         return "[" + hex(byte) + "]"
+
+
+def char_to_byte(c: str) -> int:
+    mapping = CHAR_TO_BYTE_MAP
+
+    if c in mapping:
+        return mapping[c]
+    elif c.startswith("[0x"):
+        assert c.endswith("]")
+        return int(c[1:-1], base=16)
+    else:
+        print(repr(c))
+        assert False
+        # return "?"
+        # return "[" + char + "]"
+        # return "[" + hex(byte) + "]"
+
+
+def get_string_chars(string: str) -> List[str]:
+    chars = []
+
+    current = 0
+    while current < len(string):
+        c = string[current]
+        if c == "[":
+            # ex. [0xff]
+            c = string[current : current + 6]
+        elif c == "\\":
+            c = string[current : current + 2]
+
+        chars.append(c)
+        current += len(c)
+
+    return chars
 
 
 if __name__ == "__main__":

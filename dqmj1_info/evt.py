@@ -50,7 +50,8 @@ class CommandType:
 COMMAND_TYPES = [
     CommandType(0x15, "Cmd_0x15", [at.U32, at.U32, at.U32, at.U32]),
     CommandType(0x25, "StartDialog", []),
-    CommandType(0x29, "ShowDialog", [at.String]),
+    CommandType(0x27, "ShowDialog", []),
+    CommandType(0x29, "SetDialog", [at.String]),
     CommandType(0x2A, "SpeakerName", [at.String]),
     CommandType(0xE9, "ShowCreditsText", [at.String]),
 ]

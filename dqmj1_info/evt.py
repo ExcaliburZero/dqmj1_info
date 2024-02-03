@@ -48,12 +48,36 @@ class CommandType:
 
 
 COMMAND_TYPES = [
+    CommandType(0x00, "Cmd_0x00", []),
     CommandType(0x15, "Cmd_0x15", [at.U32, at.U32, at.U32, at.U32]),
+    CommandType(0x16, "Cmd_0x16", []),
+    CommandType(0x17, "Cmd_0x17", []),
     CommandType(0x25, "StartDialog", []),
+    CommandType(0x26, "Cmd_0x26", []),
     CommandType(0x27, "ShowDialog", []),
     CommandType(0x29, "SetDialog", [at.String]),
     CommandType(0x2A, "SpeakerName", [at.String]),
+    CommandType(0x2B, "Cmd_0x2B", []),
+    CommandType(0x2E, "Cmd_0x2E", []),
+    CommandType(0x2F, "Cmd_0x2F", []),
+    CommandType(0x48, "Cmd_0x48", []),
+    CommandType(0x49, "Cmd_0x49", []),
+    CommandType(0x70, "Cmd_0x70", []),
+    CommandType(0x86, "Cmd_0x86", []),
+    CommandType(0x87, "Cmd_0x87", []),
+    CommandType(0x89, "Cmd_0x89", []),
+    CommandType(0x8C, "Cmd_0x8C", []),
+    CommandType(0x91, "Cmd_0x91", []),
+    CommandType(0x92, "Cmd_0x92", []),
+    CommandType(0x97, "Cmd_0x97", []),
+    CommandType(0x98, "Cmd_0x98", []),
+    CommandType(0x9A, "Cmd_0x9A", []),
+    CommandType(0x9B, "Cmd_0x9B", []),
+    CommandType(0xBB, "Cmd_0xBB", []),
+    CommandType(0xD4, "Cmd_0xD4", []),
+    CommandType(0xD5, "Cmd_0xD5", []),
     CommandType(0xE9, "ShowCreditsText", [at.String]),
+    CommandType(0xF0, "Cmd_0xF0", []),
 ]
 
 

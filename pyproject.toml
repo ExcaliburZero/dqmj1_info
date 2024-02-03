@@ -1,0 +1,9 @@
+[project]
+name = "dqmj1_info"
+version = "0.0.1"
+
+[project.scripts]
+dqmj1_extract_files = "dqmj1_info:extract_files.main_without_args"
+
+[tool.setuptools]
+packages = ["dqmj1_info"]

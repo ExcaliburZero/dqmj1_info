@@ -123,7 +123,7 @@ def main(argv: List[str]):
             *sorted(glob.glob(str(input_directory / "data" / "*.evt"))),
             "--output_directory",
             str(scripts_dir),
-            "--ignore_unknown_commands",
+            # "--ignore_unknown_commands",
         ]
     )
     logging.info(f"Finished decompiling scripts to: {scripts_dir}")
@@ -179,5 +179,5 @@ def main(argv: List[str]):
     logging.info(f"Finished creating item set table: {item_table_csv}")
 
 
-if __name__ == "__main__":
+def main_without_args() -> None:
     main(sys.argv[1:])

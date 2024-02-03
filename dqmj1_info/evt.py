@@ -47,6 +47,7 @@ class CommandType:
 
 
 COMMAND_TYPES = [
+    CommandType(0x15, "Cmd_0x15", [at.U32, at.U32, at.U32, at.U32]),
     CommandType(0x25, "StartDialog", []),
     CommandType(0x29, "ShowDialog", [at.String]),
     CommandType(0x2A, "SpeakerName", [at.String]),
@@ -92,6 +93,11 @@ class Command:
 
                 arguments.append(string)
                 current = len(raw.data)
+            elif argument_type == at.U32:
+                value = int.from_bytes(raw.data[current : current + 4], ENDIANESS)
+
+                arguments.append(value)
+                current += 4
 
         return Command(command_type=command_type, arguments=arguments)
 
@@ -99,9 +105,21 @@ class Command:
         start = f"{self.command_type.name} (0x{self.command_type.type_id:02x})"
         end = ""
         if len(self.arguments) > 0:
-            end = " " + " ".join((repr(a) for a in self.arguments))
+            end = " " + " ".join(
+                (
+                    Command.value_to_script_literal(a, t)
+                    for a, t in zip(self.arguments, self.command_type.arguments)
+                )
+            )
 
         return start + end
+
+    @staticmethod
+    def value_to_script_literal(value: Any, value_type: ArgumentType) -> str:
+        if value_type == at.U32:
+            return hex(value)
+
+        return repr(value)
 
     @staticmethod
     def commands_by_type_id() -> Dict[int, CommandType]:

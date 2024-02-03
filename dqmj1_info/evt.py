@@ -118,6 +118,8 @@ class Command:
     def value_to_script_literal(value: Any, value_type: ArgumentType) -> str:
         if value_type == at.U32:
             return hex(value)
+        elif value_type == at.Bytes:
+            return 'b"' + "".join([f"\\x{b:02x}" for b in value]) + '"'
 
         return repr(value)
 

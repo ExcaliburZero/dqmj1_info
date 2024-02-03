@@ -119,13 +119,17 @@ class Command:
         if value_type == at.U32:
             return hex(value)
         elif value_type == at.Bytes:
-            return 'b"' + "".join([f"\\x{b:02x}" for b in value]) + '"'
+            return bytes_repr(value)
 
         return repr(value)
 
     @staticmethod
     def commands_by_type_id() -> Dict[int, CommandType]:
         return {cmd_type.type_id: cmd_type for cmd_type in COMMAND_TYPES}
+
+
+def bytes_repr(bs: bytes) -> str:
+    return 'b"' + "".join([f"\\x{b:02x}" for b in bs]) + '"'
 
 
 def bytes_to_string(bs: Union[List[int], bytes]) -> str:
@@ -161,7 +165,7 @@ class Event:
 
     def write_script(self, output_stream: IO[str]) -> None:
         output_stream.write("DATA ")
-        output_stream.write(repr(self.data))
+        output_stream.write(bytes_repr(self.data))
         output_stream.write("\n")
         for command in self.commands:
             print(command.to_script(), file=output_stream, flush=False)

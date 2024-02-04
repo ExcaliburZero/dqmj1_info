@@ -27,6 +27,9 @@ def main(argv: List[str]):
         with open(evt_filepath, "rb") as input_stream:
             event = Event.from_evt(input_stream)
 
+        for command in event.commands:
+            commands_by_type[command.type_id].append(command)
+
         output_filepath = output_directory / (evt_filepath.name + ".dqmj1_script")
         with open(output_filepath, "w") as output_stream:
             if args.ignore_unknown_commands:
@@ -36,13 +39,10 @@ def main(argv: List[str]):
             else:
                 event.write_script(output_stream)
 
-            for command in event.commands:
-                commands_by_type[command.type_id].append(command)
-
     command_examples_dir = output_directory / "command_examples"
     command_examples_dir.mkdir(exist_ok=True)
 
-    for command_type, commands in commands_by_type.items():
+    for command_type, commands in sorted(commands_by_type.items()):
         filepath = command_examples_dir / f"{command_type:02x}.txt"
         with open(filepath, "w") as output_stream:
             examples = set()

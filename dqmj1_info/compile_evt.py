@@ -26,7 +26,7 @@ def main(argv: List[str]):
             event = Event.from_script(input_stream)
 
         output_filepath = output_directory / (
-            script_filepath.name.replace(".dqmj1_script", "RE")
+            script_filepath.name.replace(".dqmj1_script", "")
         )  # TODO: add .evt if needed
         with open(output_filepath, "wb") as output_stream:
             event.write_evt(output_stream)

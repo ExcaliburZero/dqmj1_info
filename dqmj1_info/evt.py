@@ -15,6 +15,7 @@ STRING_END_PADDING = 0xCC
 class ArgumentType(enum.Enum):
     U32 = enum.auto()
     String = enum.auto()
+    AsciiString = enum.auto()
     Bytes = enum.auto()
 
 
@@ -144,6 +145,7 @@ COMMAND_TYPES = [
     CommandType(0x92, "Cmd_0x92", []),
     CommandType(0x97, "Cmd_0x97", []),
     CommandType(0x98, "Cmd_0x98", []),
+    CommandType(0x99, "Cmd_0x99", [at.AsciiString]),
     CommandType(0x9A, "Cmd_0x9A", []),
     CommandType(0x9B, "Cmd_0x9B", []),
     CommandType(0xB9, "Cmd_0xB9", []),
@@ -194,6 +196,10 @@ class Command:
             if argument_type == at.Bytes:
                 for b in argument:
                     data.append(b)
+            elif argument_type == at.AsciiString:
+                for c in argument:
+                    data.append(ord(c))
+                data.append(0x00)
             elif argument_type == at.U32:
                 for b in argument.to_bytes(4, ENDIANESS):
                     data.append(b)
@@ -225,12 +231,15 @@ class Command:
         for argument_type in command_type.arguments:
             if argument_type == at.Bytes:
                 arguments.append(raw.data[current:])
-                current = len(raw.data)
+                current += len(raw.data)
+            elif argument_type == at.AsciiString:
+                arguments.append("".join((chr(b) for b in raw.data[current:-1])))
+                current += len(raw.data)
             elif argument_type == at.String:
                 string = bytes_to_string(raw.data[current:])
 
                 arguments.append(string)
-                current = len(raw.data)
+                current += len(raw.data)
             elif argument_type == at.U32:
                 value = int.from_bytes(raw.data[current : current + 4], ENDIANESS)
 

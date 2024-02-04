@@ -49,8 +49,17 @@ class CommandType:
 
 COMMAND_TYPES = [
     CommandType(0x00, "Cmd_0x00", []),
+    CommandType(0x02, "Cmd_0x02", [at.U32]),  # Argument seems to be unused
     CommandType(0x09, "Cmd_0x09", [at.U32]),
-    CommandType(0x10, "Cmd_0x10", [at.U32, at.U32]),
+    CommandType(0x0B, "Cmd_0x0B", [at.U32, at.U32]),
+    CommandType(0x0C, "Cmd_0x0C", [at.U32]),
+    CommandType(0x0E, "Cmd_0x0E", [at.U32]),
+    CommandType(0x0F, "Cmd_0x0F", [at.U32, at.U32, at.U32, at.U32]),
+    CommandType(0x10, "Cmd_0x10", [at.U32, at.U32, at.U32, at.U32]),
+    CommandType(0x11, "Cmd_0x11", [at.U32, at.U32, at.U32, at.U32]),
+    CommandType(0x12, "Cmd_0x12", [at.U32, at.U32, at.U32, at.U32]),
+    CommandType(0x13, "Cmd_0x13", [at.U32, at.U32, at.U32, at.U32]),
+    CommandType(0x14, "Cmd_0x14", [at.U32, at.U32, at.U32, at.U32]),
     CommandType(0x15, "Cmd_0x15", [at.U32, at.U32, at.U32, at.U32]),
     CommandType(0x16, "Cmd_0x16", []),
     CommandType(0x17, "Cmd_0x17", []),

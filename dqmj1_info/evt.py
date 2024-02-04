@@ -49,19 +49,40 @@ class CommandType:
 
 COMMAND_TYPES = [
     CommandType(0x00, "Cmd_0x00", []),
+    CommandType(0x09, "Cmd_0x09", [at.U32]),
+    CommandType(0x10, "Cmd_0x10", [at.U32, at.U32]),
     CommandType(0x15, "Cmd_0x15", [at.U32, at.U32, at.U32, at.U32]),
     CommandType(0x16, "Cmd_0x16", []),
     CommandType(0x17, "Cmd_0x17", []),
+    CommandType(0x23, "Cmd_0x23", []),
+    CommandType(0x24, "Cmd_0x24", []),
     CommandType(0x25, "StartDialog", []),
     CommandType(0x26, "Cmd_0x26", []),
     CommandType(0x27, "ShowDialog", []),
+    CommandType(0x28, "Cmd_0x28", []),
     CommandType(0x29, "SetDialog", [at.String]),
     CommandType(0x2A, "SpeakerName", [at.String]),
     CommandType(0x2B, "Cmd_0x2B", []),
+    CommandType(0x2C, "Cmd_0x2C", []),
+    CommandType(0x2D, "Cmd_0x2D", []),
     CommandType(0x2E, "Cmd_0x2E", []),
     CommandType(0x2F, "Cmd_0x2F", []),
+    CommandType(0x33, "Cmd_0x33", []),
+    CommandType(0x34, "Cmd_0x34", []),
+    CommandType(0x35, "Cmd_0x35", []),
+    CommandType(0x36, "Cmd_0x36", []),
+    CommandType(0x39, "Cmd_0x39", []),
+    CommandType(0x3F, "Cmd_0x3F", []),
+    CommandType(0x44, "Cmd_0x44", []),
+    CommandType(0x45, "Cmd_0x45", []),
     CommandType(0x48, "Cmd_0x48", []),
     CommandType(0x49, "Cmd_0x49", []),
+    CommandType(0x4A, "Cmd_0x4A", []),
+    CommandType(0x58, "Cmd_0x58", []),
+    CommandType(0x5A, "Cmd_0x5A", []),
+    CommandType(0x5B, "Cmd_0x5B", []),
+    CommandType(0x5E, "Cmd_0x5E", []),
+    CommandType(0x5F, "Cmd_0x5F", []),
     CommandType(0x70, "Cmd_0x70", []),
     CommandType(0x86, "Cmd_0x86", []),
     CommandType(0x87, "Cmd_0x87", []),
@@ -73,11 +94,16 @@ COMMAND_TYPES = [
     CommandType(0x98, "Cmd_0x98", []),
     CommandType(0x9A, "Cmd_0x9A", []),
     CommandType(0x9B, "Cmd_0x9B", []),
+    CommandType(0xB9, "Cmd_0xB9", []),
     CommandType(0xBB, "Cmd_0xBB", []),
+    CommandType(0xBD, "Cmd_0xBD", []),
     CommandType(0xD4, "Cmd_0xD4", []),
     CommandType(0xD5, "Cmd_0xD5", []),
     CommandType(0xE9, "ShowCreditsText", [at.String]),
     CommandType(0xF0, "Cmd_0xF0", []),
+    CommandType(0xF1, "Cmd_0xF1", []),
+    CommandType(0xF3, "Cmd_0xF3", []),
+    CommandType(0xF4, "Cmd_0xF4", []),
 ]
 
 
@@ -180,7 +206,10 @@ class Command:
         return Command(command_type=command_type, arguments=arguments)
 
     def to_script(self) -> str:
-        start = f"(0x{self.command_type.type_id:02x}) {self.command_type.name}"
+        command_id_reversed_endian = int.from_bytes(
+            self.command_type.type_id.to_bytes(4, ENDIANESS), "big"
+        )
+        start = f"(0x{command_id_reversed_endian:08X}) {self.command_type.name}"
         end = ""
         if len(self.arguments) > 0:
             end = " " + " ".join(

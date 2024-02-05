@@ -1,9 +1,18 @@
 Id,Name,Arguments,Notes
 0x00,"Cmd_0x00","[]",
+0x01,"Cmd_0x01","[Bytes]",TODO: figure out arguments
 0x02,"Cmd_0x02","[U32]",Argument seems to be unused
+0x03,"Cmd_0x03","[Bytes]",TODO: figure out arguments
+0x04,"Cmd_0x04","[Bytes]",TODO: figure out arguments
+0x05,"Cmd_0x05","[Bytes]",TODO: figure out arguments
+0x06,"Cmd_0x06","[Bytes]",TODO: figure out arguments
+0x07,"Cmd_0x07","[Bytes]",TODO: figure out arguments
+0x08,"Cmd_0x08","[Bytes]",TODO: figure out arguments
 0x09,"Cmd_0x09","[U32]",
+0x0A,"Cmd_0x0A","[Bytes]",TODO: figure out arguments
 0x0B,"Cmd_0x0B","[U32, U32]",
 0x0C,"Cmd_0x0C","[U32]",
+0x0D,"Cmd_0x0D","[Bytes]",TODO: figure out arguments
 0x0E,"Cmd_0x0E","[U32]",
 0x0F,"Cmd_0x0F","[U32, U32, U32, U32]",
 0x10,"Cmd_0x10","[U32, U32, U32, U32]",
@@ -14,6 +23,13 @@ Id,Name,Arguments,Notes
 0x15,"Cmd_0x15","[U32, U32, U32, U32]",
 0x16,"Cmd_0x16","[]",
 0x17,"Cmd_0x17","[]",
+0x18,"Cmd_0x18","[Bytes]",TODO: figure out arguments
+0x19,"Cmd_0x19","[Bytes]",TODO: figure out arguments
+0x1A,"Cmd_0x1A","[Bytes]",TODO: figure out arguments
+0x1B,"Cmd_0x1B","[Bytes]",TODO: figure out arguments
+0x1C,"Cmd_0x1C","[Bytes]",TODO: figure out arguments
+0x1D,"Cmd_0x1D","[Bytes]",TODO: figure out arguments
+0x1E,"Cmd_0x1E","[Bytes]",TODO: figure out arguments
 0x1F,"Cmd_0x1F","[]",
 0x20,"Cmd_0x20","[]",
 0x21,"Cmd_0x21","[]",
@@ -86,25 +102,155 @@ Id,Name,Arguments,Notes
 0x64,"Cmd_0x64","[]",
 0x65,"Cmd_0x65","[]",
 0x66,"Cmd_0x66","[]",
+0x67,"Cmd_0x67","[Bytes]",TODO: figure out arguments
+0x68,"Cmd_0x68","[Bytes]",TODO: figure out arguments
+0x69,"Cmd_0x69","[Bytes]",TODO: figure out arguments
+0x6A,"Cmd_0x6A","[Bytes]",TODO: figure out arguments
+0x6B,"Cmd_0x6B","[Bytes]",TODO: figure out arguments
+0x6C,"Cmd_0x6C","[Bytes]",TODO: figure out arguments
+0x6D,"Cmd_0x6D","[Bytes]",TODO: figure out arguments
+0x6E,"Cmd_0x6E","[Bytes]",TODO: figure out arguments
+0x6F,"Cmd_0x6F","[Bytes]",TODO: figure out arguments
 0x70,"Cmd_0x70","[]",
+0x71,"Cmd_0x71","[Bytes]",TODO: figure out arguments
+0x72,"Cmd_0x72","[Bytes]",TODO: figure out arguments
+0x73,"Cmd_0x73","[Bytes]",TODO: figure out arguments
+0x74,"Cmd_0x74","[Bytes]",TODO: figure out arguments
+0x75,"Cmd_0x75","[Bytes]",TODO: figure out arguments
+0x76,"Cmd_0x76","[Bytes]",TODO: figure out arguments
+0x77,"Cmd_0x77","[Bytes]",TODO: figure out arguments
+0x78,"Cmd_0x78","[Bytes]",TODO: figure out arguments
+0x79,"Cmd_0x79","[Bytes]",TODO: figure out arguments
+0x7A,"Cmd_0x7A","[Bytes]",TODO: figure out arguments
+0x7B,"Cmd_0x7B","[Bytes]",TODO: figure out arguments
+0x7C,"Cmd_0x7C","[Bytes]",TODO: figure out arguments
+0x7D,"Cmd_0x7D","[Bytes]",TODO: figure out arguments
+0x7E,"Cmd_0x7E","[Bytes]",TODO: figure out arguments
+0x7F,"Cmd_0x7F","[Bytes]",TODO: figure out arguments
+0x80,"Cmd_0x80","[Bytes]",TODO: figure out arguments
+0x81,"Cmd_0x81","[Bytes]",TODO: figure out arguments
+0x82,"Cmd_0x82","[Bytes]",TODO: figure out arguments
+0x83,"Cmd_0x83","[Bytes]",TODO: figure out arguments
+0x84,"Cmd_0x84","[Bytes]",TODO: figure out arguments
+0x85,"Cmd_0x85","[Bytes]",TODO: figure out arguments
 0x86,"Cmd_0x86","[]",
 0x87,"Cmd_0x87","[]",
+0x88,"Cmd_0x88","[Bytes]",TODO: figure out arguments
 0x89,"Cmd_0x89","[]",
+0x8A,"Cmd_0x8A","[Bytes]",TODO: figure out arguments
+0x8B,"Cmd_0x8B","[Bytes]",TODO: figure out arguments
 0x8C,"Cmd_0x8C","[]",
+0x8D,"Cmd_0x8D","[Bytes]",TODO: figure out arguments
+0x8E,"Cmd_0x8E","[Bytes]",TODO: figure out arguments
+0x8F,"Cmd_0x8F","[Bytes]",TODO: figure out arguments
+0x90,"Cmd_0x90","[Bytes]",TODO: figure out arguments
 0x91,"Cmd_0x91","[]",
 0x92,"Cmd_0x92","[]",
+0x93,"Cmd_0x93","[Bytes]",TODO: figure out arguments
+0x94,"Cmd_0x94","[Bytes]",TODO: figure out arguments
+0x95,"Cmd_0x95","[Bytes]",TODO: figure out arguments
+0x96,"Cmd_0x96","[Bytes]",TODO: figure out arguments
 0x97,"Cmd_0x97","[]",
 0x98,"Cmd_0x98","[]",
 0x99,"Cmd_0x99","[AsciiString]",
 0x9A,"Cmd_0x9A","[]",
 0x9B,"Cmd_0x9B","[]",
+0x9C,"Cmd_0x9C","[Bytes]",TODO: figure out arguments
+0x9D,"Cmd_0x9D","[Bytes]",TODO: figure out arguments
+0x9E,"Cmd_0x9E","[Bytes]",TODO: figure out arguments
+0x9F,"Cmd_0x9F","[Bytes]",TODO: figure out arguments
+0xA0,"Cmd_0xA0","[Bytes]",TODO: figure out arguments
+0xA1,"Cmd_0xA1","[Bytes]",TODO: figure out arguments
+0xA2,"Cmd_0xA2","[Bytes]",TODO: figure out arguments
+0xA3,"Cmd_0xA3","[Bytes]",TODO: figure out arguments
+0xA4,"Cmd_0xA4","[Bytes]",TODO: figure out arguments
+0xA5,"Cmd_0xA5","[Bytes]",TODO: figure out arguments
+0xA6,"Cmd_0xA6","[Bytes]",TODO: figure out arguments
+0xA7,"Cmd_0xA7","[Bytes]",TODO: figure out arguments
+0xA8,"Cmd_0xA8","[Bytes]",TODO: figure out arguments
+0xA9,"Cmd_0xA9","[Bytes]",TODO: figure out arguments
+0xAA,"Cmd_0xAA","[Bytes]",TODO: figure out arguments
+0xAB,"Cmd_0xAB","[Bytes]",TODO: figure out arguments
+0xAC,"Cmd_0xAC","[Bytes]",TODO: figure out arguments
+0xAD,"Cmd_0xAD","[Bytes]",TODO: figure out arguments
+0xAE,"Cmd_0xAE","[Bytes]",TODO: figure out arguments
+0xAF,"Cmd_0xAF","[Bytes]",TODO: figure out arguments
+0xB0,"Cmd_0xB0","[Bytes]",TODO: figure out arguments
+0xB1,"Cmd_0xB1","[Bytes]",TODO: figure out arguments
+0xB2,"Cmd_0xB2","[Bytes]",TODO: figure out arguments
+0xB3,"Cmd_0xB3","[Bytes]",TODO: figure out arguments
+0xB4,"Cmd_0xB4","[Bytes]",TODO: figure out arguments
+0xB5,"Cmd_0xB5","[Bytes]",TODO: figure out arguments
+0xB6,"Cmd_0xB6","[Bytes]",TODO: figure out arguments
+0xB7,"Cmd_0xB7","[Bytes]",TODO: figure out arguments
+0xB8,"Cmd_0xB8","[Bytes]",TODO: figure out arguments
 0xB9,"Cmd_0xB9","[]",
+0xBA,"Cmd_0xBA","[Bytes]",TODO: figure out arguments
 0xBB,"Cmd_0xBB","[]",
+0xBC,"Cmd_0xBC","[Bytes]",TODO: figure out arguments
 0xBD,"Cmd_0xBD","[]",
+0xBE,"Cmd_0xBE","[Bytes]",TODO: figure out arguments
+0xBF,"Cmd_0xBF","[Bytes]",TODO: figure out arguments
+0xC0,"Cmd_0xC0","[Bytes]",TODO: figure out arguments
+0xC1,"Cmd_0xC1","[Bytes]",TODO: figure out arguments
+0xC2,"Cmd_0xC2","[Bytes]",TODO: figure out arguments
+0xC3,"Cmd_0xC3","[Bytes]",TODO: figure out arguments
+0xC4,"Cmd_0xC4","[Bytes]",TODO: figure out arguments
+0xC5,"Cmd_0xC5","[Bytes]",TODO: figure out arguments
+0xC6,"Cmd_0xC6","[Bytes]",TODO: figure out arguments
+0xC7,"Cmd_0xC7","[Bytes]",TODO: figure out arguments
+0xC8,"Cmd_0xC8","[Bytes]",TODO: figure out arguments
+0xC9,"Cmd_0xC9","[Bytes]",TODO: figure out arguments
+0xCA,"Cmd_0xCA","[Bytes]",TODO: figure out arguments
+0xCB,"Cmd_0xCB","[Bytes]",TODO: figure out arguments
+0xCC,"Cmd_0xCC","[Bytes]",TODO: figure out arguments
+0xCD,"Cmd_0xCD","[Bytes]",TODO: figure out arguments
+0xCE,"Cmd_0xCE","[Bytes]",TODO: figure out arguments
+0xCF,"Cmd_0xCF","[Bytes]",TODO: figure out arguments
+0xD0,"Cmd_0xD0","[Bytes]",TODO: figure out arguments
+0xD1,"Cmd_0xD1","[Bytes]",TODO: figure out arguments
+0xD2,"Cmd_0xD2","[Bytes]",TODO: figure out arguments
+0xD3,"Cmd_0xD3","[Bytes]",TODO: figure out arguments
 0xD4,"Cmd_0xD4","[]",
 0xD5,"Cmd_0xD5","[]",
+0xD6,"Cmd_0xD6","[Bytes]",TODO: figure out arguments
+0xD7,"Cmd_0xD7","[Bytes]",TODO: figure out arguments
+0xD8,"Cmd_0xD8","[Bytes]",TODO: figure out arguments
+0xD9,"Cmd_0xD9","[Bytes]",TODO: figure out arguments
+0xDA,"Cmd_0xDA","[Bytes]",TODO: figure out arguments
+0xDB,"Cmd_0xDB","[Bytes]",TODO: figure out arguments
+0xDC,"Cmd_0xDC","[Bytes]",TODO: figure out arguments
+0xDD,"Cmd_0xDD","[Bytes]",TODO: figure out arguments
+0xDE,"Cmd_0xDE","[Bytes]",TODO: figure out arguments
+0xDF,"Cmd_0xDF","[Bytes]",TODO: figure out arguments
+0xE0,"Cmd_0xE0","[Bytes]",TODO: figure out arguments
+0xE1,"Cmd_0xE1","[Bytes]",TODO: figure out arguments
+0xE2,"Cmd_0xE2","[Bytes]",TODO: figure out arguments
+0xE3,"Cmd_0xE3","[Bytes]",TODO: figure out arguments
+0xE4,"Cmd_0xE4","[Bytes]",TODO: figure out arguments
+0xE5,"Cmd_0xE5","[Bytes]",TODO: figure out arguments
+0xE6,"Cmd_0xE6","[Bytes]",TODO: figure out arguments
+0xE7,"Cmd_0xE7","[Bytes]",TODO: figure out arguments
+0xE8,"Cmd_0xE8","[Bytes]",TODO: figure out arguments
 0xE9,"ShowCreditsText","[String]",
+0xEA,"Cmd_0xEA","[Bytes]",TODO: figure out arguments
+0xEB,"Cmd_0xEB","[Bytes]",TODO: figure out arguments
+0xEC,"Cmd_0xEC","[Bytes]",TODO: figure out arguments
+0xED,"Cmd_0xED","[Bytes]",TODO: figure out arguments
+0xEE,"Cmd_0xEE","[Bytes]",TODO: figure out arguments
+0xEF,"Cmd_0xEF","[Bytes]",TODO: figure out arguments
 0xF0,"Cmd_0xF0","[]",
 0xF1,"Cmd_0xF1","[]",
 0xF3,"Cmd_0xF3","[]",
 0xF4,"Cmd_0xF4","[]",
+0xF5,"Cmd_0xF5","[Bytes]",TODO: figure out arguments
+0xF6,"Cmd_0xF6","[Bytes]",TODO: figure out arguments
+0xF7,"Cmd_0xF7","[Bytes]",TODO: figure out arguments
+0xF8,"Cmd_0xF8","[Bytes]",TODO: figure out arguments
+0xF9,"Cmd_0xF9","[Bytes]",TODO: figure out arguments
+0xFA,"Cmd_0xFA","[Bytes]",TODO: figure out arguments
+0xFB,"Cmd_0xFB","[Bytes]",TODO: figure out arguments
+0xFC,"Cmd_0xFC","[Bytes]",TODO: figure out arguments
+0xFD,"Cmd_0xFD","[Bytes]",TODO: figure out arguments
+0xFE,"Cmd_0xFE","[Bytes]",TODO: figure out arguments
+0xFF,"Cmd_0xFF","[Bytes]",TODO: figure out arguments

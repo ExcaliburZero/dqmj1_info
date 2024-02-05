@@ -105,21 +105,21 @@ Id,Name,Arguments,Notes
 0x67,"Cmd_0x67","[Bytes]",TODO: figure out arguments
 0x68,"Cmd_0x68","[Bytes]",TODO: figure out arguments
 0x69,"Cmd_0x69","[Bytes]",TODO: figure out arguments
-0x6A,"Cmd_0x6A","[Bytes]",TODO: figure out arguments
-0x6B,"Cmd_0x6B","[Bytes]",TODO: figure out arguments
-0x6C,"Cmd_0x6C","[Bytes]",TODO: figure out arguments
-0x6D,"Cmd_0x6D","[Bytes]",TODO: figure out arguments
-0x6E,"Cmd_0x6E","[Bytes]",TODO: figure out arguments
-0x6F,"Cmd_0x6F","[Bytes]",TODO: figure out arguments
+0x6A,"Cmd_0x6A","[]",
+0x6B,"Cmd_0x6B","[]",Something related to a player's monster name
+0x6C,"Cmd_0x6C","[]",Something with a player's monster's species name
+0x6D,"Cmd_0x6D","[]",
+0x6E,"Cmd_0x6E","[]",
+0x6F,"Cmd_0x6F","[]",
 0x70,"Cmd_0x70","[]",
-0x71,"Cmd_0x71","[Bytes]",TODO: figure out arguments
-0x72,"Cmd_0x72","[Bytes]",TODO: figure out arguments
-0x73,"Cmd_0x73","[Bytes]",TODO: figure out arguments
-0x74,"Cmd_0x74","[Bytes]",TODO: figure out arguments
-0x75,"Cmd_0x75","[Bytes]",TODO: figure out arguments
-0x76,"Cmd_0x76","[Bytes]",TODO: figure out arguments
-0x77,"Cmd_0x77","[Bytes]",TODO: figure out arguments
-0x78,"Cmd_0x78","[Bytes]",TODO: figure out arguments
+0x71,"Cmd_0x71","[]",
+0x72,"Cmd_0x72","[]",
+0x73,"Cmd_0x73","[]",
+0x74,"Cmd_0x74","[]",
+0x75,"Cmd_0x75","[]",
+0x76,"Cmd_0x76","[]",
+0x77,"Cmd_0x77","[U32, U32]",
+0x78,"Cmd_0x78","[]",
 0x79,"Cmd_0x79","[Bytes]",TODO: figure out arguments
 0x7A,"Cmd_0x7A","[Bytes]",TODO: figure out arguments
 0x7B,"Cmd_0x7B","[Bytes]",TODO: figure out arguments

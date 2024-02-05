@@ -160,8 +160,16 @@ class Command:
                 arguments.append(raw.data[current:])
                 current += len(raw.data)
             elif argument_type == at.AsciiString:
-                arguments.append("".join((chr(b) for b in raw.data[current:-1])))
-                current += len(raw.data)
+                string_bytes = raw.data[current:]
+                string_character_bytes = []
+                for b in string_bytes:
+                    if b == 0x00:
+                        break
+
+                    string_character_bytes.append(b)
+
+                arguments.append("".join((chr(b) for b in string_character_bytes)))
+                current += len(string_bytes)
             elif argument_type == at.String:
                 string = bytes_to_string(raw.data[current:])
 

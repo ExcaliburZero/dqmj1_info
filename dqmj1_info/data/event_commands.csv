@@ -20,7 +20,7 @@ Id,Name,Arguments,Notes
 0x12,"Cmd_0x12","[U32, U32, U32, U32]",
 0x13,"Cmd_0x13","[U32, U32, U32, U32]",
 0x14,"Cmd_0x14","[U32, U32, U32, U32]",
-0x15,"Cmd_0x15","[U32, U32, U32, U32]",
+0x15,"SetU32","[ValueLocation, U32, ValueLocation, U32]",
 0x16,"Cmd_0x16","[]",
 0x17,"Cmd_0x17","[]",
 0x18,"Cmd_0x18","[Bytes]",TODO: figure out arguments

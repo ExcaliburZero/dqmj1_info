@@ -20,6 +20,24 @@ class ArgumentType(enum.Enum):
     String = enum.auto()
     AsciiString = enum.auto()
     Bytes = enum.auto()
+    ValueLocation = enum.auto()
+
+
+class ValueLocation(enum.Enum):
+    Zero = 0
+    One = 1
+    Constant = 2
+    Three = 3
+
+    def to_script(self) -> str:
+        if self == ValueLocation.Zero:
+            return "Pool_0"
+        elif self == ValueLocation.One:
+            return "Pool_1"
+        elif self == ValueLocation.Constant:
+            return "Const"
+        elif self == ValueLocation.Three:
+            return "Pool_3"
 
 
 at = ArgumentType
@@ -154,6 +172,13 @@ class Command:
 
                 arguments.append(value)
                 current += 4
+            elif argument_type == at.ValueLocation:
+                value = int.from_bytes(raw.data[current : current + 4], ENDIANESS)
+
+                arguments.append(ValueLocation(value))
+                current += 4
+            else:
+                assert False, f"Unhandled arg type: {argument_type}"
 
         return Command(command_type=command_type, arguments=arguments)
 
@@ -197,6 +222,9 @@ class Command:
             return hex(value)
         elif value_type == at.Bytes:
             return bytes_repr(value)
+        elif value_type == at.ValueLocation:
+            assert isinstance(value, ValueLocation)
+            return value.to_script()
 
         return repr(value)
 

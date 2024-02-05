@@ -1,4 +1,4 @@
-Id,Name,Parameters,Notes
+Id,Name,Arguments,Notes
 0x00,"Cmd_0x00","[]",
 0x02,"Cmd_0x02","[U32]",Argument seems to be unused
 0x09,"Cmd_0x09","[U32]",

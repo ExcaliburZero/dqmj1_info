@@ -1,7 +1,10 @@
 from dataclasses import dataclass
 from typing import Any, Dict, IO, List, Literal, Optional, Type, Union
 
+import csv
 import enum
+import os
+import pathlib
 import re
 
 from .extract_strings import byte_to_char, get_string_chars, char_to_byte
@@ -47,118 +50,24 @@ class CommandType:
     name: str
     arguments: List[ArgumentType]
 
+    @staticmethod
+    def from_dict(d: Dict[str, Any]) -> "CommandType":
+        type_id = int(d["Id"][2:], 16)
+        name = d["Name"]
+        arguments = [
+            ArgumentType[arg.strip()]
+            for arg in d["Arguments"][1:-1].split(",")
+            if arg.strip() != ""
+        ]
 
-COMMAND_TYPES = [
-    CommandType(0x00, "Cmd_0x00", []),
-    CommandType(0x02, "Cmd_0x02", [at.U32]),  # Argument seems to be unused
-    CommandType(0x09, "Cmd_0x09", [at.U32]),
-    CommandType(0x0B, "Cmd_0x0B", [at.U32, at.U32]),
-    CommandType(0x0C, "Cmd_0x0C", [at.U32]),
-    CommandType(0x0E, "Cmd_0x0E", [at.U32]),
-    CommandType(0x0F, "Cmd_0x0F", [at.U32, at.U32, at.U32, at.U32]),
-    CommandType(0x10, "Cmd_0x10", [at.U32, at.U32, at.U32, at.U32]),
-    CommandType(0x11, "Cmd_0x11", [at.U32, at.U32, at.U32, at.U32]),
-    CommandType(0x12, "Cmd_0x12", [at.U32, at.U32, at.U32, at.U32]),
-    CommandType(0x13, "Cmd_0x13", [at.U32, at.U32, at.U32, at.U32]),
-    CommandType(0x14, "Cmd_0x14", [at.U32, at.U32, at.U32, at.U32]),
-    CommandType(0x15, "Cmd_0x15", [at.U32, at.U32, at.U32, at.U32]),
-    CommandType(0x16, "Cmd_0x16", []),
-    CommandType(0x17, "Cmd_0x17", []),
-    CommandType(0x1F, "Cmd_0x1F", []),
-    CommandType(0x20, "Cmd_0x20", []),
-    CommandType(0x21, "Cmd_0x21", []),
-    CommandType(0x22, "Cmd_0x22", []),
-    CommandType(0x23, "Cmd_0x23", []),
-    CommandType(0x24, "Cmd_0x24", []),
-    CommandType(0x25, "StartDialog", []),
-    CommandType(0x26, "Cmd_0x26", []),
-    CommandType(0x27, "ShowDialog", []),
-    CommandType(0x28, "Cmd_0x28", []),
-    CommandType(0x29, "SetDialog", [at.String]),
-    CommandType(0x2A, "SpeakerName", [at.String]),
-    CommandType(0x2B, "Cmd_0x2B", []),
-    CommandType(0x2C, "Cmd_0x2C", []),
-    CommandType(0x2D, "Cmd_0x2D", []),
-    CommandType(0x2E, "Cmd_0x2E", []),
-    CommandType(0x2F, "Cmd_0x2F", []),
-    CommandType(0x30, "Cmd_0x30", []),
-    CommandType(0x31, "Cmd_0x31", []),
-    CommandType(0x32, "Cmd_0x32", []),
-    CommandType(0x33, "Cmd_0x33", []),
-    CommandType(0x34, "Cmd_0x34", []),
-    CommandType(0x35, "Cmd_0x35", []),
-    CommandType(0x36, "Cmd_0x36", []),
-    CommandType(0x37, "Cmd_0x37", []),
-    CommandType(0x38, "Cmd_0x38", []),
-    CommandType(0x39, "Cmd_0x39", []),
-    CommandType(0x3A, "Cmd_0x3A", []),
-    CommandType(0x3B, "Cmd_0x3B", []),
-    CommandType(0x3C, "Cmd_0x3C", []),
-    CommandType(0x3D, "Cmd_0x3D", []),
-    CommandType(0x3E, "Cmd_0x3E", []),
-    CommandType(0x3F, "Cmd_0x3F", []),
-    CommandType(0x40, "Cmd_0x40", []),
-    CommandType(0x41, "Cmd_0x41", []),
-    CommandType(0x42, "Cmd_0x42", []),
-    CommandType(0x43, "Cmd_0x43", [at.U32, at.U32]),  # TODO: confirm args
-    CommandType(0x44, "Cmd_0x44", []),
-    CommandType(0x45, "Cmd_0x45", []),
-    CommandType(0x46, "Cmd_0x46", []),
-    CommandType(0x47, "Cmd_0x47", []),
-    CommandType(0x48, "Cmd_0x48", []),
-    CommandType(0x49, "Cmd_0x49", []),
-    CommandType(0x4A, "Cmd_0x4A", []),
-    CommandType(0x4B, "Cmd_0x4B", []),
-    CommandType(0x4C, "Cmd_0x4C", []),
-    CommandType(0x4D, "Cmd_0x4D", []),
-    CommandType(0x4E, "Cmd_0x4E", []),
-    CommandType(0x4F, "Cmd_0x4F", []),  # Seems to be same as 0x4D
-    CommandType(0x50, "Cmd_0x50", []),
-    CommandType(0x51, "Cmd_0x51", []),
-    CommandType(0x52, "Cmd_0x52", []),
-    CommandType(0x53, "Cmd_0x53", []),
-    CommandType(0x54, "Cmd_0x54", []),
-    CommandType(0x55, "Cmd_0x55", []),
-    CommandType(0x56, "Cmd_0x56", []),
-    CommandType(0x57, "Cmd_0x57", []),
-    CommandType(0x58, "Cmd_0x58", []),
-    CommandType(0x59, "Cmd_0x59", []),
-    CommandType(0x5A, "Cmd_0x5A", []),
-    CommandType(0x5B, "Cmd_0x5B", []),
-    CommandType(0x5C, "Cmd_0x5C", []),
-    CommandType(0x5D, "Cmd_0x5D", []),
-    CommandType(0x5E, "Cmd_0x5E", []),
-    CommandType(0x5F, "Cmd_0x5F", []),
-    CommandType(0x60, "Cmd_0x60", []),
-    CommandType(0x61, "Cmd_0x61", []),
-    CommandType(0x62, "Cmd_0x62", []),
-    CommandType(0x63, "Cmd_0x63", []),
-    CommandType(0x64, "Cmd_0x64", []),
-    CommandType(0x65, "Cmd_0x65", []),
-    CommandType(0x66, "Cmd_0x66", []),
-    CommandType(0x70, "Cmd_0x70", []),
-    CommandType(0x86, "Cmd_0x86", []),
-    CommandType(0x87, "Cmd_0x87", []),
-    CommandType(0x89, "Cmd_0x89", []),
-    CommandType(0x8C, "Cmd_0x8C", []),
-    CommandType(0x91, "Cmd_0x91", []),
-    CommandType(0x92, "Cmd_0x92", []),
-    CommandType(0x97, "Cmd_0x97", []),
-    CommandType(0x98, "Cmd_0x98", []),
-    CommandType(0x99, "Cmd_0x99", [at.AsciiString]),
-    CommandType(0x9A, "Cmd_0x9A", []),
-    CommandType(0x9B, "Cmd_0x9B", []),
-    CommandType(0xB9, "Cmd_0xB9", []),
-    CommandType(0xBB, "Cmd_0xBB", []),
-    CommandType(0xBD, "Cmd_0xBD", []),
-    CommandType(0xD4, "Cmd_0xD4", []),
-    CommandType(0xD5, "Cmd_0xD5", []),
-    CommandType(0xE9, "ShowCreditsText", [at.String]),
-    CommandType(0xF0, "Cmd_0xF0", []),
-    CommandType(0xF1, "Cmd_0xF1", []),
-    CommandType(0xF3, "Cmd_0xF3", []),
-    CommandType(0xF4, "Cmd_0xF4", []),
-]
+        return CommandType(type_id=type_id, name=name, arguments=arguments)
+
+
+# Load the command type info from csv file
+CURRENT_DIRECTORY = pathlib.Path(os.path.dirname(os.path.realpath(__file__)))
+with open(CURRENT_DIRECTORY / "data" / "event_commands.csv", "r") as input_stream:
+    reader = csv.DictReader(input_stream)
+    COMMAND_TYPES = [CommandType.from_dict(line) for line in reader]
 
 
 @dataclass

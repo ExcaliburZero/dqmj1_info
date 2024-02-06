@@ -163,27 +163,27 @@ Id,Name,Arguments,Notes
 0xA1,"Cmd_0xA1","[]",
 0xA2,"Cmd_0xA2","[]",
 0xA3,"LoadD16","[AsciiString]",
-0xA4,"Cmd_0xA4","[Bytes]",TODO: figure out arguments
-0xA5,"Cmd_0xA5","[Bytes]",TODO: figure out arguments
-0xA6,"Cmd_0xA6","[Bytes]",TODO: figure out arguments
-0xA7,"Cmd_0xA7","[Bytes]",TODO: figure out arguments
-0xA8,"Cmd_0xA8","[Bytes]",TODO: figure out arguments
-0xA9,"Cmd_0xA9","[Bytes]",TODO: figure out arguments
-0xAA,"Cmd_0xAA","[Bytes]",TODO: figure out arguments
-0xAB,"Cmd_0xAB","[Bytes]",TODO: figure out arguments
-0xAC,"Cmd_0xAC","[Bytes]",TODO: figure out arguments
-0xAD,"Cmd_0xAD","[Bytes]",TODO: figure out arguments
-0xAE,"Cmd_0xAE","[Bytes]",TODO: figure out arguments
-0xAF,"Cmd_0xAF","[Bytes]",TODO: figure out arguments
-0xB0,"Cmd_0xB0","[Bytes]",TODO: figure out arguments
-0xB1,"Cmd_0xB1","[Bytes]",TODO: figure out arguments
-0xB2,"Cmd_0xB2","[Bytes]",TODO: figure out arguments
-0xB3,"Cmd_0xB3","[Bytes]",TODO: figure out arguments
-0xB4,"Cmd_0xB4","[Bytes]",TODO: figure out arguments
-0xB5,"Cmd_0xB5","[Bytes]",TODO: figure out arguments
-0xB6,"Cmd_0xB6","[Bytes]",TODO: figure out arguments
-0xB7,"Cmd_0xB7","[Bytes]",TODO: figure out arguments
-0xB8,"Cmd_0xB8","[Bytes]",TODO: figure out arguments
+0xA4,"Cmd_0xA4","[]",
+0xA5,"Cmd_0xA5","[]",
+0xA6,"Cmd_0xA6","[]",
+0xA7,"Cmd_0xA7","[]",
+0xA8,"Cmd_0xA8","[]",
+0xA9,"Cmd_0xA9","[]",
+0xAA,"Nop","[]",Seems to have no effect other than updating the command pointer and setting return value to 0.
+0xAB,"Cmd_0xAB","[]",Does something with player monsters species'. Maybe the party monsters? Maybe it counts the number that have a matching rank or family (can't tell which).
+0xAC,"Cmd_0xAC","[]",
+0xAD,"Cmd_0xAD","[]",
+0xAE,"Cmd_0xAE","[]",
+0xAF,"Cmd_0xAF","[]",
+0xB0,"Cmd_0xB0","[]",
+0xB1,"Cmd_0xB1","[]",
+0xB2,"Cmd_0xB2","[]",
+0xB3,"Cmd_0xB3","[]",
+0xB4,"Cmd_0xB4","[]",
+0xB5,"Cmd_0xB5","[]",
+0xB6,"Cmd_0xB6","[]",Doesn't do anything. Does not even update command pointer or return value.
+0xB7,"Cmd_0xB7","[]",Doesn't do anything. Does not even update command pointer or return value.
+0xB8,"Cmd_0xB8","[]",
 0xB9,"Cmd_0xB9","[]",
 0xBA,"Cmd_0xBA","[Bytes]",TODO: figure out arguments
 0xBB,"Cmd_0xBB","[]",

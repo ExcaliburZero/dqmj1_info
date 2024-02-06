@@ -9,7 +9,7 @@ Id,Name,Arguments,Notes
 0x07,"Cmd_0x07","[Bytes]",TODO: figure out arguments
 0x08,"Cmd_0x08","[Bytes]",TODO: figure out arguments
 0x09,"JumpKeepBackPointer","[U32]",
-0x0A,"Cmd_0x0A","[Bytes]",TODO: figure out arguments
+0x0A,"StartEvent","[U32, U32]",
 0x0B,"Cmd_0x0B","[ValueLocation, U32]",
 0x0C,"Jump","[U32]",
 0x0D,"Cmd_0x0D","[Bytes]",TODO: figure out arguments

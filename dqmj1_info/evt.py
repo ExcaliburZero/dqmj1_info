@@ -3,6 +3,7 @@ from typing import Any, Dict, IO, List, Literal, Optional, Type, Union
 
 import csv
 import enum
+import io
 import os
 import pathlib
 import re
@@ -97,6 +98,13 @@ class Command:
     def type_id(self) -> int:
         return self.command_type.type_id
 
+    @property
+    def length(self) -> int:
+        stream = io.BytesIO()
+        self.write_evt(stream)
+
+        return len(stream.getbuffer())
+
     @staticmethod
     def from_evt(input_stream: IO[bytes]) -> Optional["Command"]:
         raw = RawCommand.from_evt(input_stream)
@@ -130,6 +138,10 @@ class Command:
             elif argument_type == at.U32:
                 for b in argument.to_bytes(4, ENDIANESS):
                     data.append(b)
+            elif argument_type == at.ValueLocation:
+                assert isinstance(argument, ValueLocation)
+                for b in argument.value.to_bytes(4, ENDIANESS):
+                    data.append(b)
             elif argument_type == at.String:
                 string_bytes = string_to_bytes(argument)
                 for b in string_bytes:
@@ -140,6 +152,8 @@ class Command:
                 )
                 for _ in range(0, num_padding_bytes):
                     data.append(0xCC)
+            else:
+                raise NotImplementedError(f"{argument_type}")
 
         length = len(data) + 8
         length_bytes = length.to_bytes(4, ENDIANESS)
@@ -311,8 +325,14 @@ class Event:
         output_stream.write("DATA ")
         output_stream.write(bytes_repr(self.data))
         output_stream.write("\n")
+        position = 0x0
         for command in self.commands:
-            print(command.to_script(), file=output_stream, flush=False)
+            print(
+                f"[0x{position:04x}] " + command.to_script(),
+                file=output_stream,
+                flush=False,
+            )
+            position += command.length
 
     def write_evt(self, output_stream: IO[bytes]) -> None:
         output_stream.write(b"\x53\x43\x52\x00")

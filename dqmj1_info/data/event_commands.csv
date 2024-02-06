@@ -1,17 +1,17 @@
 Id,Name,Arguments,Notes
 0x00,"Cmd_0x00","[]",
 0x01,"Cmd_0x01","[Bytes]",TODO: figure out arguments
-0x02,"Cmd_0x02","[U32]",Argument seems to be unused
+0x02,"Exit","[U32]",Argument seems to be unused and is always 0x0
 0x03,"Cmd_0x03","[Bytes]",TODO: figure out arguments
 0x04,"Cmd_0x04","[Bytes]",TODO: figure out arguments
 0x05,"Cmd_0x05","[Bytes]",TODO: figure out arguments
 0x06,"Cmd_0x06","[Bytes]",TODO: figure out arguments
 0x07,"Cmd_0x07","[Bytes]",TODO: figure out arguments
 0x08,"Cmd_0x08","[Bytes]",TODO: figure out arguments
-0x09,"Cmd_0x09","[U32]",
+0x09,"JumpKeepBackPointer","[U32]",
 0x0A,"Cmd_0x0A","[Bytes]",TODO: figure out arguments
 0x0B,"Cmd_0x0B","[ValueLocation, U32]",
-0x0C,"Cmd_0x0C","[U32]",
+0x0C,"Jump","[U32]",
 0x0D,"Cmd_0x0D","[Bytes]",TODO: figure out arguments
 0x0E,"Cmd_0x0E","[U32]",
 0x0F,"Cmd_0x0F","[ValueLocation, U32, ValueLocation, U32]",

@@ -6,6 +6,7 @@ import logging
 import pathlib
 import sys
 
+from . import d16_to_png
 from . import decompile_evt
 from . import enmy_kind_tbl
 from . import extract_strings
@@ -112,6 +113,20 @@ def main(argv: List[str]):
         ]
     )
     logging.info(f"Finished extracting ItemTbl.bin to: {skill_tbl_csv}")
+
+    ###
+    # Extract D16 images
+    ###
+    d16_images_dir = output_directory / "d16_images"
+    d16_to_png.main(
+        [
+            "--d16_filepaths",
+            *sorted(glob.glob(str(input_directory / "data" / "*.d16"))),
+            "--output_directory",
+            str(d16_images_dir),
+        ]
+    )
+    logging.info(f"Finished extracting d16 images to: {d16_images_dir}")
 
     ###
     # Decompile scripts

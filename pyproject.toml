@@ -5,6 +5,7 @@ version = "0.0.1"
 [project.scripts]
 dqmj1_extract_files = "dqmj1_info:extract_files.main_without_args"
 dqmj1_compile_evt = "dqmj1_info:compile_evt.main_without_args"
+d16_to_png = "dqmj1_info:d16_to_png.main_without_args"
 
 [tool.setuptools]
 packages = ["dqmj1_info"]

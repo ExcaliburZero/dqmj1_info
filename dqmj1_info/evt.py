@@ -288,7 +288,7 @@ class Event:
     @staticmethod
     def from_evt(input_stream: IO[bytes]) -> "Event":
         input_stream.read(4)
-        data = input_stream.read(0x1010 - 4)
+        data = input_stream.read(0x1004 - 4)
 
         commands = []
         while True:

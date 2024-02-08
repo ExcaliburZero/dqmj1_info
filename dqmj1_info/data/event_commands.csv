@@ -13,7 +13,7 @@ Id,Name,Arguments,Notes
 0x0B,"Cmd_0x0B","[ValueLocation, U32]",
 0x0C,"Jump","[U32]",
 0x0D,"Cmd_0x0D","[Bytes]",TODO: figure out arguments
-0x0E,"Cmd_0x0E","[U32]",
+0x0E,"JumpIfTrue","[U32]",TODO: confirm this is indeed a "true" check. Which commands change that flag/value?
 0x0F,"Cmd_0x0F","[ValueLocation, U32, ValueLocation, U32]",
 0x10,"Cmd_0x10","[ValueLocation, U32, ValueLocation, U32]",
 0x11,"Cmd_0x11","[ValueLocation, U32, ValueLocation, U32]",

@@ -339,3 +339,16 @@ class Event:
         output_stream.write(self.data)
         for command in self.commands:
             command.write_evt(output_stream)
+
+    def get_command_at_ptr(self, pointer: int) -> Optional[Command]:
+        start = 0x1004
+        offsetted_pointer = pointer + start
+
+        current_location = start
+        for command in self.commands:
+            if current_location == offsetted_pointer:
+                return command
+
+            current_location += command.length
+
+        return None

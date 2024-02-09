@@ -85,9 +85,9 @@ class CommandType:
             type_id=type_id,
             name=name,
             arguments=arguments,
-            label_argument=int(d["Label Argument"])
-            if d["Label Argument"] != ""
-            else None,
+            label_argument=(
+                int(d["Label Argument"]) if d["Label Argument"] != "" else None
+            ),
         )
 
 

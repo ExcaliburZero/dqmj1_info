@@ -35,7 +35,7 @@ def main(argv: List[str]):
             if args.ignore_unknown_commands:
                 for command in event.commands:
                     if not command.command_type.name == "UNKNOWN":
-                        print(command.to_script(), file=output_stream)
+                        print(command.to_script(None), file=output_stream)
             else:
                 event.write_script(output_stream)
 
@@ -47,7 +47,7 @@ def main(argv: List[str]):
         with open(filepath, "w") as output_stream:
             examples = set()
             for command in commands:
-                examples.add(command.to_script())
+                examples.add(command.to_script(None))
 
             for command_str in sorted(examples):
                 print(command_str, file=output_stream)

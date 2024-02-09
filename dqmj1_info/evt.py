@@ -1,9 +1,10 @@
 from dataclasses import dataclass
-from typing import Any, Dict, IO, List, Literal, Optional, Type, Union
+from typing import Any, Dict, IO, List, Literal, Optional, Set, Union
 
 import csv
 import enum
 import io
+import itertools
 import os
 import pathlib
 import re
@@ -68,6 +69,7 @@ class CommandType:
     type_id: int
     name: str
     arguments: List[ArgumentType]
+    label_argument: Optional[int]
 
     @staticmethod
     def from_dict(d: Dict[str, Any]) -> "CommandType":
@@ -79,7 +81,14 @@ class CommandType:
             if arg.strip() != ""
         ]
 
-        return CommandType(type_id=type_id, name=name, arguments=arguments)
+        return CommandType(
+            type_id=type_id,
+            name=name,
+            arguments=arguments,
+            label_argument=int(d["Label Argument"])
+            if d["Label Argument"] != ""
+            else None,
+        )
 
 
 # Load the command type info from csv file
@@ -121,7 +130,7 @@ class Command:
         if command_id in commands_by_type:
             return commands_by_type[command_id]
 
-        return CommandType(command_id, "UNKNOWN", [at.Bytes])
+        return CommandType(command_id, "UNKNOWN", [at.Bytes], None)
 
     def write_evt(self, output_stream: IO[bytes]) -> None:
         command_id_bytes = self.type_id.to_bytes(4, ENDIANESS)
@@ -222,7 +231,7 @@ class Command:
 
         return Command(command_type=command_type, arguments=arguments)
 
-    def to_script(self) -> str:
+    def to_script(self, labels_by_position: Optional[Dict[int, str]]) -> str:
         command_id_reversed_endian = int.from_bytes(
             self.command_type.type_id.to_bytes(4, ENDIANESS), "big"
         )
@@ -231,15 +240,30 @@ class Command:
         if len(self.arguments) > 0:
             end = " " + " ".join(
                 (
-                    Command.value_to_script_literal(a, t)
-                    for a, t in zip(self.arguments, self.command_type.arguments)
+                    Command.value_to_script_literal(
+                        a, t, self.command_type.label_argument == i, labels_by_position
+                    )
+                    for i, (a, t) in enumerate(
+                        zip(self.arguments, self.command_type.arguments)
+                    )
                 )
             )
 
         return start + end
 
     @staticmethod
-    def value_to_script_literal(value: Any, value_type: ArgumentType) -> str:
+    def value_to_script_literal(
+        value: Any,
+        value_type: ArgumentType,
+        is_label_argument: bool,
+        labels_by_position: Optional[Dict[int, str]],
+    ) -> str:
+        if is_label_argument and labels_by_position is not None:
+            assert value_type == at.U32
+            assert isinstance(value, int)
+
+            return labels_by_position[value]
+
         if value_type == at.U32:
             return hex(value)
         elif value_type == at.Bytes:
@@ -285,6 +309,40 @@ class Event:
     commands: List[Command]
     data: bytes
 
+    @property
+    def labels(self) -> Dict[str, int]:
+        jump_destinations: Set[int] = set()
+        for command in self.commands:
+            label_argument_index = command.command_type.label_argument
+            if label_argument_index is None:
+                continue
+
+            destination = command.arguments[label_argument_index]
+            jump_destinations.add(destination)
+
+        label_names = Event.create_label_names(len(jump_destinations))
+
+        return {
+            label_names[i]: dest for i, dest in enumerate(sorted(jump_destinations))
+        }
+
+    @property
+    def labels_by_position(self) -> Dict[int, str]:
+        return {pos: label for label, pos in self.labels.items()}
+
+    @staticmethod
+    def create_label_names(num_labels: int) -> List[str]:
+        # https://stackoverflow.com/questions/58172537/generator-for-a-b-aa-ab-ba-bb-aaa-aab
+        return list(
+            "".join(l)
+            for l in itertools.chain.from_iterable(
+                itertools.product(
+                    "".join((chr(c + ord("a")) for c in range(0, 26))), repeat=i
+                )
+                for i in range(1, 4)
+            )
+        )
+
     @staticmethod
     def from_evt(input_stream: IO[bytes]) -> "Event":
         input_stream.read(4)
@@ -325,10 +383,17 @@ class Event:
         output_stream.write("DATA ")
         output_stream.write(bytes_repr(self.data))
         output_stream.write("\n")
+
+        labels_by_position = self.labels_by_position
+
         position = 0x0
         for command in self.commands:
+            if position in labels_by_position:
+                label = labels_by_position[position]
+                print(f".{label}:", file=output_stream, flush=False)
+
             print(
-                f"[0x{position:04x}] " + command.to_script(),
+                "    " + command.to_script(labels_by_position),
                 file=output_stream,
                 flush=False,
             )

@@ -109,7 +109,12 @@ class InstructionType:
 CURRENT_DIRECTORY = pathlib.Path(os.path.dirname(os.path.realpath(__file__)))
 with open(CURRENT_DIRECTORY / "data" / "event_instructions.csv", "r") as input_stream:
     reader = csv.DictReader(input_stream)
-    COMMAND_TYPES = [InstructionType.from_dict(line) for line in reader]
+    INSTRUCTION_TYPES = [InstructionType.from_dict(line) for line in reader]
+
+INSTRUCTION_TYPES_BY_TYPE = {
+    cmd_type.type_id: cmd_type for cmd_type in INSTRUCTION_TYPES
+}
+INSTRUCTION_TYPES_BY_NAME = {cmd_type.name: cmd_type for cmd_type in INSTRUCTION_TYPES}
 
 
 @dataclass
@@ -322,11 +327,11 @@ class Instruction:
 
     @staticmethod
     def instructions_by_type_id() -> Dict[int, InstructionType]:
-        return {cmd_type.type_id: cmd_type for cmd_type in COMMAND_TYPES}
+        return INSTRUCTION_TYPES_BY_TYPE
 
     @staticmethod
     def instructions_by_name() -> Dict[str, InstructionType]:
-        return {cmd_type.name: cmd_type for cmd_type in COMMAND_TYPES}
+        return INSTRUCTION_TYPES_BY_NAME
 
 
 def bytes_repr(bs: bytes) -> str:

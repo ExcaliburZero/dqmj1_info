@@ -2,6 +2,7 @@
 /old_data/
 /current_data/
 /recompiled_scripts/
+/regression_tests/work_dirs/
 .vscode/
 docs/_build
 notes.txt

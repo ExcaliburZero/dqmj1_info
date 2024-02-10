@@ -139,10 +139,22 @@ class Instruction:
         if raw is None:
             return None
 
-        return Instruction.from_raw(
+        results = Instruction.from_raw(
             raw=raw,
             instruction_type=Instruction.get_instruction_type(raw.instruction_type),
         )
+        if results is not None:
+            instruction, _ = results
+            if instruction.length != len(raw.data) + 8:
+                stream = io.BytesIO()
+                instruction.write_evt(stream, collections.defaultdict(lambda: 0))
+
+                bs = stream.getbuffer()
+                raise ValueError(
+                    f"{instruction.length} != {len(raw.data) + 8} for instruction: {instruction}\n{str([b for b in bs])}"
+                )
+
+        return results
 
     @staticmethod
     def get_instruction_type_by_name(instruction_name: str) -> InstructionType:
@@ -384,7 +396,13 @@ class Event:
         instructions = []
         labels = {}
         while True:
-            result = Instruction.from_evt(input_stream)
+            position = input_stream.tell()
+            try:
+                result = Instruction.from_evt(input_stream)
+            except Exception as e:
+                raise ValueError(
+                    f"Failed to parse instruction at: 0x{position:x}"
+                ) from e
             if result is None:
                 break
 
@@ -450,11 +468,15 @@ class Event:
         labels_by_position = self.labels_by_position
 
         output_stream.write("  .code:\n")
+
+        outputted_labels = []
         position = 0x0
         for instruction in self.instructions:
             if position in labels_by_position:
                 label = labels_by_position[position]
                 print(f"{label}:", file=output_stream, flush=False)
+
+                outputted_labels.append(label)
 
             print(
                 "    " + instruction.to_script(),
@@ -462,6 +484,13 @@ class Event:
                 flush=False,
             )
             position += instruction.length
+
+        assert len(outputted_labels) == len(set(outputted_labels))
+        if len(outputted_labels) != len(self.labels):
+            unprinted_labels = set(self.labels) - set(outputted_labels)
+            raise ValueError(
+                f'Did not output labels: {", ".join(sorted(unprinted_labels))}\nStopped at: 0x{position:x}'
+            )
 
     def write_evt(self, output_stream: IO[bytes]) -> None:
         output_stream.write(b"\x53\x43\x52\x00")

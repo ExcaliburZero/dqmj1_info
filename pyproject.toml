@@ -11,3 +11,6 @@ dqmj1_simulate_event = "dqmj1_info:simulate_event.main_without_args"
 
 [tool.setuptools]
 packages = ["dqmj1_info"]
+
+[tool.setuptools.package-data]
+dqmj1_info = ["data/event_instructions.csv"]

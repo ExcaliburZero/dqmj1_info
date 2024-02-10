@@ -1,6 +1,8 @@
 from dataclasses import dataclass
-from typing import Any, Dict, IO, List, Literal, Optional, Set, Union
+from typing import Any, Dict, IO, List, Literal, Optional, Set, Tuple, Union
 
+import abc
+import collections
 import csv
 import enum
 import io
@@ -16,6 +18,8 @@ ENDIANESS: Literal["little"] = "little"
 STRING_END = 0xFF
 STRING_END_PADDING = 0xCC
 
+LabelDict = Dict[str, int]
+
 
 class ArgumentType(enum.Enum):
     U32 = enum.auto()
@@ -23,6 +27,7 @@ class ArgumentType(enum.Enum):
     AsciiString = enum.auto()
     Bytes = enum.auto()
     ValueLocation = enum.auto()
+    InstructionLocation = enum.auto()
 
 
 class ValueLocation(enum.Enum):
@@ -69,7 +74,6 @@ class CommandType:
     type_id: int
     name: str
     arguments: List[ArgumentType]
-    label_argument: Optional[int]
 
     @staticmethod
     def from_dict(d: Dict[str, Any]) -> "CommandType":
@@ -85,9 +89,6 @@ class CommandType:
             type_id=type_id,
             name=name,
             arguments=arguments,
-            label_argument=(
-                int(d["Label Argument"]) if d["Label Argument"] != "" else None
-            ),
         )
 
 
@@ -110,12 +111,12 @@ class Command:
     @property
     def length(self) -> int:
         stream = io.BytesIO()
-        self.write_evt(stream)
+        self.write_evt(stream, collections.defaultdict(lambda: 0))
 
         return len(stream.getbuffer())
 
     @staticmethod
-    def from_evt(input_stream: IO[bytes]) -> Optional["Command"]:
+    def from_evt(input_stream: IO[bytes]) -> Optional[Tuple["Command", LabelDict]]:
         raw = RawCommand.from_evt(input_stream)
         if raw is None:
             return None
@@ -130,9 +131,9 @@ class Command:
         if command_id in commands_by_type:
             return commands_by_type[command_id]
 
-        return CommandType(command_id, "UNKNOWN", [at.Bytes], None)
+        return CommandType(command_id, "UNKNOWN", [at.Bytes])
 
-    def write_evt(self, output_stream: IO[bytes]) -> None:
+    def write_evt(self, output_stream: IO[bytes], labels: LabelDict) -> None:
         command_id_bytes = self.type_id.to_bytes(4, ENDIANESS)
 
         data = []
@@ -150,6 +151,12 @@ class Command:
             elif argument_type == at.ValueLocation:
                 assert isinstance(argument, ValueLocation)
                 for b in argument.value.to_bytes(4, ENDIANESS):
+                    data.append(b)
+            elif argument_type == at.InstructionLocation:
+                assert isinstance(argument, str)
+                position = labels[argument]
+
+                for b in position.to_bytes(4, ENDIANESS):
                     data.append(b)
             elif argument_type == at.String:
                 string_bytes = string_to_bytes(argument)
@@ -174,8 +181,12 @@ class Command:
         output_stream.write(data_bytes)
 
     @staticmethod
-    def from_raw(raw: RawCommand, command_type: CommandType) -> Optional["Command"]:
+    def from_raw(
+        raw: RawCommand, command_type: CommandType
+    ) -> Optional[Tuple["Command", LabelDict]]:
         arguments: List[Any] = []
+
+        labels = {}
 
         current = 0
         for argument_type in command_type.arguments:
@@ -208,10 +219,18 @@ class Command:
 
                 arguments.append(ValueLocation(value))
                 current += 4
+            elif argument_type == at.InstructionLocation:
+                value = int.from_bytes(raw.data[current : current + 4], ENDIANESS)
+
+                label = f"0x{value:x}"
+                labels[label] = value
+
+                arguments.append(label)
+                current += 4
             else:
                 assert False, f"Unhandled arg type: {argument_type}"
 
-        return Command(command_type=command_type, arguments=arguments)
+        return Command(command_type=command_type, arguments=arguments), labels
 
     @staticmethod
     def from_script(line: str) -> Optional["Command"]:
@@ -231,7 +250,7 @@ class Command:
 
         return Command(command_type=command_type, arguments=arguments)
 
-    def to_script(self, labels_by_position: Optional[Dict[int, str]]) -> str:
+    def to_script(self) -> str:
         command_id_reversed_endian = int.from_bytes(
             self.command_type.type_id.to_bytes(4, ENDIANESS), "big"
         )
@@ -240,9 +259,7 @@ class Command:
         if len(self.arguments) > 0:
             end = " " + " ".join(
                 (
-                    Command.value_to_script_literal(
-                        a, t, self.command_type.label_argument == i, labels_by_position
-                    )
+                    Command.value_to_script_literal(a, t)
                     for i, (a, t) in enumerate(
                         zip(self.arguments, self.command_type.arguments)
                     )
@@ -255,15 +272,7 @@ class Command:
     def value_to_script_literal(
         value: Any,
         value_type: ArgumentType,
-        is_label_argument: bool,
-        labels_by_position: Optional[Dict[int, str]],
     ) -> str:
-        if is_label_argument and labels_by_position is not None:
-            assert value_type == at.U32
-            assert isinstance(value, int)
-
-            return labels_by_position[value]
-
         if value_type == at.U32:
             return hex(value)
         elif value_type == at.Bytes:
@@ -271,6 +280,8 @@ class Command:
         elif value_type == at.ValueLocation:
             assert isinstance(value, ValueLocation)
             return value.to_script()
+        elif value_type == at.InstructionLocation:
+            return str(value)
 
         return repr(value)
 
@@ -308,40 +319,11 @@ def bytes_to_string(bs: Union[List[int], bytes]) -> str:
 class Event:
     commands: List[Command]
     data: bytes
-
-    @property
-    def labels(self) -> Dict[str, int]:
-        jump_destinations: Set[int] = set()
-        for command in self.commands:
-            label_argument_index = command.command_type.label_argument
-            if label_argument_index is None:
-                continue
-
-            destination = command.arguments[label_argument_index]
-            jump_destinations.add(destination)
-
-        label_names = Event.create_label_names(len(jump_destinations))
-
-        return {
-            label_names[i]: dest for i, dest in enumerate(sorted(jump_destinations))
-        }
+    labels: LabelDict
 
     @property
     def labels_by_position(self) -> Dict[int, str]:
         return {pos: label for label, pos in self.labels.items()}
-
-    @staticmethod
-    def create_label_names(num_labels: int) -> List[str]:
-        # https://stackoverflow.com/questions/58172537/generator-for-a-b-aa-ab-ba-bb-aaa-aab
-        return list(
-            "".join(l)
-            for l in itertools.chain.from_iterable(
-                itertools.product(
-                    "".join((chr(c + ord("a")) for c in range(0, 26))), repeat=i
-                )
-                for i in range(1, 4)
-            )
-        )
 
     @staticmethod
     def from_evt(input_stream: IO[bytes]) -> "Event":
@@ -349,14 +331,17 @@ class Event:
         data = input_stream.read(0x1004 - 4)
 
         commands = []
+        labels = {}
         while True:
-            command = Command.from_evt(input_stream)
-            if command is None:
+            result = Command.from_evt(input_stream)
+            if result is None:
                 break
 
+            command, new_labels = result
             commands.append(command)
+            labels.update(new_labels)
 
-        return Event(commands=commands, data=data)
+        return Event(commands=commands, data=data, labels=labels)
 
     @staticmethod
     def from_script(input_stream: IO[str]) -> "Event":
@@ -377,7 +362,8 @@ class Event:
         assert data is not None
         assert isinstance(data, bytes)
 
-        return Event(data=data, commands=commands)
+        raise NotImplementedError()
+        return Event(data=data, commands=commands, labels={})
 
     def write_script(self, output_stream: IO[str]) -> None:
         output_stream.write("DATA ")
@@ -393,7 +379,7 @@ class Event:
                 print(f".{label}:", file=output_stream, flush=False)
 
             print(
-                "    " + command.to_script(labels_by_position),
+                "    " + command.to_script(),
                 file=output_stream,
                 flush=False,
             )
@@ -403,7 +389,7 @@ class Event:
         output_stream.write(b"\x53\x43\x52\x00")
         output_stream.write(self.data)
         for command in self.commands:
-            command.write_evt(output_stream)
+            command.write_evt(output_stream, self.labels)
 
     def get_command_at_ptr(self, pointer: int) -> Optional[Command]:
         start = 0x1004

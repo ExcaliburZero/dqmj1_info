@@ -23,13 +23,19 @@ def main(argv: List[str]):
 
     for script_filepath in script_filepaths:
         with open(script_filepath, "r") as input_stream:
-            event = Event.from_script(input_stream)
+            try:
+                event = Event.from_script(input_stream)
+            except Exception as e:
+                raise Exception(f"Failed to load script: {script_filepath}") from e
 
         output_filepath = output_directory / (
             script_filepath.name.replace(".dqmj1_script", "")
         )  # TODO: add .evt if needed
         with open(output_filepath, "wb") as output_stream:
-            event.write_evt(output_stream)
+            try:
+                event.write_evt(output_stream)
+            except Exception as e:
+                raise Exception(f"Failed to write evt file: {output_filepath}") from e
 
 
 def main_without_args() -> None:

@@ -24,7 +24,7 @@ class Util:
             self.setup_dir(work_dir)
 
             status_code = self.run_command(work_dir)
-            self.assertEqual(self.expected_status_code, 1)
+            self.assertEqual(self.expected_status_code, status_code)
 
             # Note: Only check against baselines on non-Windows OSs, since windows has some
             # differences that I don't want to add support for smartly diffing yet.

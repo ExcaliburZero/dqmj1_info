@@ -1,6 +1,7 @@
 /old/
 /old_data/
 /current_data/
+/recompiled_scripts/
 .vscode/
 docs/_build
 notes.txt

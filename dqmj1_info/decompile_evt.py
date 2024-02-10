@@ -27,7 +27,10 @@ def main(argv: List[str]):
     instructions_by_type = collections.defaultdict(lambda: [])
     for evt_filepath in evt_filepaths:
         with open(evt_filepath, "rb") as input_stream:
-            event = Event.from_evt(input_stream)
+            try:
+                event = Event.from_evt(input_stream)
+            except Exception as e:
+                raise Exception(f"Failed to parse evt file: {evt_filepath}") from e
 
         for instruction in event.instructions:
             instructions_by_type[instruction.type_id].append(instruction)

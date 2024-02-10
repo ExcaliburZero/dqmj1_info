@@ -460,21 +460,21 @@ class Event:
         return Event(data=data, instructions=instructions, labels=labels)
 
     def write_script(self, output_stream: IO[str]) -> None:
-        output_stream.write("  .data:\n")
+        output_stream.write(".data:\n")
         output_stream.write("    ")
         output_stream.write(bytes_repr(self.data))
         output_stream.write("\n")
 
         labels_by_position = self.labels_by_position
 
-        output_stream.write("  .code:\n")
+        output_stream.write(".code:\n")
 
         outputted_labels = []
         position = 0x0
         for instruction in self.instructions:
             if position in labels_by_position:
                 label = labels_by_position[position]
-                output_stream.write(f"{label}:\n")
+                output_stream.write(f"  {label}:\n")
 
                 outputted_labels.append(label)
 

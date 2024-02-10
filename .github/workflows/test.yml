@@ -29,15 +29,15 @@ jobs:
         python -m pip install --upgrade pip
         pip install mypy black pytest pylint
         pip install pandas-stubs types-Pillow
-    - name: Install package
-      run: |
-        pip install .
     - name: Lint with mypy
       run: |
         mypy .
     - name: Lint with black
       run: |
         black --check .
+    - name: Install package
+      run: |
+        pip install .
     - name: Run regression tests
       run: |
         make regression_test

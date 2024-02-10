@@ -272,7 +272,7 @@ class Instruction:
                 )
             )
 
-        return start + end
+        return (start + end).rstrip()
 
     @staticmethod
     def value_to_script_literal(

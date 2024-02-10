@@ -10,10 +10,10 @@ from .evt import Event
 
 @dataclass
 class EventFrame:
-    command_ptr: int
+    instruction_ptr: int
     counter: int
     is_running: bool
-    command_return_value: int
+    instruction_return_value: int
 
 
 class EventSimulator:
@@ -34,92 +34,94 @@ class EventSimulator:
                 continue
 
             while True:
-                self.run_command(cur_frame)
+                self.run_instruction(cur_frame)
 
-                if cur_frame.command_return_value != 0:
+                if cur_frame.instruction_return_value != 0:
                     break
 
-    def run_command(self, frame: EventFrame) -> None:
-        current_command = self.event.get_command_at_ptr(frame.command_ptr)
-        if current_command is None:
+    def run_instruction(self, frame: EventFrame) -> None:
+        current_instruction = self.event.get_instruction_at_ptr(frame.instruction_ptr)
+        if current_instruction is None:
             raise Exception(
-                f"Could not find a command at pointer: 0x{frame.command_ptr:04x}"
+                f"Could not find a instruction at pointer: 0x{frame.instruction_ptr:04x}"
             )
 
-        print(f"  (0x{frame.command_ptr:04x}) 0x{current_command.type_id:02x}")
+        print(f"  (0x{frame.instruction_ptr:04x}) 0x{current_instruction.type_id:02x}")
 
-        if current_command.type_id == 0x00:
-            frame.command_ptr += current_command.length
-            frame.command_return_value = 0
-        elif current_command.type_id == 0x0A:
-            self.activate_next_frame(current_command.arguments[0])
-            frame.command_ptr += current_command.length
-            frame.command_return_value = 0
-        elif current_command.type_id == 0x0B:
+        if current_instruction.type_id == 0x00:
+            frame.instruction_ptr += current_instruction.length
+            frame.instruction_return_value = 0
+        elif current_instruction.type_id == 0x0A:
+            self.activate_next_frame(current_instruction.arguments[0])
+            frame.instruction_ptr += current_instruction.length
+            frame.instruction_return_value = 0
+        elif current_instruction.type_id == 0x0B:
             # TODO: not accurate
-            frame.command_ptr += current_command.length
-            frame.command_return_value = 0
-        elif current_command.type_id == 0x0C:
-            print(f"    Jump to 0x{current_command.arguments[0]:x}")
-            frame.command_ptr = current_command.arguments[0]
-            frame.command_return_value = 0
-        elif current_command.type_id == 0x15:
-            frame.command_ptr += current_command.length
-            frame.command_return_value = 0
-        elif current_command.type_id == 0x2B:
-            frame.command_ptr += current_command.length
-            frame.command_return_value = 0
-        elif current_command.type_id == 0x2E:
-            frame.command_ptr += current_command.length
-            frame.command_return_value = 0
-        elif current_command.type_id == 0x2F:
-            frame.command_ptr += current_command.length
-            frame.command_return_value = 1
-        elif current_command.type_id == 0x48:
-            frame.command_ptr += current_command.length
-            frame.command_return_value = 0
-        elif current_command.type_id == 0x49:
-            frame.command_ptr += current_command.length
-            frame.command_return_value = 0
-        elif current_command.type_id == 0x86:
-            frame.command_ptr += current_command.length
-            frame.command_return_value = 0
-        elif current_command.type_id == 0x87:
-            frame.command_ptr += current_command.length
-            frame.command_return_value = 0
-        elif current_command.type_id == 0x89:
-            frame.command_ptr += current_command.length
-            frame.command_return_value = 0
-        elif current_command.type_id == 0x92:
-            frame.command_ptr += current_command.length
-            frame.command_return_value = 0
-        elif current_command.type_id == 0x91:
-            frame.command_ptr += current_command.length
-            frame.command_return_value = 0
-        elif current_command.type_id == 0x98:
-            frame.command_ptr += current_command.length
-            frame.command_return_value = 0
-        elif current_command.type_id == 0x99:
-            frame.command_ptr += current_command.length
-            frame.command_return_value = 0
-        elif current_command.type_id == 0x9B:
-            frame.command_ptr += current_command.length
-            frame.command_return_value = 0
-        elif current_command.type_id == 0x9A:
-            frame.command_ptr += current_command.length
-            frame.command_return_value = 0
-        elif current_command.type_id == 0xD4:
-            frame.command_ptr += current_command.length
-            frame.command_return_value = 0
-        elif current_command.type_id == 0xD5:
-            frame.command_ptr += current_command.length
-            frame.command_return_value = 0
+            frame.instruction_ptr += current_instruction.length
+            frame.instruction_return_value = 0
+        elif current_instruction.type_id == 0x0C:
+            print(f"    Jump to 0x{current_instruction.arguments[0]:x}")
+            frame.instruction_ptr = current_instruction.arguments[0]
+            frame.instruction_return_value = 0
+        elif current_instruction.type_id == 0x15:
+            frame.instruction_ptr += current_instruction.length
+            frame.instruction_return_value = 0
+        elif current_instruction.type_id == 0x2B:
+            frame.instruction_ptr += current_instruction.length
+            frame.instruction_return_value = 0
+        elif current_instruction.type_id == 0x2E:
+            frame.instruction_ptr += current_instruction.length
+            frame.instruction_return_value = 0
+        elif current_instruction.type_id == 0x2F:
+            frame.instruction_ptr += current_instruction.length
+            frame.instruction_return_value = 1
+        elif current_instruction.type_id == 0x48:
+            frame.instruction_ptr += current_instruction.length
+            frame.instruction_return_value = 0
+        elif current_instruction.type_id == 0x49:
+            frame.instruction_ptr += current_instruction.length
+            frame.instruction_return_value = 0
+        elif current_instruction.type_id == 0x86:
+            frame.instruction_ptr += current_instruction.length
+            frame.instruction_return_value = 0
+        elif current_instruction.type_id == 0x87:
+            frame.instruction_ptr += current_instruction.length
+            frame.instruction_return_value = 0
+        elif current_instruction.type_id == 0x89:
+            frame.instruction_ptr += current_instruction.length
+            frame.instruction_return_value = 0
+        elif current_instruction.type_id == 0x92:
+            frame.instruction_ptr += current_instruction.length
+            frame.instruction_return_value = 0
+        elif current_instruction.type_id == 0x91:
+            frame.instruction_ptr += current_instruction.length
+            frame.instruction_return_value = 0
+        elif current_instruction.type_id == 0x98:
+            frame.instruction_ptr += current_instruction.length
+            frame.instruction_return_value = 0
+        elif current_instruction.type_id == 0x99:
+            frame.instruction_ptr += current_instruction.length
+            frame.instruction_return_value = 0
+        elif current_instruction.type_id == 0x9B:
+            frame.instruction_ptr += current_instruction.length
+            frame.instruction_return_value = 0
+        elif current_instruction.type_id == 0x9A:
+            frame.instruction_ptr += current_instruction.length
+            frame.instruction_return_value = 0
+        elif current_instruction.type_id == 0xD4:
+            frame.instruction_ptr += current_instruction.length
+            frame.instruction_return_value = 0
+        elif current_instruction.type_id == 0xD5:
+            frame.instruction_ptr += current_instruction.length
+            frame.instruction_return_value = 0
         else:
-            raise NotImplementedError(f"command: 0x{current_command.type_id:02x}")
-            frame.command_ptr += current_command.length
-            frame.command_return_value = 0
+            raise NotImplementedError(
+                f"instruction: 0x{current_instruction.type_id:02x}"
+            )
+            frame.instruction_ptr += current_instruction.length
+            frame.instruction_return_value = 0
 
-    def activate_next_frame(self, command_pointer: int) -> None:
+    def activate_next_frame(self, instruction_pointer: int) -> None:
         next_frame = None
         for i, frame in enumerate(self.frames):
             if not frame.is_running:
@@ -130,7 +132,7 @@ class EventSimulator:
 
         print(f"    Activated frame {i}")
 
-        next_frame.command_ptr = command_pointer
+        next_frame.instruction_ptr = instruction_pointer
         next_frame.is_running = True
 
 

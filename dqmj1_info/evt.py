@@ -174,6 +174,13 @@ class Instruction:
                 for c in argument:
                     data.append(ord(c))
                 data.append(0x00)
+
+                num_string_bytes = len(argument) + 1
+                num_padding_bytes = (
+                    0 if num_string_bytes % 4 == 0 else 4 - num_string_bytes % 4
+                )
+                for _ in range(0, num_padding_bytes):
+                    data.append(0xCC)
             elif argument_type == at.U32:
                 for b in argument.to_bytes(4, ENDIANESS):
                     data.append(b)

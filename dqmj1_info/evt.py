@@ -372,17 +372,19 @@ class Event:
         return Event(data=data, instructions=instructions, labels={})
 
     def write_script(self, output_stream: IO[str]) -> None:
-        output_stream.write("DATA ")
+        output_stream.write("  .data:\n")
+        output_stream.write("    ")
         output_stream.write(bytes_repr(self.data))
         output_stream.write("\n")
 
         labels_by_position = self.labels_by_position
 
+        output_stream.write("  .code:\n")
         position = 0x0
         for instruction in self.instructions:
             if position in labels_by_position:
                 label = labels_by_position[position]
-                print(f".{label}:", file=output_stream, flush=False)
+                print(f"{label}:", file=output_stream, flush=False)
 
             print(
                 "    " + instruction.to_script(),

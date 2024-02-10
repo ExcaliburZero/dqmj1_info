@@ -260,7 +260,7 @@ class Instruction:
         instruction_id_reversed_endian = int.from_bytes(
             self.instruction_type.type_id.to_bytes(4, ENDIANESS), "big"
         )
-        start = f"(0x{instruction_id_reversed_endian:08X}) {self.instruction_type.name}"
+        start = f"{self.instruction_type.name:<12}"
         end = ""
         if len(self.arguments) > 0:
             end = " " + " ".join(

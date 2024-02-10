@@ -285,6 +285,9 @@ class Instruction:
             return value.to_script()
         elif value_type == at.InstructionLocation:
             return str(value)
+        elif value_type == at.String or value_type == at.AsciiString:
+            # TODO: implement this more properly
+            return repr(value).replace("'", '"')
 
         return repr(value)
 

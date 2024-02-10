@@ -169,7 +169,7 @@ Id,Name,Arguments,Notes
 0xA7,"Cmd_0xA7","[]",
 0xA8,"Cmd_0xA8","[]",
 0xA9,"Cmd_0xA9","[]",
-0xAA,"Nop","[]",Seems to have no effect other than updating the command pointer and setting return value to 0.
+0xAA,"Nop","[Bytes]","Seems to have no effect other than updating the command pointer and setting return value to 0. Can have a value, but does not have to."
 0xAB,"Cmd_0xAB","[]",Does something with player monsters species'. Maybe the party monsters? Maybe it counts the number that have a matching rank or family (can't tell which).
 0xAC,"Cmd_0xAC","[]",
 0xAD,"Cmd_0xAD","[]",

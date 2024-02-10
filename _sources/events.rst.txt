@@ -7,6 +7,6 @@ Events
    :maxdepth: 1
    :hidden:
 
-   event_commands
+   event_instructions
 
-Events are implemented in the game using a script files (:code:`.evt`) that consist of a series of commands that control what happens.
+Events are implemented in the game using a script files (:code:`.evt`) that consist of a series of instructions that control what happens.

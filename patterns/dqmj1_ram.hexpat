@@ -10,7 +10,7 @@ u32 rng_value @ 0x020BEC9C;
 u8 save_file_validation_result @ 0x0219CA9C;
 
 u32 skill_table_pointer @ 0x0218B628;
-u8 skill_table[0x0000B5E8] @ skill_table_pointer;
+//u8 skill_table[0x0000B5E8] @ skill_table_pointer;
 
 u32 item_table_pointer @ 0x020B01CC;
 u8 item_table[0x4388] @ item_table_pointer;
@@ -19,13 +19,13 @@ u32 monster_species_table_pointer @ 0x0218B53C;
 u8 monster_species_table[0xCB88] @ monster_species_table_pointer;
 
 u32 fld_mstr_prm_pointer @ 0x02249C10;
-u8 fld_mstr_prm[0x408] @ fld_mstr_prm_pointer;
+//u8 fld_mstr_prm[0x408] @ fld_mstr_prm_pointer;
 
 u32 fld_enmy_prm_start_pointer @ 0x02249C14;
-u8 fld_enmy_prm_data_start @ fld_enmy_prm_start_pointer;
+//u8 fld_enmy_prm_data_start @ fld_enmy_prm_start_pointer;
 
 u32 fld_enmy_prm_pointer @ 0x02249C18;
-u8 fld_enmy_prm[0x6E08] @ fld_enmy_prm_pointer;
+//u8 fld_enmy_prm[0x6E08] @ fld_enmy_prm_pointer;
 
 u8 trait_stat_increment_values_adaw[11] @ 0x0208c778;
 u8 trait_stat_increment_values_hp_mp[11] @ 0x0208c76c;
@@ -84,3 +84,21 @@ u32 first_evt_file_ptr @ 0x223DF9C;
 u32 first_evt_file_data_start @ 0x223DFA0;
 
 u32 num_times_synthesized @ 0x20BE5A0;
+
+struct unknown_struct_b {
+    u8 unknown_a[3];
+    u8 unknown_index;
+    u32 unknown_ab;
+    u32 script_start_ptr;
+    u32 script_data_start_ptr;
+    u32 unknown_b_to_h[7];
+    u8 unknown[936];
+    u32 unknown_j;
+    u32 unknown_2[152];
+    u32 unknown_3[268]; // size unclear
+};
+
+
+unknown_struct_b start_unknown_struct_b @ 0x223DF94;
+
+u32 pos_file_pointer @ 0x224B61C;

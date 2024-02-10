@@ -30,7 +30,10 @@ def main(argv: List[str]):
 
         output_filepath = output_directory / (
             script_filepath.name.replace(".dqmj1_script", "")
-        )  # TODO: add .evt if needed
+        )
+        if not output_filepath.name.endswith(".evt"):
+            output_filepath = output_filepath.with_suffix(".evt")
+
         with open(output_filepath, "wb") as output_stream:
             try:
                 event.write_evt(output_stream)

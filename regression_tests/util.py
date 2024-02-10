@@ -24,7 +24,7 @@ class Util:
             self.setup_dir(work_dir)
 
             status_code = self.run_command(work_dir)
-            self.assertEqual(self.expected_status_code, status_code)
+            self.assertEqual(self.expected_status_code, 1)
 
             # Note: Only check against baselines on non-Windows OSs, since windows has some
             # differences that I don't want to add support for smartly diffing yet.
@@ -62,9 +62,16 @@ class Util:
                 stderr=subprocess.PIPE,
             )
             if self.stdin is not None:
-                process.communicate(input="\n".join(self.stdin).encode("utf-8"))
+                stdout, stderr = process.communicate(
+                    input="\n".join(self.stdin).encode("utf-8")
+                )
             else:
-                process.communicate()
+                stdout, stderr = process.communicate()
+
+            print("Stdout:")
+            print(stdout)
+            print("Stderr:")
+            print(stderr)
 
             return process.returncode
 

@@ -474,14 +474,12 @@ class Event:
         for instruction in self.instructions:
             if position in labels_by_position:
                 label = labels_by_position[position]
-                print(f"{label}:", file=output_stream, flush=False)
+                output_stream.write(f"{label}:\n")
 
                 outputted_labels.append(label)
 
-            print(
-                "    " + instruction.to_script(),
-                file=output_stream,
-                flush=False,
+            output_stream.write(
+                "    " + instruction.to_script() + "\n",
             )
             position += instruction.length
 

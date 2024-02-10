@@ -14,6 +14,7 @@ class TestRegressionCompileEvtBasic(Util.TestRegression):
         ".",
     ]
     expected_files = [("basic.evt", "rb")]
+    expected_status_code = 0
 
 
 if __name__ == "__main__":

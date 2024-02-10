@@ -16,13 +16,15 @@ class Util:
         name: str
         command: List[str]
         expected_files: List[Tuple[str, str]]
+        expected_status_code: int
         stdin: Optional[List[str]] = None
 
         def test(self) -> None:
             work_dir = self.get_work_dir()
             self.setup_dir(work_dir)
 
-            self.run_command(work_dir)
+            status_code = self.run_command(work_dir)
+            self.assertEqual(self.expected_status_code, status_code)
 
             # Note: Only check against baselines on non-Windows OSs, since windows has some
             # differences that I don't want to add support for smartly diffing yet.
@@ -51,7 +53,7 @@ class Util:
 
             work_dir.mkdir(parents=True, exist_ok=not clear_if_exists)
 
-        def run_command(self, work_dir: pathlib.Path) -> None:
+        def run_command(self, work_dir: pathlib.Path) -> int:
             process = subprocess.Popen(
                 self.command,
                 cwd=work_dir,
@@ -63,6 +65,8 @@ class Util:
                 process.communicate(input="\n".join(self.stdin).encode("utf-8"))
             else:
                 process.communicate()
+
+            return process.returncode
 
         def diff_against_baselines(self, work_dir: pathlib.Path) -> None:
             baseline_dir = self.get_baseline_dir()

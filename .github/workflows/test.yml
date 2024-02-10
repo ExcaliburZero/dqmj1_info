@@ -35,3 +35,6 @@ jobs:
     - name: Lint with black
       run: |
         black --check .
+    - name: Run regression tests
+      run: |
+        make regression_test

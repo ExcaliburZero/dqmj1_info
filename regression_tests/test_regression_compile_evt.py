@@ -13,7 +13,7 @@ class TestRegressionCompileEvtBasic(Util.TestRegression):
         "--output_directory",
         ".",
     ]
-    expected_files = ["translated_strings.csv"]
+    expected_files = [("basic.evt", "rb")]
 
 
 if __name__ == "__main__":

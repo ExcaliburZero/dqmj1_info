@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 import os
 import pathlib
@@ -15,7 +15,7 @@ class Util:
     class TestRegression(unittest.TestCase):
         name: str
         command: List[str]
-        expected_files: List[str]
+        expected_files: List[Tuple[str, str]]
         stdin: Optional[List[str]] = None
 
         def test(self) -> None:
@@ -68,15 +68,15 @@ class Util:
             baseline_dir = self.get_baseline_dir()
             self.assertTrue(baseline_dir.exists())
 
-            for filename in self.expected_files:
+            for filename, open_mode in self.expected_files:
                 actual = work_dir / filename
                 baseline = baseline_dir / filename
 
                 self.assertTrue(actual.exists())
                 self.assertTrue(baseline.exists())
 
-                with open(baseline, "r") as baseline_stream:
-                    with open(actual, "r") as actual_stream:
+                with open(baseline, open_mode) as baseline_stream:
+                    with open(actual, open_mode) as actual_stream:
                         self.assertEqual(list(baseline_stream), list(actual_stream))
 
         def update_baseline(self) -> None:

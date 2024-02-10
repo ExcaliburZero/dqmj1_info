@@ -11,6 +11,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Checkout LFS objects
+        run: git lfs checkout
+
       - name: Setup Python
         uses: actions/setup-python@v2
         with:

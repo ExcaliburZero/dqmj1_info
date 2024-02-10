@@ -46,6 +46,19 @@ class ValueLocation(enum.Enum):
         elif self == ValueLocation.Three:
             return "Pool_3"
 
+    @staticmethod
+    def from_script(name: str) -> "ValueLocation":
+        if name == "Pool_0":
+            return ValueLocation.Zero
+        elif name == "Pool_1":
+            return ValueLocation.One
+        elif name == "Const":
+            return ValueLocation.Constant
+        elif name == "Pool_3":
+            return ValueLocation.Three
+
+        raise ValueError(f'Unrecognized ValueLocation name: "{name}"')
+
 
 at = ArgumentType
 
@@ -125,6 +138,14 @@ class Instruction:
             raw=raw,
             instruction_type=Instruction.get_instruction_type(raw.instruction_type),
         )
+
+    @staticmethod
+    def get_instruction_type_by_name(instruction_name: str) -> InstructionType:
+        instructions_by_name = Instruction.instructions_by_name()
+        if instruction_name in instructions_by_name:
+            return instructions_by_name[instruction_name]
+
+        raise ValueError(f'Unrecognized instruction: "{instruction_name}"')
 
     @staticmethod
     def get_instruction_type(instruction_id: int) -> InstructionType:
@@ -247,12 +268,20 @@ class Instruction:
         parts = PATTERN.split(line.strip())
         parts = [p for p in parts if len(p.strip()) > 0]
 
-        instruction_id = eval(parts[0])
-        instruction_type = Instruction.get_instruction_type(instruction_id)
+        instruction_name = parts[0]
+        instruction_type = Instruction.get_instruction_type_by_name(instruction_name)
 
-        arguments = []
-        for i, _ in enumerate(instruction_type.arguments):
-            arguments.append(eval(parts[i + 2]))
+        arguments: List[Any] = []
+        for i, arg_type in enumerate(instruction_type.arguments):
+            try:
+                if arg_type == at.ValueLocation:
+                    arguments.append(ValueLocation.from_script(parts[i + 1]))
+                elif arg_type == at.InstructionLocation:
+                    arguments.append(parts[i + 1])
+                else:
+                    arguments.append(eval(parts[i + 1]))
+            except IndexError:
+                raise ValueError(f"Failed to parse index {i + 1} in: {parts}")
 
         return Instruction(instruction_type=instruction_type, arguments=arguments)
 
@@ -294,6 +323,10 @@ class Instruction:
     @staticmethod
     def instructions_by_type_id() -> Dict[int, InstructionType]:
         return {cmd_type.type_id: cmd_type for cmd_type in COMMAND_TYPES}
+
+    @staticmethod
+    def instructions_by_name() -> Dict[str, InstructionType]:
+        return {cmd_type.name: cmd_type for cmd_type in COMMAND_TYPES}
 
 
 def bytes_repr(bs: bytes) -> str:
@@ -353,23 +386,48 @@ class Event:
     def from_script(input_stream: IO[str]) -> "Event":
         data: Optional[Any] = None
         instructions: List[Instruction] = []
+        labels: LabelDict = {}
+        current_section: Optional[str]
+        current_instruction_ptr = 0x0
         for line in input_stream:
-            if data is None:
-                assert line.startswith('DATA b"')
-
-                data = eval(line[len("DATA ") :])
+            line = line.strip()
+            if line == "":
                 continue
 
-            instruction = Instruction.from_script(line)
-            assert instruction is not None
+            if line.startswith("."):
+                assert line.endswith(":")
 
-            instructions.append(instruction)
+                section_name = line[1:-1]
+                assert section_name in ["data", "code"]
+
+                current_section = section_name
+                continue
+
+            if line.endswith(":"):
+                label_name = line[:-1]
+                assert label_name not in labels
+
+                labels[label_name] = current_instruction_ptr
+                continue
+
+            if current_section == "data":
+                assert line.startswith('b"')
+
+                data = eval(line)
+                continue
+            elif current_section == "code":
+                instruction = Instruction.from_script(line)
+                assert instruction is not None
+
+                instructions.append(instruction)
+                current_instruction_ptr += instruction.length
+            else:
+                assert False
 
         assert data is not None
         assert isinstance(data, bytes)
 
-        raise NotImplementedError()
-        return Event(data=data, instructions=instructions, labels={})
+        return Event(data=data, instructions=instructions, labels=labels)
 
     def write_script(self, output_stream: IO[str]) -> None:
         output_stream.write("  .data:\n")

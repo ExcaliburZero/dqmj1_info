@@ -58,5 +58,5 @@ def main(argv: List[str]):
                 print(instruction_str, file=output_stream)
 
 
-if __name__ == "__main__":
+def main_without_args() -> None:
     main(sys.argv[1:])

@@ -69,9 +69,9 @@ class Util:
                 stdout, stderr = process.communicate()
 
             print("Stdout:")
-            print(stdout)
+            print(stdout.decode("utf8"))
             print("Stderr:")
-            print(stderr)
+            print(stderr.decode("utf8"))
 
             return process.returncode
 

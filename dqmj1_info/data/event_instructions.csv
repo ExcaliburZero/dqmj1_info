@@ -133,7 +133,7 @@ Id,Name,Arguments,Notes
 0x83,"Cmd_0x83","[]",Seems to do something with the player's monsters' families
 0x84,"Cmd_0x84","[]",Seems to do something with a monster.
 0x85,"Cmd_0x85","[]",
-0x86,"Cmd_0x86","[]",
+0x86,"LoadMap","[]",TODO: Confirm exact functionality
 0x87,"Cmd_0x87","[]",
 0x88,"Cmd_0x88","[]",
 0x89,"Cmd_0x89","[]",

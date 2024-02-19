@@ -9,6 +9,7 @@ import sys
 import pandas as pd
 
 from .character_encoding import BYTE_TO_CHAR_MAP, CHAR_TO_BYTE_MAP
+from .language_configs.language_configs import LANGUAGE_CONFIGS
 
 
 @dataclass
@@ -23,37 +24,14 @@ def main(argv: List[str]):
 
     parser.add_argument("--data_directory", required=True)
     parser.add_argument("--output_csv", required=True)
+    parser.add_argument("--language", required=True)
 
     args = parser.parse_args(argv)
 
     data_directory = pathlib.Path(args.data_directory)
     output_csv = pathlib.Path(args.output_csv)
 
-    string_locations = {
-        pathlib.Path("arm9.bin"): (
-            0x02000000,
-            [
-                StringTable("strings_a", 0x020735F0, 0x020749E8),
-                StringTable("strings_b", 0x0207805C, 0x02083DE3),
-                StringTable("strings_c", 0x02084B18, 0x0208A7B8),
-                StringTable("strings_d", 0x0209072C, 0x02091753),
-            ],
-        ),
-        pathlib.Path("overlay")
-        / "overlay_0000.bin": (
-            0x021A0A00,
-            [
-                StringTable("strings_h", 0x021F5950, 0x021F66EC),
-                StringTable("strings_i", 0x021F678C, 0x021F6D6C),
-                StringTable("strings_j", 0x021F6ED8, 0x021F78B8),
-                StringTable("strings_k", 0x021F80C0, 0x021FC140),
-                StringTable("strings_l", 0x021FC224, 0x021FC940),
-                StringTable("strings_m", 0x021FCB10, 0x021FD2A0),
-                StringTable("strings_n", 0x021FD2F8, 0x021FD45C),
-                StringTable("strings_o", 0x021FD588, 0x021FD874),
-            ],
-        ),
-    }
+    string_locations = LANGUAGE_CONFIGS[args.language].string_tables
 
     strings: List[Tuple[pathlib.Path, str, str, str, str]] = []
     for file_subpath, (offset, tables) in sorted(string_locations.items()):

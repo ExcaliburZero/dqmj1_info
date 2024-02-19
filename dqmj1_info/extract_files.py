@@ -13,9 +13,13 @@ from . import extract_strings
 from . import extract_string_address_tables
 from . import item_table
 from . import item_tbl
+from . import language_configs
 from . import monster_species_table
 from . import skill_set_table
 from . import skill_tbl
+
+SUCCESS = 0
+FAILURE = 1
 
 
 def main(argv: List[str]):
@@ -25,6 +29,7 @@ def main(argv: List[str]):
 
     parser.add_argument("--input_directory", required=True)
     parser.add_argument("--output_directory", required=True)
+    parser.add_argument("--language", default="en")
 
     args = parser.parse_args(argv)
 
@@ -33,6 +38,13 @@ def main(argv: List[str]):
 
     if not input_directory.exists():
         logging.error(f"Input directory does not exist: {input_directory}")
+        return FAILURE
+
+    if args.language not in language_configs.LANGUAGE_CONFIGS:
+        logging.error(
+            f'Unrecognized language "{args.language}". Known languages are: {", ".join(sorted(language_configs.LANGUAGE_CONFIGS.keys()))}'
+        )
+        return FAILURE
 
     ###
     # Setup output directory
@@ -50,6 +62,8 @@ def main(argv: List[str]):
             str(input_directory),
             "--output_csv",
             str(strings_without_context_csv),
+            "--language",
+            args.language,
         ]
     )
     logging.info(
@@ -68,6 +82,8 @@ def main(argv: List[str]):
             str(strings_without_context_csv),
             "--output_csv",
             str(strings_by_table_csv),
+            "--language",
+            args.language,
         ]
     )
     logging.info(f"Finished writing extracted string tables to: {strings_by_table_csv}")
@@ -193,6 +209,8 @@ def main(argv: List[str]):
     )
     logging.info(f"Finished creating item set table: {item_table_csv}")
 
+    return SUCCESS
+
 
 def main_without_args() -> None:
-    main(sys.argv[1:])
+    return main(sys.argv[1:])

@@ -8,12 +8,7 @@ import sys
 
 import pandas as pd
 
-
-@dataclass
-class StringAddressTable:
-    name: str
-    start: int
-    end: int
+from .language_configs.language_configs import LANGUAGE_CONFIGS
 
 
 def main(argv: List[str]):
@@ -22,6 +17,7 @@ def main(argv: List[str]):
     parser.add_argument("--data_directory", required=True)
     parser.add_argument("--output_csv", required=True)
     parser.add_argument("--mined_strings_csv", required=True)
+    parser.add_argument("--language", required=True)
 
     args = parser.parse_args(argv)
 
@@ -31,45 +27,7 @@ def main(argv: List[str]):
 
     mined_strings = pd.read_csv(mined_strings_csv)
 
-    string_locations = {
-        pathlib.Path("arm9.bin"): (
-            0x02000000,
-            [
-                StringAddressTable("monster_species_names", 0x0207785C, 0x0207805C),
-                StringAddressTable("skill_set_names", 0x020763E0, 0x020767E4),
-                StringAddressTable("skill_names", 0x02076BE8, 0x0207705C),
-                StringAddressTable("mnamemes", 0x02075FE0, 0x020763E0),
-                StringAddressTable("unknown_a", 0x02074CE0, 0x02074DE0),
-                StringAddressTable("tactic_names", 0x02074A88, 0x02074AA8),
-                StringAddressTable("skill_descriptions", 0x02074FE0, 0x020753E0),
-                StringAddressTable(
-                    "skill_set_names_and_descriptions", 0x020753E0, 0x020757E0
-                ),
-                StringAddressTable("item_names", 0x020767E4, 0x02076BE8),
-                StringAddressTable("trait_names", 0x020757E0, 0x02075BE0),
-                StringAddressTable("enemy_scout_names", 0x02075BE0, 0x02075FE0),
-                StringAddressTable("unknown_b", 0x0207705C, 0x0207785C),
-                StringAddressTable("unknown_c", 0x02074A04, 0x02074A14),
-                StringAddressTable("color_names", 0x02074A54, 0x02074A6C),
-                StringAddressTable("day_and_night", 0x020749EC, 0x020749F4),
-                StringAddressTable("nsbmd_filenames", 0x02074DE0, 0x02074FE0),
-                StringAddressTable("unknown_d", 0x02074C60, 0x02074DDC),
-                StringAddressTable("unknown_e", 0x02074B2C, 0x02074B74),
-                StringAddressTable("unknown_f", 0x02074A6C, 0x02074A88),
-                StringAddressTable(
-                    "battle_and_field_and_anywhere", 0x020749F4, 0x02074A04
-                ),
-                StringAddressTable("unknown_g", 0x02074A3C, 0x02074A54),
-                StringAddressTable("battle_targets", 0x02074A14, 0x02074A28),
-                StringAddressTable("skill_targeting_types", 0x02074A28, 0x02074A3C),
-                StringAddressTable("unknown_h", 0x02074AE8, 0x02074B2C),
-                StringAddressTable("unknown_i", 0x02074BE0, 0x02074C60),
-                StringAddressTable("unknown_j", 0x02084018, 0x02084118),
-                StringAddressTable("unknown_k", 0x02083EBC, 0x02083EFC),
-                StringAddressTable("battle_messages", 0x02084318, 0x02084B18),
-            ],
-        ),
-    }
+    string_locations = LANGUAGE_CONFIGS[args.language].string_address_tables
 
     strings: List[Tuple[pathlib.Path, str, int, str, str, str, str, Any]] = []
     for file_subpath, (offset, tables) in sorted(string_locations.items()):

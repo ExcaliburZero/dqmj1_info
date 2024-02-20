@@ -37,7 +37,7 @@ def main(argv: List[str]):
 
                 logging.debug(f"Wrote extracted file: {output_filepath}")
         else:
-            logging.info(f"{fpk_bin} is not an FPK file.")
+            logging.info(f"{fpk_bin_filepath} is not an FPK file.")
 
 
 def main_without_args() -> None:

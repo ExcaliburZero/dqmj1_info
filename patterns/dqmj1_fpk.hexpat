@@ -1,10 +1,14 @@
-u32 magic @ 0x0;
-u32 num_files @ 0x4;
-
 struct file {
-    u8 unknown[0x20];
+    u8 name_info[0x20];
     u32 offset;
     u32 size;
+    u8 data[size] @ offset;
 };
 
-file files[num_files] @ $;
+struct fpk {
+    u32 magic;
+    u32 num_files;
+    file files[num_files];  
+};
+
+fpk fpk @ 0x0;

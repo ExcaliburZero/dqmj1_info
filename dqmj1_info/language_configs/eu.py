@@ -1,4 +1,11 @@
-from .language_configs import *
+from .language_configs import (
+    LanguageConfig,
+    LANGUAGE_CONFIGS,
+    StringTable,
+    StringAddressTable,
+)
+
+import pathlib
 
 LANGUAGE_CONFIGS["eu"] = LanguageConfig(
     string_tables={

@@ -36,6 +36,9 @@ jobs:
     - name: Lint with mypy
       run: |
         mypy .
+    - name: Lint with ruff
+      run: |
+        ruff check .
     - name: Lint with black
       run: |
         black --check .

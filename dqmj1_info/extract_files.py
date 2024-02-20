@@ -9,6 +9,7 @@ import sys
 from . import d16_to_png
 from . import decompile_evt
 from . import enmy_kind_tbl
+from . import extract_fpks
 from . import extract_strings
 from . import extract_string_address_tables
 from . import item_table
@@ -51,6 +52,20 @@ def main(argv: List[str]):
     ###
     output_directory.mkdir(exist_ok=True, parents=True)
     logging.info(f"Created output directory: {output_directory}")
+
+    ###
+    # Extract FPK file parchives / packages
+    ###
+    fpk_extracted_files_dir = output_directory / "fpk_extracted_files"
+    extract_fpks.main(
+        [
+            "--fpk_bin_filepaths",
+            *sorted(glob.glob(str(input_directory / "data" / "*.bin"))),
+            "--output_directory",
+            str(fpk_extracted_files_dir),
+        ]
+    )
+    logging.info(f"Finished extracted files from FPKs to: {fpk_extracted_files_dir}")
 
     ###
     # Extract strings
@@ -152,6 +167,7 @@ def main(argv: List[str]):
         [
             "--evt_filepaths",
             *sorted(glob.glob(str(input_directory / "data" / "*.evt"))),
+            *sorted(glob.glob(str(fpk_extracted_files_dir / "*.ev*"))),
             "--output_directory",
             str(scripts_dir),
             # "--ignore_unknown_commands",

@@ -1,5 +1,4 @@
-from dataclasses import dataclass
-from typing import IO, List, Literal
+from typing import List, Literal
 
 import argparse
 import sys

@@ -1,7 +1,6 @@
 from typing import List
 
 import argparse
-import collections
 import pathlib
 import sys
 

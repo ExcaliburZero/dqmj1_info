@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 from typing import Any, List, Tuple
 
 import argparse

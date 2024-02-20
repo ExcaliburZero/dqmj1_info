@@ -1,7 +1,6 @@
 from typing import List
 
 import argparse
-import random
 import sys
 
 import numpy as np

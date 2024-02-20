@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import IO, List, Literal
+from typing import IO, Literal
 
 import sys
 

@@ -1,6 +1,13 @@
-u32 magic @ 0x00;
-u16 width @ 0x04;
-u16 height @ 0x06;
+struct pixel {
+    // 16bit color, 0b1BBBBBGGGGGRRRRR
+    u16 color;
+};
 
-// 16bit colors, 0b1BBBBBGGGGGRRRRR
-u16 pixels[width * height] @ 0x08;
+struct d16 {
+    u32 magic;
+    u16 width;
+    u16 height;
+    pixel pixels[width * height];
+};
+
+d16 d16 @ 0x0;

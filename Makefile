@@ -1,4 +1,4 @@
-.PHONY: format regression_test
+.PHONY: format lint regression_test
 
 format:
 	python -m black .

@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 from typing import List, Tuple
 
 import argparse
@@ -10,13 +9,6 @@ import pandas as pd
 
 from .character_encoding import BYTE_TO_CHAR_MAP, CHAR_TO_BYTE_MAP
 from .language_configs.language_configs import LANGUAGE_CONFIGS
-
-
-@dataclass
-class StringTable:
-    name: str
-    start: int
-    end: int
 
 
 def main(argv: List[str]):

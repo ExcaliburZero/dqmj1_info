@@ -1,4 +1,4 @@
-from typing import Any, List
+from typing import List
 
 import argparse
 import enum
@@ -7,7 +7,7 @@ import logging
 import pathlib
 import sys
 
-import gooey
+import gooey # type: ignore
 
 from . import d16_to_png
 from . import decompile_evt

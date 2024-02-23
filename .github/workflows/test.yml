@@ -32,7 +32,7 @@ jobs:
       run: |
         sudo apt install libgtk-3-dev
         python -m pip install --upgrade pip
-        pip install mypy black pytest ruff
+        pip install mypy black pytest ruff pyinstaller
         pip install pandas-stubs types-Pillow
     - name: Lint with mypy
       run: |
@@ -49,3 +49,11 @@ jobs:
     - name: Run regression tests
       run: |
         make regression_test
+    - name: Create exectuable
+      run: |
+        make compile_executables
+    - name: Archive executable
+      uses: actions/upload-artifact@v4
+      with:
+        name: executable
+        path: dist/extract_files_gui/*

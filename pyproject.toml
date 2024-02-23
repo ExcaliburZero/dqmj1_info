@@ -1,7 +1,7 @@
 [project]
 name = "dqmj1_info"
 version = "0.0.1"
-dependencies = ["numpy", "pandas", "Pillow"]
+dependencies = ["numpy", "pandas", "Pillow", "gooey"]
 
 [project.scripts]
 dqmj1_extract_files = "dqmj1_info:extract_files.main_cli"

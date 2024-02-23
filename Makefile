@@ -1,4 +1,4 @@
-.PHONY: format lint regression_test
+.PHONY: format lint regression_test compile_executables
 
 format:
 	python -m black .
@@ -9,3 +9,6 @@ lint:
 
 regression_test:
 	python -m pytest regression_tests/test_*.py
+
+compile_executables:
+	pyinstaller extract_files_gui.py --add-data "dqmj1_info/data:dqmj1_info/data" --noconfirm

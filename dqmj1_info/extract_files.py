@@ -1,10 +1,13 @@
-from typing import List
+from typing import Any, List
 
 import argparse
+import enum
 import glob
 import logging
 import pathlib
 import sys
+
+import gooey
 
 from . import d16_to_png
 from . import decompile_evt
@@ -22,17 +25,65 @@ from . import skill_tbl
 SUCCESS = 0
 FAILURE = 1
 
+class UiMode(enum.Enum):
+    CLI = enum.auto()
+    GUI = enum.auto()
 
-def main(argv: List[str]):
-    logging.basicConfig(level=logging.DEBUG, format="%(levelname)s> %(message)s")
 
+def cli_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--input_directory", required=True)
-    parser.add_argument("--output_directory", required=True)
-    parser.add_argument("--language", default="en")
+    parser.add_argument(
+        "--input_directory",
+        required=True,
+        help="Directory containing the unpacked game files (typically unpacked using a program link DsLazy).",
+    )
+    parser.add_argument(
+        "--output_directory",
+        required=True,
+        help="Directory to write extracted files to. It is recommended to create a new empty directory.",
+    )
+    parser.add_argument(
+        "--language", default="en", choices=language_configs.LANGUAGE_CONFIGS.keys()
+    )
+
+    return parser
+
+
+@gooey.Gooey(program_name="DQMJ1 Unofficial File Extractor")
+def gui_parser() -> gooey.GooeyParser:
+    parser = gooey.GooeyParser(
+        description="Program that extracts data files from Dragon Quest Monsters: Joker."
+    )
+
+    parser.add_argument(
+        "--input_directory",
+        required=True,
+        widget="DirChooser",
+        help="Directory containing the unpacked game files (typically unpacked using a program link DsLazy).",
+    )
+    parser.add_argument(
+        "--output_directory",
+        required=True,
+        widget="DirChooser",
+        help="Directory to write extracted files to. It is recommended to create a new empty directory.",
+    )
+    parser.add_argument(
+        "--language", default="en", choices=language_configs.LANGUAGE_CONFIGS.keys()
+    )
+
+    return parser
+
+
+def main(argv: List[str], mode: UiMode):
+    if mode == UiMode.GUI:
+        parser = gui_parser()
+    else:
+        parser = cli_parser()
 
     args = parser.parse_args(argv)
+
+    logging.basicConfig(level=logging.DEBUG, format="%(levelname)s> %(message)s")
 
     input_directory = pathlib.Path(args.input_directory)
     output_directory = pathlib.Path(args.output_directory)
@@ -228,5 +279,8 @@ def main(argv: List[str]):
     return SUCCESS
 
 
-def main_without_args() -> None:
-    return main(sys.argv[1:])
+def main_cli() -> None:
+    return main(sys.argv[1:], mode=UiMode.CLI)
+
+def main_gui() -> None:
+    return main(sys.argv[1:], mode=UiMode.GUI)

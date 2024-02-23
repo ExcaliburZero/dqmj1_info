@@ -7,7 +7,7 @@ import logging
 import pathlib
 import sys
 
-import gooey # type: ignore
+import gooey  # type: ignore
 
 from . import ability_tbl
 from . import d16_to_png

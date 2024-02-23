@@ -7,7 +7,7 @@ import logging
 import pathlib
 import sys
 
-import gooey # type: ignore
+import gooey  # type: ignore
 
 from . import d16_to_png
 from . import decompile_evt
@@ -24,6 +24,7 @@ from . import skill_tbl
 
 SUCCESS = 0
 FAILURE = 1
+
 
 class UiMode(enum.Enum):
     CLI = enum.auto()
@@ -281,6 +282,7 @@ def main(argv: List[str], mode: UiMode):
 
 def main_cli() -> None:
     return main(sys.argv[1:], mode=UiMode.CLI)
+
 
 def main_gui() -> None:
     return main(sys.argv[1:], mode=UiMode.GUI)

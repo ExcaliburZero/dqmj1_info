@@ -12,6 +12,7 @@ from . import enmy_kind_tbl
 from . import extract_fpks
 from . import extract_strings
 from . import extract_string_address_tables
+from . import extract_script_dialogue
 from . import item_table
 from . import item_tbl
 from . import language_configs
@@ -174,6 +175,20 @@ def main(argv: List[str]):
         ]
     )
     logging.info(f"Finished decompiling scripts to: {scripts_dir}")
+
+    ###
+    # Extract dialogue
+    ###
+    event_dialogue_csv = output_directory / "scripts" / "dialogue.csv"
+    extract_script_dialogue.main(
+        [
+            "--script_filepaths",
+            *sorted(glob.glob(str(scripts_dir / "*.dqmj1_script"))),
+            "--output_csv",
+            str(event_dialogue_csv),
+        ]
+    )
+    logging.info(f"Finished extracting scripts dialogue to: {event_dialogue_csv}")
 
     ###
     # Create monster species table

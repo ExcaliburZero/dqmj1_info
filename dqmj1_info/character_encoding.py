@@ -1,4 +1,6 @@
-BYTE_TO_CHAR_MAP = {
+from typing import List, Tuple, Union
+
+BYTE_TO_CHAR_MAP_NA_AND_EU = {
     0x00: "0",
     0x01: "1",
     0x02: "2",
@@ -78,4 +80,138 @@ BYTE_TO_CHAR_MAP = {
     0xFE: "\\n",
 }
 
-CHAR_TO_BYTE_MAP = {c: b for b, c in BYTE_TO_CHAR_MAP.items()}
+BYTE_TO_CHAR_MAP = [
+    # Not checked
+    ([0x00], "0"),
+    ([0x01], "1"),
+    ([0x02], "2"),
+    ([0x03], "3"),
+    ([0x04], "4"),
+    ([0x05], "5"),
+    ([0x06], "6"),
+    ([0x07], "7"),
+    ([0x08], "8"),
+    ([0x09], "9"),
+    ([0x0A], " "),
+    ([0x0B], "A"),
+    ([0x0C], "B"),
+    ([0x0D], "C"),
+    ([0x0E], "D"),
+    ([0x0F], "E"),
+    #,~Checke)d
+    #,x92: "の"),
+    #,x6B: "ジ"),
+    #,x62: "ェ"),
+    #,x5D: "イ"),
+    #,x5D: "ル"),
+    #,x3C: "で"),
+    ([0xA9], "…"),
+    #,x8E: "地"),
+    #,x8e: "の"),
+    #,x3D: "ど"),
+    ([0x34], "し"),
+    ([0x2E], "か"),
+    ([0x94], "。"),
+    ([0x95], "「"),
+    ([0xBF], " "),
+    ([0x42], "の"),
+    ([0x26], "い"),
+    ([0x3E], "な"),
+    ([0x58], "わ"),
+    ([0x43], "は"),
+    ([0x30], "く"),
+    ([0x9C], "!"),
+    ([0x3D], "と"),
+    ([0x3F], "に"),
+    ([0x36], "せ"),
+    ([0x28], "う"),
+    ([0x38], "た"),
+    ([0x92, 0x3D], "ど"),
+    ([0x92, 0x36], "ぜ"),
+    ([0x92, 0x2E], "が"),
+    ([0x9b], "?"),
+    ([0xFE], "\\n"),
+]
+
+#CHAR_TO_BYTE_MAP = {c: b for b, c in BYTE_TO_CHAR_MAP.items()}
+CHAR_TO_BYTE_MAP = {c: b for b, c in BYTE_TO_CHAR_MAP}
+
+def string_to_bytes(string: str) -> bytes:
+    try:
+        string_bytes = []
+        hex_buffer = []
+        escape_buffer = []
+        for char in string:
+            if char == "]":
+                char = "".join(hex_buffer[3:])
+                string_bytes.append(int(char, 16))
+                hex_buffer = []
+                continue
+            elif char == "[" or len(hex_buffer) > 0:
+                hex_buffer.append(char)
+                continue
+            elif char == "\\":
+                escape_buffer += [char]
+                continue
+            elif len(escape_buffer) > 0:
+                char = "".join(escape_buffer) + char
+                escape_buffer = []
+
+            matching_bytes = CHAR_TO_BYTE_MAP[char]
+            string_bytes.extend(matching_bytes)
+    except Exception as e:
+        raise ValueError(f'Failed to convert string to bytes: "{string}"') from e
+
+    string_bytes.append(0xFF)
+
+    return bytes(string_bytes)
+
+def bytes_to_string(bs: Union[List[int], bytes]) -> str:
+    chars = []
+    i = 0
+    while i != len(bs):
+        b = bs[i]
+        if b == 0xFF:
+            break
+
+        #chars.append(byte_to_char(b))
+        #return "[" + hex(byte) + "]"
+        char, i = get_bytes_match(bs, i)
+        chars.append(char)
+
+        # i += 1
+
+    return "".join(chars)
+
+def get_bytes_match(bs: Union[List[int], bytes], i: int) -> Tuple[List[Tuple[List[int], str]], int]:
+    matches = list(BYTE_TO_CHAR_MAP)
+    offset = 0
+    while len(matches) >= 1:
+        remaining_matches = []
+        for match_bytes, match_char in matches:
+            if match_bytes[offset] == bs[i + offset]:
+                if len(match_bytes) == offset + 1:
+                    return match_char, i + offset + 1
+                else:
+                    remaining_matches.append((match_bytes, match_char))
+        matches = remaining_matches
+
+        offset += 1
+
+    #if len(matches) == 1 and len(matches[0][0]) > 1:
+    #    print(matches)
+    #    print([hex(b) for b in matches[0][0]])
+    #    print([hex(b) for b in bs[i:i+offset+1]])
+    #    print(offset)
+    #    breakpoint()
+
+    if len(matches) == 0 or (len(matches) == 1 and len(matches[0][0]) <= offset):
+        return "[" + hex(bs[i]) + "]", i + 1
+    elif len(matches) == 1:
+        #if len(matches[0][0]) > 1:
+        #    breakpoint()
+        assert matches[0][0] == bs[i:i + offset], f"{matches[0][0]} != {bs[i:i + offset]}"
+
+        return matches[0][1], i + offset
+    else:
+        assert False

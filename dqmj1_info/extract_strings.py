@@ -95,7 +95,7 @@ def char_to_byte(c: str) -> int:
     if c in mapping:
         return mapping[c]
     elif c.startswith("[0x"):
-        assert c.endswith("]")
+        assert c.endswith("]"), c
         return int(c[1:-1], base=16)
     else:
         print(repr(c))

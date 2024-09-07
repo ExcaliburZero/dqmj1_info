@@ -9,7 +9,7 @@ import os
 import pathlib
 import re
 
-from .extract_strings import byte_to_char, get_string_chars, char_to_byte
+from .character_encoding import bytes_to_string, string_to_bytes
 
 ENDIANESS: Literal["little"] = "little"
 
@@ -149,7 +149,7 @@ class Instruction:
 
                 bs = stream.getbuffer()
                 raise ValueError(
-                    f"{instruction.length} != {len(raw.data) + 8} for instruction: {instruction}\n{str([b for b in bs])}"
+                    f"{instruction.length} != {len(raw.data) + 8} for instruction: {instruction}\nwritten={str([hex(b) for b in bs[8:]])}\nraw=    {[hex(b) for b in raw.data]}"
                 )
 
         return results
@@ -353,27 +353,6 @@ class Instruction:
 
 def bytes_repr(bs: bytes) -> str:
     return 'b"' + "".join([f"\\x{b:02x}" for b in bs]) + '"'
-
-
-def string_to_bytes(string: str) -> bytes:
-    individual_bytes = []
-    for c in get_string_chars(string):
-        individual_bytes.append(char_to_byte(c))
-
-    individual_bytes.append(0xFF)
-
-    return bytes(individual_bytes)
-
-
-def bytes_to_string(bs: Union[List[int], bytes]) -> str:
-    chars = []
-    for b in bs:
-        if b == 0xFF:
-            break
-
-        chars.append(byte_to_char(b))
-
-    return "".join(chars)
 
 
 @dataclass

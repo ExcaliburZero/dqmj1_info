@@ -15,5 +15,6 @@ struct item {
     u8 unknown[76];
 };
 
-u64 magic @ 0x0;
-item items[160] @ 0x8;
+u32 magic @ 0x0;
+u32 length @ 0x4;
+item items[length] @ 0x8;

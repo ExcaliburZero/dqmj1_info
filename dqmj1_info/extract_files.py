@@ -6,6 +6,7 @@ import logging
 import pathlib
 import sys
 
+from . import ability_tbl
 from . import d16_to_png
 from . import decompile_evt
 from . import enmy_kind_tbl
@@ -61,7 +62,10 @@ def main(argv: List[str]):
     extract_fpks.main(
         [
             "--fpk_bin_filepaths",
-            *sorted(glob.glob(str(input_directory / "data" / "*.bin"))),
+            *sorted(
+                list(glob.glob(str(input_directory / "data" / "*.bin")))
+                + list(glob.glob(str(input_directory / "data" / "*.map")))
+            ),
             "--output_directory",
             str(fpk_extracted_files_dir),
         ]
@@ -103,6 +107,20 @@ def main(argv: List[str]):
         ]
     )
     logging.info(f"Finished writing extracted string tables to: {strings_by_table_csv}")
+
+    ###
+    # Extract EnmyKindTbl
+    ###
+    ability_tbl_csv = output_directory / "AbilityTbl.csv"
+    ability_tbl.main(
+        [
+            "--table_filepath",
+            str(input_directory / "data" / "AbilityTbl.bin"),
+            "--output_csv",
+            str(ability_tbl_csv),
+        ]
+    )
+    logging.info(f"Finished extracting AbilityTbl.bin to: {ability_tbl_csv}")
 
     ###
     # Extract EnmyKindTbl

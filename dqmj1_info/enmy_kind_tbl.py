@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import IO, List, Literal
+from typing import IO, List, Literal, Tuple
 
 import argparse
 import logging
@@ -29,6 +29,12 @@ class EnemyKind:
     defense_limit: int
     agility_limit: int
     wisdom_limit: int
+    max_hp_increase_pattern: Tuple[int, int, int, int]
+    max_mp_increase_pattern: Tuple[int, int, int, int]
+    attack_increase_pattern: Tuple[int, int, int, int]
+    defense_increase_pattern: Tuple[int, int, int, int]
+    agility_increase_pattern: Tuple[int, int, int, int]
+    wisdom_increase_pattern: Tuple[int, int, int, int]
     skill_set: int
 
     @staticmethod
@@ -62,7 +68,43 @@ class EnemyKind:
         agility_limit = int.from_bytes(input_stream.read(2), ENDIANESS)
         wisdom_limit = int.from_bytes(input_stream.read(2), ENDIANESS)
 
-        input_stream.read(24)
+        max_hp_increase_pattern = (
+            int.from_bytes(input_stream.read(1), ENDIANESS),
+            int.from_bytes(input_stream.read(1), ENDIANESS),
+            int.from_bytes(input_stream.read(1), ENDIANESS),
+            int.from_bytes(input_stream.read(1), ENDIANESS),
+        )
+        max_mp_increase_pattern = (
+            int.from_bytes(input_stream.read(1), ENDIANESS),
+            int.from_bytes(input_stream.read(1), ENDIANESS),
+            int.from_bytes(input_stream.read(1), ENDIANESS),
+            int.from_bytes(input_stream.read(1), ENDIANESS),
+        )
+        attack_increase_pattern = (
+            int.from_bytes(input_stream.read(1), ENDIANESS),
+            int.from_bytes(input_stream.read(1), ENDIANESS),
+            int.from_bytes(input_stream.read(1), ENDIANESS),
+            int.from_bytes(input_stream.read(1), ENDIANESS),
+        )
+        defense_increase_pattern = (
+            int.from_bytes(input_stream.read(1), ENDIANESS),
+            int.from_bytes(input_stream.read(1), ENDIANESS),
+            int.from_bytes(input_stream.read(1), ENDIANESS),
+            int.from_bytes(input_stream.read(1), ENDIANESS),
+        )
+        agility_increase_pattern = (
+            int.from_bytes(input_stream.read(1), ENDIANESS),
+            int.from_bytes(input_stream.read(1), ENDIANESS),
+            int.from_bytes(input_stream.read(1), ENDIANESS),
+            int.from_bytes(input_stream.read(1), ENDIANESS),
+        )
+        wisdom_increase_pattern = (
+            int.from_bytes(input_stream.read(1), ENDIANESS),
+            int.from_bytes(input_stream.read(1), ENDIANESS),
+            int.from_bytes(input_stream.read(1), ENDIANESS),
+            int.from_bytes(input_stream.read(1), ENDIANESS),
+        )
+
         skil_set = int.from_bytes(input_stream.read(1), ENDIANESS)
         input_stream.read(75)
 
@@ -84,6 +126,12 @@ class EnemyKind:
             defense_limit=defense_limit,
             agility_limit=agility_limit,
             wisdom_limit=wisdom_limit,
+            max_hp_increase_pattern=max_hp_increase_pattern,
+            max_mp_increase_pattern=max_mp_increase_pattern,
+            attack_increase_pattern=attack_increase_pattern,
+            defense_increase_pattern=defense_increase_pattern,
+            agility_increase_pattern=agility_increase_pattern,
+            wisdom_increase_pattern=wisdom_increase_pattern,
             skill_set=skil_set,
         )
 

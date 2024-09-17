@@ -36,7 +36,7 @@ def main(argv: List[str]):
             instructions_by_type[instruction.type_id].append(instruction)
 
         output_filepath = output_directory / (evt_filepath.name + ".dqmj1_script")
-        with open(output_filepath, "w") as output_stream:
+        with open(output_filepath, "w", encoding="utf-8") as output_stream:
             if args.ignore_unknown_instructions:
                 for instruction in event.instructions:
                     if not instruction.instruction_type.name == "UNKNOWN":
@@ -49,7 +49,7 @@ def main(argv: List[str]):
 
     for instruction_type, instructions in sorted(instructions_by_type.items()):
         filepath = instruction_examples_dir / f"{instruction_type:02x}.txt"
-        with open(filepath, "w") as output_stream:
+        with open(filepath, "w", encoding="utf-8") as output_stream:
             examples = set()
             for instruction in instructions:
                 examples.add(instruction.to_script())

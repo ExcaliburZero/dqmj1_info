@@ -1,14 +1,20 @@
 # dqmj1_info
-A tool for extracting data and files from the game *Dragon Quest Monsters: Joker*.
+A set of tools for extracting and working with data and files from the game *Dragon Quest Monsters: Joker*.
 
-## Installation
+## Download
+Download the latest release of dqmj1_info for your operating system at the link below:
+
+https://github.com/ExcaliburZero/dqmj1_info/releases
+
+## Development
+### Installation
 ```bash
 git clone https://github.com/ExcaliburZero/dqmj1_info.git
 cd dqmj1_info
-pip install .
+pip install -e .
 ```
 
-## Usage
+### Usage
 ```bash
 dqmj1_extract_files --input_directory ../NDS_UNPACK_DQMJ1 --output_directory current_data
 ```

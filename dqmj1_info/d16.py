@@ -79,6 +79,7 @@ class D16Image:
     def write_png(self, output_stream: IO[bytes]) -> None:
         image = PIL.Image.new("RGB", (self.width, self.height))
         pixels = image.load()
+        assert pixels is not None
 
         for r, row in enumerate(self.pixels):
             for c, color_16bit in enumerate(row):

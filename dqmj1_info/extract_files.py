@@ -56,7 +56,12 @@ def cli_parser() -> argparse.ArgumentParser:
     return parser
 
 
-@gooey.Gooey(program_name="DQMJ1 Unofficial File Extractor", default_size=(800, 500))
+@gooey.Gooey(
+    program_name="DQMJ1 Unofficial File Extractor",
+    default_size=(800, 500),
+    progress_regex=r"^INFO> \((?P<current>\d+)/(?P<total>\d+)\)",
+    progress_expr="current / total * 100",
+)
 def gui_parser() -> gooey.GooeyParser:
     parser = gooey.GooeyParser(
         description="Program that extracts data files from Dragon Quest Monsters: Joker."
@@ -129,11 +134,17 @@ def main(argv: List[str], mode: UiMode):
         )
         return FAILURE
 
+    total_steps = 14
+    steps_completed = 0
+
     ###
     # Setup output directory
     ###
     output_directory.mkdir(exist_ok=True, parents=True)
-    logging.info(f"Created output directory: {output_directory}")
+    steps_completed += 1
+    logging.info(
+        f"({steps_completed}/{total_steps}) Created output directory: {output_directory}"
+    )
 
     ###
     # Extract FPK file parchives / packages
@@ -150,7 +161,10 @@ def main(argv: List[str], mode: UiMode):
             str(fpk_extracted_files_dir),
         ]
     )
-    logging.info(f"Finished extracted files from FPKs to: {fpk_extracted_files_dir}")
+    steps_completed += 1
+    logging.info(
+        f"({steps_completed}/{total_steps}) Finished extracted files from FPKs to: {fpk_extracted_files_dir}"
+    )
 
     ###
     # Extract strings
@@ -166,8 +180,9 @@ def main(argv: List[str], mode: UiMode):
             args.region,
         ]
     )
+    steps_completed += 1
     logging.info(
-        f"Finished writing extracted strings to: {strings_without_context_csv}"
+        f"({steps_completed}/{total_steps}) Finished writing extracted strings to: {strings_without_context_csv}"
     )
 
     ###
@@ -186,7 +201,10 @@ def main(argv: List[str], mode: UiMode):
             args.region,
         ]
     )
-    logging.info(f"Finished writing extracted string tables to: {strings_by_table_csv}")
+    steps_completed += 1
+    logging.info(
+        f"({steps_completed}/{total_steps}) Finished writing extracted string tables to: {strings_by_table_csv}"
+    )
 
     ###
     # Extract EnmyKindTbl
@@ -200,7 +218,10 @@ def main(argv: List[str], mode: UiMode):
             str(ability_tbl_csv),
         ]
     )
-    logging.info(f"Finished extracting AbilityTbl.bin to: {ability_tbl_csv}")
+    steps_completed += 1
+    logging.info(
+        f"({steps_completed}/{total_steps}) Finished extracting AbilityTbl.bin to: {ability_tbl_csv}"
+    )
 
     ###
     # Extract EnmyKindTbl
@@ -214,7 +235,10 @@ def main(argv: List[str], mode: UiMode):
             str(enmy_kind_tbl_csv),
         ]
     )
-    logging.info(f"Finished extracting EnmyKindTbl.bin to: {enmy_kind_tbl_csv}")
+    steps_completed += 1
+    logging.info(
+        f"({steps_completed}/{total_steps}) Finished extracting EnmyKindTbl.bin to: {enmy_kind_tbl_csv}"
+    )
 
     ###
     # Extract SkillTbl
@@ -228,7 +252,10 @@ def main(argv: List[str], mode: UiMode):
             str(skill_tbl_csv),
         ]
     )
-    logging.info(f"Finished extracting SkillTbl.bin to: {skill_tbl_csv}")
+    steps_completed += 1
+    logging.info(
+        f"({steps_completed}/{total_steps}) Finished extracting SkillTbl.bin to: {skill_tbl_csv}"
+    )
 
     ###
     # Extract ItemTbl
@@ -242,7 +269,10 @@ def main(argv: List[str], mode: UiMode):
             str(item_tbl_csv),
         ]
     )
-    logging.info(f"Finished extracting ItemTbl.bin to: {skill_tbl_csv}")
+    steps_completed += 1
+    logging.info(
+        f"({steps_completed}/{total_steps}) Finished extracting ItemTbl.bin to: {skill_tbl_csv}"
+    )
 
     ###
     # Extract D16 images
@@ -256,7 +286,10 @@ def main(argv: List[str], mode: UiMode):
             str(d16_images_dir),
         ]
     )
-    logging.info(f"Finished extracting d16 images to: {d16_images_dir}")
+    steps_completed += 1
+    logging.info(
+        f"({steps_completed}/{total_steps}) Finished extracting d16 images to: {d16_images_dir}"
+    )
 
     ###
     # Decompile scripts
@@ -272,7 +305,10 @@ def main(argv: List[str], mode: UiMode):
             # "--ignore_unknown_commands",
         ]
     )
-    logging.info(f"Finished decompiling scripts to: {scripts_dir}")
+    steps_completed += 1
+    logging.info(
+        f"({steps_completed}/{total_steps}) Finished decompiling scripts to: {scripts_dir}"
+    )
 
     ###
     # Extract dialogue
@@ -286,7 +322,10 @@ def main(argv: List[str], mode: UiMode):
             str(event_dialogue_csv),
         ]
     )
-    logging.info(f"Finished extracting scripts dialogue to: {event_dialogue_csv}")
+    steps_completed += 1
+    logging.info(
+        f"({steps_completed}/{total_steps}) Finished extracting scripts dialogue to: {event_dialogue_csv}"
+    )
 
     ###
     # Create monster species table
@@ -302,8 +341,9 @@ def main(argv: List[str], mode: UiMode):
             str(monster_species_table_csv),
         ]
     )
+    steps_completed += 1
     logging.info(
-        f"Finished creating monster species table: {monster_species_table_csv}"
+        f"({steps_completed}/{total_steps}) Finished creating monster species table: {monster_species_table_csv}"
     )
 
     ###
@@ -320,7 +360,10 @@ def main(argv: List[str], mode: UiMode):
             str(skill_set_table_csv),
         ]
     )
-    logging.info(f"Finished creating skill set table: {skill_set_table_csv}")
+    steps_completed += 1
+    logging.info(
+        f"({steps_completed}/{total_steps}) Finished creating skill set table: {skill_set_table_csv}"
+    )
 
     ###
     # Create item set table
@@ -336,7 +379,10 @@ def main(argv: List[str], mode: UiMode):
             str(item_table_csv),
         ]
     )
-    logging.info(f"Finished creating item set table: {item_table_csv}")
+    steps_completed += 1
+    logging.info(
+        f"({steps_completed}/{total_steps}) Finished creating item set table: {item_table_csv}"
+    )
 
     return SUCCESS
 

@@ -105,6 +105,8 @@ def main(argv: List[str], mode: UiMode):
 
     setup_logging(log_filepath=pathlib.Path(".") / "extract_dqmj1_files_log.txt")
 
+    logging.debug(f"Arguments: {args}")
+
     input_directory = pathlib.Path(args.input_directory)
     output_directory = pathlib.Path(args.output_directory)
 

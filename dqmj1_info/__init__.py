@@ -1,1 +1,1 @@
-from . import extract_files
+from . import extract_files, recompile_files

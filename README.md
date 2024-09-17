@@ -18,3 +18,6 @@ pip install -e .
 ```bash
 dqmj1_extract_files --input_directory ../NDS_UNPACK_DQMJ1 --output_directory current_data
 ```
+
+### Creating a new release
+For instructions on how to create a new release, see: [RELEASE.md](RELEASE.md)

@@ -1,6 +1,7 @@
 from typing import List
 
 import argparse
+import logging
 import pathlib
 import sys
 
@@ -21,7 +22,7 @@ def main(argv: List[str]):
     output_directory.mkdir(exist_ok=True, parents=True)
 
     for d16_filepath in d16_filepaths:
-        print(d16_filepath)
+        logging.debug(f"Processing d16 file: {d16_filepath}")
         with open(d16_filepath, "rb") as input_stream:
             d16_image = D16Image.from_d16(input_stream)
 

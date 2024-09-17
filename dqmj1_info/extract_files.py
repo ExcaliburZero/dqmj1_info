@@ -19,8 +19,8 @@ from . import extract_string_address_tables
 from . import extract_script_dialogue
 from . import item_table
 from . import item_tbl
-from . import language_configs
 from . import monster_species_table
+from . import region_configs
 from . import skill_set_table
 from . import skill_tbl
 
@@ -47,7 +47,9 @@ def cli_parser() -> argparse.ArgumentParser:
         help="Directory to write extracted files to. It is recommended to create a new empty directory.",
     )
     parser.add_argument(
-        "--language", default="en", choices=language_configs.LANGUAGE_CONFIGS.keys()
+        "--region",
+        default="North America",
+        choices=region_configs.REGION_CONFIGS.keys(),
     )
 
     return parser
@@ -72,7 +74,9 @@ def gui_parser() -> gooey.GooeyParser:
         help="Directory to write extracted files to. It is recommended to create a new empty directory.",
     )
     parser.add_argument(
-        "--language", default="en", choices=language_configs.LANGUAGE_CONFIGS.keys()
+        "--region",
+        default="North America",
+        choices=region_configs.REGION_CONFIGS.keys(),
     )
 
     return parser
@@ -114,9 +118,9 @@ def main(argv: List[str], mode: UiMode):
         logging.error(f"Input directory does not exist: {input_directory}")
         return FAILURE
 
-    if args.language not in language_configs.LANGUAGE_CONFIGS:
+    if args.region not in region_configs.REGION_CONFIGS:
         logging.error(
-            f'Unrecognized language "{args.language}". Known languages are: {", ".join(sorted(language_configs.LANGUAGE_CONFIGS.keys()))}'
+            f'Unrecognized region "{args.region}". Known regions are: {", ".join(sorted(region_configs.REGION_CONFIGS.keys()))}'
         )
         return FAILURE
 
@@ -153,8 +157,8 @@ def main(argv: List[str], mode: UiMode):
             str(input_directory),
             "--output_csv",
             str(strings_without_context_csv),
-            "--language",
-            args.language,
+            "--region",
+            args.region,
         ]
     )
     logging.info(
@@ -173,8 +177,8 @@ def main(argv: List[str], mode: UiMode):
             str(strings_without_context_csv),
             "--output_csv",
             str(strings_by_table_csv),
-            "--language",
-            args.language,
+            "--region",
+            args.region,
         ]
     )
     logging.info(f"Finished writing extracted string tables to: {strings_by_table_csv}")

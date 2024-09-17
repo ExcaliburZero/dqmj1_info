@@ -19,9 +19,9 @@ class StringAddressTable:
 
 
 @dataclass(frozen=True)
-class LanguageConfig:
+class RegionConfig:
     string_tables: Dict[pathlib.Path, Tuple[int, List[StringTable]]]
     string_address_tables: Dict[pathlib.Path, Tuple[int, List[StringAddressTable]]]
 
 
-LANGUAGE_CONFIGS: Dict[str, LanguageConfig] = {}
+REGION_CONFIGS: Dict[str, RegionConfig] = {}

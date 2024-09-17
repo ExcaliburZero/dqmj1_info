@@ -7,7 +7,7 @@ import sys
 
 import pandas as pd
 
-from .language_configs.language_configs import LANGUAGE_CONFIGS
+from .region_configs.region_configs import REGION_CONFIGS
 
 
 def main(argv: List[str]):
@@ -16,7 +16,7 @@ def main(argv: List[str]):
     parser.add_argument("--data_directory", required=True)
     parser.add_argument("--output_csv", required=True)
     parser.add_argument("--mined_strings_csv", required=True)
-    parser.add_argument("--language", required=True)
+    parser.add_argument("--region", required=True)
 
     args = parser.parse_args(argv)
 
@@ -26,7 +26,7 @@ def main(argv: List[str]):
 
     mined_strings = pd.read_csv(mined_strings_csv)
 
-    string_locations = LANGUAGE_CONFIGS[args.language].string_address_tables
+    string_locations = REGION_CONFIGS[args.region].string_address_tables
 
     strings: List[Tuple[pathlib.Path, str, int, str, str, str, str, Any]] = []
     for file_subpath, (offset, tables) in sorted(string_locations.items()):

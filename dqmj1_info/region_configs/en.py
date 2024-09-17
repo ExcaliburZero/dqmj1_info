@@ -1,13 +1,13 @@
-from .language_configs import (
-    LanguageConfig,
-    LANGUAGE_CONFIGS,
+from .region_configs import (
+    RegionConfig,
+    REGION_CONFIGS,
     StringTable,
     StringAddressTable,
 )
 
 import pathlib
 
-LANGUAGE_CONFIGS["en"] = LanguageConfig(
+REGION_CONFIGS["North America"] = RegionConfig(
     string_tables={
         pathlib.Path("arm9.bin"): (
             0x02000000,

@@ -8,7 +8,7 @@ import sys
 import pandas as pd
 
 from .character_encoding import BYTE_TO_CHAR_MAP, CHAR_TO_BYTE_MAP
-from .language_configs.language_configs import LANGUAGE_CONFIGS
+from .region_configs.region_configs import REGION_CONFIGS
 
 
 def main(argv: List[str]):
@@ -16,14 +16,14 @@ def main(argv: List[str]):
 
     parser.add_argument("--data_directory", required=True)
     parser.add_argument("--output_csv", required=True)
-    parser.add_argument("--language", required=True)
+    parser.add_argument("--region", required=True)
 
     args = parser.parse_args(argv)
 
     data_directory = pathlib.Path(args.data_directory)
     output_csv = pathlib.Path(args.output_csv)
 
-    string_locations = LANGUAGE_CONFIGS[args.language].string_tables
+    string_locations = REGION_CONFIGS[args.region].string_tables
 
     strings: List[Tuple[pathlib.Path, str, str, str, str]] = []
     for file_subpath, (offset, tables) in sorted(string_locations.items()):

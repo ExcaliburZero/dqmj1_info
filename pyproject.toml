@@ -12,7 +12,7 @@ d16_to_png = "dqmj1_info:d16_to_png.main_without_args"
 dqmj1_simulate_event = "dqmj1_info:simulate_event.main_without_args"
 
 [tool.setuptools]
-packages = ["dqmj1_info", "dqmj1_info.language_configs"]
+packages = ["dqmj1_info", "dqmj1_info.region_configs"]
 
 [tool.setuptools.package-data]
 dqmj1_info = ["data/event_instructions.csv"]

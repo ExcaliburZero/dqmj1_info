@@ -6,6 +6,7 @@
 .vscode/
 docs/_build
 notes.txt
+/extract_dqmj1_files_log.txt
 
 .~lock.*
 

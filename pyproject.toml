@@ -17,8 +17,5 @@ packages = ["dqmj1_info", "dqmj1_info.region_configs"]
 [tool.setuptools.package-data]
 dqmj1_info = ["data/event_instructions.csv"]
 
-[tool.ruff.lint]
-ignore-init-module-imports = true
-
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401", "F403"]

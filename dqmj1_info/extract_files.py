@@ -23,6 +23,7 @@ from . import monster_species_table
 from . import region_configs
 from . import skill_set_table
 from . import skill_tbl
+from . import meta_info
 
 SUCCESS = 0
 FAILURE = 1
@@ -56,11 +57,27 @@ def cli_parser() -> argparse.ArgumentParser:
     return parser
 
 
+ABOUT_MENU = {
+    "name": "Help",
+    "items": [
+        {
+            "type": "AboutDialog",
+            "menuTitle": "About",
+            "version": meta_info.version,
+            "copyright": meta_info.copyright_year,
+            "website": meta_info.website,
+            "license": meta_info.license,
+        }
+    ],
+}
+
+
 @gooey.Gooey(
     program_name="DQMJ1 Unofficial File Extractor",
     default_size=(800, 500),
     progress_regex=r"^INFO> \((?P<current>\d+)/(?P<total>\d+)\)",
     progress_expr="current / total * 100",
+    menu=[ABOUT_MENU],
 )
 def gui_parser() -> gooey.GooeyParser:
     parser = gooey.GooeyParser(

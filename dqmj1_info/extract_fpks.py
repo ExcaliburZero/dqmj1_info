@@ -24,12 +24,12 @@ def main(argv: List[str]):
     output_directory.mkdir(exist_ok=True, parents=True)
 
     for fpk_bin_filepath in fpk_bin_filepaths:
-        logging.info(f"Looking at bin file: {fpk_bin_filepath}")
+        logging.debug(f"Looking at bin file: {fpk_bin_filepath}")
         with open(fpk_bin_filepath, "rb") as input_stream:
             fpk_bin = Fpk.from_bin(input_stream)
 
         if fpk_bin is not None:
-            logging.info(f"{fpk_bin_filepath} is an FPK file.")
+            logging.debug(f"{fpk_bin_filepath} is an FPK file.")
             for file_description, contents in fpk_bin.files.items():
                 output_filepath = output_directory / file_description.name
                 with open(output_filepath, "wb") as output_stream:
@@ -37,7 +37,7 @@ def main(argv: List[str]):
 
                 logging.debug(f"Wrote extracted file: {output_filepath}")
         else:
-            logging.info(f"{fpk_bin_filepath} is not an FPK file.")
+            logging.debug(f"{fpk_bin_filepath} is not an FPK file.")
 
 
 def main_without_args() -> None:

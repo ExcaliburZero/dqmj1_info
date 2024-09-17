@@ -1,0 +1,10 @@
+name: dqmj1_info_env
+dependencies:
+  - python=3.12
+  - pip
+  - pip:
+    - mypy
+    - black
+    - pytest
+    - ruff
+    - pyinstaller

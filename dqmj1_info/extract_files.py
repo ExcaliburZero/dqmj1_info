@@ -55,7 +55,7 @@ def cli_parser() -> argparse.ArgumentParser:
     return parser
 
 
-@gooey.Gooey(program_name="DQMJ1 Unofficial File Extractor")
+@gooey.Gooey(program_name="DQMJ1 Unofficial File Extractor", default_size=(800, 500))
 def gui_parser() -> gooey.GooeyParser:
     parser = gooey.GooeyParser(
         description="Program that extracts data files from Dragon Quest Monsters: Joker."

@@ -49,6 +49,7 @@ def cli_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--region",
         default="North America",
+        help="Region of the ROM that the game files are from. This determines where to look for strings and other data in the game's executable binaries.",
         choices=region_configs.REGION_CONFIGS.keys(),
     )
 
@@ -64,18 +65,22 @@ def gui_parser() -> gooey.GooeyParser:
     parser.add_argument(
         "--input_directory",
         required=True,
+        metavar="Input directory",
         widget="DirChooser",
         help="Directory containing the unpacked game files (typically unpacked using a program link DsLazy).",
     )
     parser.add_argument(
         "--output_directory",
         required=True,
+        metavar="Output directory",
         widget="DirChooser",
         help="Directory to write extracted files to. It is recommended to create a new empty directory.",
     )
     parser.add_argument(
         "--region",
         default="North America",
+        metavar="Region",
+        help="Region of the ROM that the game files are from. This determines where to look for strings and other data in the game's executable binaries.",
         choices=region_configs.REGION_CONFIGS.keys(),
     )
 

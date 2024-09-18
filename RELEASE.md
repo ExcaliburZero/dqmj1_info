@@ -4,7 +4,7 @@
 * Update `CHANGELOG.md`
 * Create a new tag and push it
 ```bash
-git tag vX.Y.Z -a "vX.Y.Z"
+git tag -a "vX.Y.Z" -m "vX.Y.Z"
 git push origin vX.Y.Z
 ```
 * Create a new release cotnaining the compiled binaries from the GitHub Actions run

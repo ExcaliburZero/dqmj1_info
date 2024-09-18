@@ -10,6 +10,7 @@ import sys
 import gooey  # type: ignore
 
 from . import ability_tbl
+from . import character_encoding
 from . import d16_to_png
 from . import decompile_evt
 from . import enmy_kind_tbl
@@ -52,6 +53,12 @@ def cli_parser() -> argparse.ArgumentParser:
         default="North America",
         help="Region of the ROM that the game files are from. This determines where to look for strings and other data in the game's executable binaries.",
         choices=region_configs.REGION_CONFIGS.keys(),
+    )
+    parser.add_argument(
+        "--character_encoding",
+        default="North America / Europe",
+        help="Character encoding used to decode text/strings. Typically should match the Region.",
+        choices=character_encoding.CHARACTER_ENCODINGS.keys(),
     )
 
     return parser
@@ -105,6 +112,13 @@ def gui_parser() -> gooey.GooeyParser:
         help="Region of the ROM that the game files are from. This determines where to look for strings and other data in the game's executable binaries.",
         choices=region_configs.REGION_CONFIGS.keys(),
     )
+    parser.add_argument(
+        "--character_encoding",
+        default="North America / Europe",
+        metavar="Character encoding",
+        help="Character encoding used to decode text/strings. Typically should match the Region.",
+        choices=character_encoding.CHARACTER_ENCODINGS.keys(),
+    )
 
     return parser
 
@@ -148,6 +162,12 @@ def main(argv: List[str], mode: UiMode):
     if args.region not in region_configs.REGION_CONFIGS:
         logging.error(
             f'Unrecognized region "{args.region}". Known regions are: {", ".join(sorted(region_configs.REGION_CONFIGS.keys()))}'
+        )
+        return FAILURE
+
+    if args.character_encoding not in character_encoding.CHARACTER_ENCODINGS:
+        logging.error(
+            f'Unrecognized character encoding "{args.character_encoding}". Known character encodings are: {", ".join(sorted(character_encoding.CHARACTER_ENCODINGS.keys()))}'
         )
         return FAILURE
 
@@ -195,6 +215,8 @@ def main(argv: List[str], mode: UiMode):
             str(strings_without_context_csv),
             "--region",
             args.region,
+            "--character_encoding",
+            args.character_encoding,
         ]
     )
     steps_completed += 1
@@ -319,6 +341,8 @@ def main(argv: List[str], mode: UiMode):
             *sorted(glob.glob(str(fpk_extracted_files_dir / "*.ev*"))),
             "--output_directory",
             str(scripts_dir),
+            "--character_encoding",
+            args.character_encoding,
             # "--ignore_unknown_commands",
         ]
     )

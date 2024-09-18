@@ -1,86 +1,173 @@
-from typing import List, Tuple, Union
+from typing import Dict, List, Tuple, Union
 
-BYTE_TO_CHAR_MAP_NA_AND_EU = {
-    0x00: "0",
-    0x01: "1",
-    0x02: "2",
-    0x03: "3",
-    0x04: "4",
-    0x05: "5",
-    0x06: "6",
-    0x07: "7",
-    0x08: "8",
-    0x09: "9",
-    0x0A: " ",
-    0x0B: "A",
-    0x0C: "B",
-    0x0D: "C",
-    0x0E: "D",
-    0x0F: "E",
-    0x10: "F",
-    0x11: "G",
-    0x12: "H",
-    0x13: "I",
-    0x14: "J",
-    0x15: "K",
-    0x16: "L",
-    0x17: "M",
-    0x18: "N",
-    0x19: "O",
-    0x1A: "P",
-    0x1B: "Q",
-    0x1C: "R",
-    0x1D: "S",
-    0x1E: "T",
-    0x1F: "U",
-    0x20: "V",
-    0x21: "W",
-    0x22: "X",
-    0x23: "Y",
-    0x24: "Z",
-    0x25: "a",
-    0x26: "b",
-    0x27: "c",
-    0x28: "d",
-    0x29: "e",
-    0x2A: "f",
-    0x2B: "g",
-    0x2C: "h",
-    0x2D: "i",
-    0x2E: "j",
-    0x2F: "k",
-    0x30: "l",
-    0x31: "m",
-    0x32: "n",
-    0x33: "o",
-    0x34: "p",
-    0x35: "q",
-    0x36: "r",
-    0x37: "s",
-    0x38: "t",
-    0x39: "u",
-    0x3A: "v",
-    0x3B: "w",
-    0x3C: "x",
-    0x3D: "y",
-    0x3E: "z",
-    0x55: "Ü",
-    0x57: "á",
-    0x70: "!",
-    0x71: "?",
-    0x87: "+",
-    0x8D: "Ⅱ",
-    0x8E: "Ⅲ",
-    0x9A: "‘",
-    0x9B: "’",
-    0xAC: ".",
-    0xAD: "&",
-    0xCC: "-",
-    0xCD: ",",
-    0xFE: "\\n",
-}
 
-BYTE_TO_CHAR_MAP = [
+class CharacterEncoding:
+    def __init__(
+        self,
+        # char_to_byte_map: Dict[str, List[int]],
+        byte_to_char_map: List[Tuple[List[int], str]],
+    ) -> None:
+        self.__byte_to_char_map = byte_to_char_map
+        self.__char_to_byte_map = {c: b for b, c in byte_to_char_map}
+
+    def string_to_bytes(self, string: str) -> bytes:
+        try:
+            string_bytes = []
+            hex_buffer = []
+            escape_buffer = []
+            for char in string:
+                if char == "]":
+                    char = "".join(hex_buffer[3:])
+                    string_bytes.append(int(char, 16))
+                    hex_buffer = []
+                    continue
+                elif char == "[" or len(hex_buffer) > 0:
+                    hex_buffer.append(char)
+                    continue
+                elif char == "\\":
+                    escape_buffer += [char]
+                    continue
+                elif len(escape_buffer) > 0:
+                    char = "".join(escape_buffer) + char
+                    escape_buffer = []
+
+                matching_bytes = self.__char_to_byte_map[char]
+                string_bytes.extend(matching_bytes)
+        except Exception as e:
+            raise ValueError(f'Failed to convert string to bytes: "{string}"') from e
+
+        string_bytes.append(0xFF)
+
+        return bytes(string_bytes)
+
+    def bytes_to_string(self, bs: Union[List[int], bytes]) -> str:
+        chars = []
+        i = 0
+        while i != len(bs):
+            b = bs[i]
+            if b == 0xFF:
+                break
+
+            try:
+                char, i = self.__get_bytes_match(bs, i)
+            except Exception as e:
+                raise ValueError(
+                    f"Failed to convert bytes {[hex(byte) for byte in bs]} to a string."
+                ) from e
+            chars.append(char)
+
+        return "".join(chars)
+
+    def __get_bytes_match(
+        self, bs: Union[List[int], bytes], i: int
+    ) -> Tuple[List[Tuple[List[int], str]], int]:
+        matches = list(self.__byte_to_char_map)
+        offset = 0
+        while len(matches) >= 1:
+            remaining_matches = []
+            for match_bytes, match_char in matches:
+                if match_bytes[offset] == bs[i + offset]:
+                    if len(match_bytes) == offset + 1:
+                        return match_char, i + offset + 1
+                    else:
+                        remaining_matches.append((match_bytes, match_char))
+            matches = remaining_matches
+
+            offset += 1
+
+        if len(matches) == 0 or (len(matches) == 1 and len(matches[0][0]) <= offset):
+            return "[" + hex(bs[i]) + "]", i + 1
+        elif len(matches) == 1:
+            assert (
+                matches[0][0] == bs[i : i + offset]
+            ), f"{matches[0][0]} != {bs[i:i + offset]}"
+
+            return matches[0][1], i + offset
+        else:
+            assert False
+
+
+BYTE_TO_CHAR_MAP_NA_AND_EU = [
+    ([0x00], "0"),
+    ([0x01], "1"),
+    ([0x02], "2"),
+    ([0x03], "3"),
+    ([0x04], "4"),
+    ([0x05], "5"),
+    ([0x06], "6"),
+    ([0x07], "7"),
+    ([0x08], "8"),
+    ([0x09], "9"),
+    ([0x0A], " "),
+    ([0x0B], "A"),
+    ([0x0C], "B"),
+    ([0x0D], "C"),
+    ([0x0E], "D"),
+    ([0x0F], "E"),
+    ([0x10], "F"),
+    ([0x11], "G"),
+    ([0x12], "H"),
+    ([0x13], "I"),
+    ([0x14], "J"),
+    ([0x15], "K"),
+    ([0x16], "L"),
+    ([0x17], "M"),
+    ([0x18], "N"),
+    ([0x19], "O"),
+    ([0x1A], "P"),
+    ([0x1B], "Q"),
+    ([0x1C], "R"),
+    ([0x1D], "S"),
+    ([0x1E], "T"),
+    ([0x1F], "U"),
+    ([0x20], "V"),
+    ([0x21], "W"),
+    ([0x22], "X"),
+    ([0x23], "Y"),
+    ([0x24], "Z"),
+    ([0x25], "a"),
+    ([0x26], "b"),
+    ([0x27], "c"),
+    ([0x28], "d"),
+    ([0x29], "e"),
+    ([0x2A], "f"),
+    ([0x2B], "g"),
+    ([0x2C], "h"),
+    ([0x2D], "i"),
+    ([0x2E], "j"),
+    ([0x2F], "k"),
+    ([0x30], "l"),
+    ([0x31], "m"),
+    ([0x32], "n"),
+    ([0x33], "o"),
+    ([0x34], "p"),
+    ([0x35], "q"),
+    ([0x36], "r"),
+    ([0x37], "s"),
+    ([0x38], "t"),
+    ([0x39], "u"),
+    ([0x3A], "v"),
+    ([0x3B], "w"),
+    ([0x3C], "x"),
+    ([0x3D], "y"),
+    ([0x3E], "z"),
+    ([0x55], "Ü"),
+    ([0x57], "á"),
+    ([0x70], "!"),
+    ([0x71], "?"),
+    ([0x87], "+"),
+    ([0x8D], "Ⅱ"),
+    ([0x8E], "Ⅲ"),
+    ([0x9A], "‘"),
+    ([0x9B], "’"),
+    ([0xAC], "."),
+    ([0xAD], "&"),
+    ([0xCC], "-"),
+    ([0xCD], ","),
+    ([0xFE], "\\n"),
+]
+
+BYTE_TO_CHAR_MAP_JP = [
     ([0x00], "0"),
     ([0x01], "1"),
     ([0x02], "2"),
@@ -587,92 +674,10 @@ BYTE_TO_CHAR_MAP = [
     ([0xFE], "\\n"),
 ]
 
-# CHAR_TO_BYTE_MAP = {c: b for b, c in BYTE_TO_CHAR_MAP.items()}
-CHAR_TO_BYTE_MAP = {c: b for b, c in BYTE_TO_CHAR_MAP}
 
-
-def string_to_bytes(string: str) -> bytes:
-    try:
-        string_bytes = []
-        hex_buffer = []
-        escape_buffer = []
-        for char in string:
-            if char == "]":
-                char = "".join(hex_buffer[3:])
-                string_bytes.append(int(char, 16))
-                hex_buffer = []
-                continue
-            elif char == "[" or len(hex_buffer) > 0:
-                hex_buffer.append(char)
-                continue
-            elif char == "\\":
-                escape_buffer += [char]
-                continue
-            elif len(escape_buffer) > 0:
-                char = "".join(escape_buffer) + char
-                escape_buffer = []
-
-            matching_bytes = CHAR_TO_BYTE_MAP[char]
-            string_bytes.extend(matching_bytes)
-    except Exception as e:
-        raise ValueError(f'Failed to convert string to bytes: "{string}"') from e
-
-    string_bytes.append(0xFF)
-
-    return bytes(string_bytes)
-
-
-def bytes_to_string(bs: Union[List[int], bytes]) -> str:
-    chars = []
-    i = 0
-    while i != len(bs):
-        b = bs[i]
-        if b == 0xFF:
-            break
-
-        # chars.append(byte_to_char(b))
-        # return "[" + hex(byte) + "]"
-        char, i = get_bytes_match(bs, i)
-        chars.append(char)
-
-        # i += 1
-
-    return "".join(chars)
-
-
-def get_bytes_match(
-    bs: Union[List[int], bytes], i: int
-) -> Tuple[List[Tuple[List[int], str]], int]:
-    matches = list(BYTE_TO_CHAR_MAP)
-    offset = 0
-    while len(matches) >= 1:
-        remaining_matches = []
-        for match_bytes, match_char in matches:
-            if match_bytes[offset] == bs[i + offset]:
-                if len(match_bytes) == offset + 1:
-                    return match_char, i + offset + 1
-                else:
-                    remaining_matches.append((match_bytes, match_char))
-        matches = remaining_matches
-
-        offset += 1
-
-    # if len(matches) == 1 and len(matches[0][0]) > 1:
-    #    print(matches)
-    #    print([hex(b) for b in matches[0][0]])
-    #    print([hex(b) for b in bs[i:i+offset+1]])
-    #    print(offset)
-    #    breakpoint()
-
-    if len(matches) == 0 or (len(matches) == 1 and len(matches[0][0]) <= offset):
-        return "[" + hex(bs[i]) + "]", i + 1
-    elif len(matches) == 1:
-        # if len(matches[0][0]) > 1:
-        #    breakpoint()
-        assert (
-            matches[0][0] == bs[i : i + offset]
-        ), f"{matches[0][0]} != {bs[i:i + offset]}"
-
-        return matches[0][1], i + offset
-    else:
-        assert False
+CHARACTER_ENCODINGS = {
+    "North America / Europe": CharacterEncoding(
+        byte_to_char_map=BYTE_TO_CHAR_MAP_NA_AND_EU
+    ),
+    "Japan": CharacterEncoding(byte_to_char_map=BYTE_TO_CHAR_MAP_JP),
+}

@@ -5,6 +5,7 @@ import collections
 import pathlib
 import sys
 
+from .character_encoding import CHARACTER_ENCODINGS
 from .evt import Event
 
 
@@ -13,6 +14,7 @@ def main(argv: List[str]):
 
     parser.add_argument("--evt_filepaths", required=True, nargs="+")
     parser.add_argument("--output_directory", required=True)
+    parser.add_argument("--character_encoding", required=True)
     parser.add_argument(
         "--ignore_unknown_instructions", default=False, action="store_true"
     )
@@ -21,6 +23,7 @@ def main(argv: List[str]):
 
     evt_filepaths = [pathlib.Path(filepath) for filepath in args.evt_filepaths]
     output_directory = pathlib.Path(args.output_directory)
+    character_encoding = CHARACTER_ENCODINGS[args.character_encoding]
 
     output_directory.mkdir(exist_ok=True, parents=True)
 
@@ -28,7 +31,7 @@ def main(argv: List[str]):
     for evt_filepath in evt_filepaths:
         with open(evt_filepath, "rb") as input_stream:
             try:
-                event = Event.from_evt(input_stream)
+                event = Event.from_evt(input_stream, character_encoding)
             except Exception as e:
                 raise Exception(f"Failed to parse evt file: {evt_filepath}") from e
 
@@ -42,7 +45,7 @@ def main(argv: List[str]):
                     if not instruction.instruction_type.name == "UNKNOWN":
                         print(instruction.to_script(), file=output_stream)
             else:
-                event.write_script(output_stream)
+                event.write_script(output_stream, character_encoding)
 
     instruction_examples_dir = output_directory / "instruction_examples"
     instruction_examples_dir.mkdir(exist_ok=True)

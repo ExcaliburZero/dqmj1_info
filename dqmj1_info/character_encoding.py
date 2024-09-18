@@ -1,4 +1,4 @@
-from typing import Dict, List, Tuple, Union
+from typing import List, Tuple, Union
 
 
 class CharacterEncoding:
@@ -13,7 +13,7 @@ class CharacterEncoding:
     def string_to_bytes(self, string: str) -> bytes:
         try:
             string_bytes = []
-            hex_buffer = []
+            hex_buffer: List[str] = []
             escape_buffer = []
             for char in string:
                 if char == "]":
@@ -58,9 +58,7 @@ class CharacterEncoding:
 
         return "".join(chars)
 
-    def __get_bytes_match(
-        self, bs: Union[List[int], bytes], i: int
-    ) -> Tuple[List[Tuple[List[int], str]], int]:
+    def __get_bytes_match(self, bs: Union[List[int], bytes], i: int) -> Tuple[str, int]:
         matches = list(self.__byte_to_char_map)
         offset = 0
         while len(matches) >= 1:
@@ -80,7 +78,7 @@ class CharacterEncoding:
         elif len(matches) == 1:
             assert (
                 matches[0][0] == bs[i : i + offset]
-            ), f"{matches[0][0]} != {bs[i:i + offset]}"
+            ), f"{matches[0][0]!r} != {bs[i:i + offset]!r}"
 
             return matches[0][1], i + offset
         else:

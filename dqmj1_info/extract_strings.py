@@ -27,7 +27,7 @@ def main(argv: List[str]):
     string_locations = REGION_CONFIGS[args.region].string_tables
     if args.character_encoding == "Japan":
         logging.warning(
-            f'extract strings does not support "Japan" character encoding yet. Using "North America / Europe" instead.'
+            'extract strings does not support "Japan" character encoding yet. Using "North America / Europe" instead.'
         )
         character_encoding = CHARACTER_ENCODINGS["North America / Europe"]
     else:

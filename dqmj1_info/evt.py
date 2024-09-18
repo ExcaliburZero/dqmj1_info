@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, Dict, IO, List, Literal, Optional, Tuple, Union
+from typing import Any, Dict, IO, List, Literal, Optional, Tuple
 
 import collections
 import csv

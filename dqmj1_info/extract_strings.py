@@ -7,7 +7,7 @@ import sys
 
 import pandas as pd
 
-from .character_encoding import BYTE_TO_CHAR_MAP, CHAR_TO_BYTE_MAP
+from .character_encoding import CHARACTER_ENCODINGS
 from .region_configs.region_configs import REGION_CONFIGS
 
 
@@ -17,6 +17,7 @@ def main(argv: List[str]):
     parser.add_argument("--data_directory", required=True)
     parser.add_argument("--output_csv", required=True)
     parser.add_argument("--region", required=True)
+    parser.add_argument("--character_encoding", required=True)
 
     args = parser.parse_args(argv)
 
@@ -24,6 +25,13 @@ def main(argv: List[str]):
     output_csv = pathlib.Path(args.output_csv)
 
     string_locations = REGION_CONFIGS[args.region].string_tables
+    if args.character_encoding == "Japan":
+        logging.warning(
+            'extract strings does not support "Japan" character encoding yet. Using "North America / Europe" instead.'
+        )
+        character_encoding = CHARACTER_ENCODINGS["North America / Europe"]
+    else:
+        character_encoding = CHARACTER_ENCODINGS[args.character_encoding]
 
     strings: List[Tuple[pathlib.Path, str, str, str, str]] = []
     for file_subpath, (offset, tables) in sorted(string_locations.items()):
@@ -52,10 +60,7 @@ def main(argv: List[str]):
                         string = "".join(buffer)
                         j = i - len(buffer)
 
-                        # if string != "":
-                        #    print(string, hex(i + start))
                         buffer = []
-
                         strings.append(
                             (
                                 file_subpath,
@@ -66,7 +71,7 @@ def main(argv: List[str]):
                             )
                         )
                     else:
-                        char = byte_to_char(byte)
+                        char = character_encoding.bytes_to_string([byte])
                         buffer.append(char)
 
                 num_after = len(strings)
@@ -76,51 +81,6 @@ def main(argv: List[str]):
         strings,
         columns=["filepath", "table_name", "global_address", "local_offset", "string"],
     ).to_csv(output_csv, index=False)
-
-
-def byte_to_char(byte: int) -> str:
-    mapping = BYTE_TO_CHAR_MAP
-
-    if byte in mapping:
-        return mapping[byte]
-    else:
-        # return "?"
-        # return "[" + char + "]"
-        return "[" + hex(byte) + "]"
-
-
-def char_to_byte(c: str) -> int:
-    mapping = CHAR_TO_BYTE_MAP
-
-    if c in mapping:
-        return mapping[c]
-    elif c.startswith("[0x"):
-        assert c.endswith("]")
-        return int(c[1:-1], base=16)
-    else:
-        print(repr(c))
-        assert False
-        # return "?"
-        # return "[" + char + "]"
-        # return "[" + hex(byte) + "]"
-
-
-def get_string_chars(string: str) -> List[str]:
-    chars = []
-
-    current = 0
-    while current < len(string):
-        c = string[current]
-        if c == "[":
-            # ex. [0xff]
-            c = string[current : current + 6]
-        elif c == "\\":
-            c = string[current : current + 2]
-
-        chars.append(c)
-        current += len(c)
-
-    return chars
 
 
 if __name__ == "__main__":

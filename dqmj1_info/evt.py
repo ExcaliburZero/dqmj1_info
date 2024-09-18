@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, Dict, IO, List, Literal, Optional, Tuple, Union
+from typing import Any, Dict, IO, List, Literal, Optional, Tuple
 
 import collections
 import csv
@@ -9,7 +9,7 @@ import os
 import pathlib
 import re
 
-from .extract_strings import byte_to_char, get_string_chars, char_to_byte
+from .character_encoding import CharacterEncoding
 
 ENDIANESS: Literal["little"] = "little"
 
@@ -124,15 +124,16 @@ class Instruction:
     def type_id(self) -> int:
         return self.instruction_type.type_id
 
-    @property
-    def length(self) -> int:
+    def length(self, character_encoding: CharacterEncoding) -> int:
         stream = io.BytesIO()
-        self.write_evt(stream, collections.defaultdict(lambda: 0))
+        self.write_evt(stream, collections.defaultdict(lambda: 0), character_encoding)
 
         return len(stream.getbuffer())
 
     @staticmethod
-    def from_evt(input_stream: IO[bytes]) -> Optional[Tuple["Instruction", LabelDict]]:
+    def from_evt(
+        input_stream: IO[bytes], character_encoding: CharacterEncoding
+    ) -> Optional[Tuple["Instruction", LabelDict]]:
         raw = RawInstruction.from_evt(input_stream)
         if raw is None:
             return None
@@ -140,16 +141,19 @@ class Instruction:
         results = Instruction.from_raw(
             raw=raw,
             instruction_type=Instruction.get_instruction_type(raw.instruction_type),
+            character_encoding=character_encoding,
         )
         if results is not None:
             instruction, _ = results
-            if instruction.length != len(raw.data) + 8:
+            if instruction.length(character_encoding) != len(raw.data) + 8:
                 stream = io.BytesIO()
-                instruction.write_evt(stream, collections.defaultdict(lambda: 0))
+                instruction.write_evt(
+                    stream, collections.defaultdict(lambda: 0), character_encoding
+                )
 
                 bs = stream.getbuffer()
                 raise ValueError(
-                    f"{instruction.length} != {len(raw.data) + 8} for instruction: {instruction}\n{str([b for b in bs])}"
+                    f"{instruction.length(character_encoding)} != {len(raw.data) + 8} for instruction: {instruction}\nwritten={str([hex(b) for b in bs[8:]])}\nraw=    {[hex(b) for b in raw.data]}"
                 )
 
         return results
@@ -170,7 +174,12 @@ class Instruction:
 
         return InstructionType(instruction_id, "UNKNOWN", [at.Bytes])
 
-    def write_evt(self, output_stream: IO[bytes], labels: LabelDict) -> None:
+    def write_evt(
+        self,
+        output_stream: IO[bytes],
+        labels: LabelDict,
+        character_encoding: CharacterEncoding,
+    ) -> None:
         instruction_id_bytes = self.type_id.to_bytes(4, ENDIANESS)
 
         data = []
@@ -205,7 +214,7 @@ class Instruction:
                 for b in position.to_bytes(4, ENDIANESS):
                     data.append(b)
             elif argument_type == at.String:
-                string_bytes = string_to_bytes(argument)
+                string_bytes = character_encoding.string_to_bytes(argument)
                 for b in string_bytes:
                     data.append(b)
 
@@ -228,7 +237,9 @@ class Instruction:
 
     @staticmethod
     def from_raw(
-        raw: RawInstruction, instruction_type: InstructionType
+        raw: RawInstruction,
+        instruction_type: InstructionType,
+        character_encoding: CharacterEncoding,
     ) -> Optional[Tuple["Instruction", LabelDict]]:
         arguments: List[Any] = []
 
@@ -251,7 +262,7 @@ class Instruction:
                 arguments.append("".join((chr(b) for b in string_character_bytes)))
                 current += len(string_bytes)
             elif argument_type == at.String:
-                string = bytes_to_string(raw.data[current:])
+                string = character_encoding.bytes_to_string(raw.data[current:])
 
                 arguments.append(string)
                 current += len(raw.data)
@@ -355,27 +366,6 @@ def bytes_repr(bs: bytes) -> str:
     return 'b"' + "".join([f"\\x{b:02x}" for b in bs]) + '"'
 
 
-def string_to_bytes(string: str) -> bytes:
-    individual_bytes = []
-    for c in get_string_chars(string):
-        individual_bytes.append(char_to_byte(c))
-
-    individual_bytes.append(0xFF)
-
-    return bytes(individual_bytes)
-
-
-def bytes_to_string(bs: Union[List[int], bytes]) -> str:
-    chars = []
-    for b in bs:
-        if b == 0xFF:
-            break
-
-        chars.append(byte_to_char(b))
-
-    return "".join(chars)
-
-
 @dataclass
 class Event:
     instructions: List[Instruction]
@@ -387,7 +377,9 @@ class Event:
         return {pos: label for label, pos in self.labels.items()}
 
     @staticmethod
-    def from_evt(input_stream: IO[bytes]) -> "Event":
+    def from_evt(
+        input_stream: IO[bytes], character_encoding: CharacterEncoding
+    ) -> "Event":
         input_stream.read(4)
         data = input_stream.read(0x1004 - 4)
 
@@ -396,7 +388,7 @@ class Event:
         while True:
             position = input_stream.tell()
             try:
-                result = Instruction.from_evt(input_stream)
+                result = Instruction.from_evt(input_stream, character_encoding)
             except Exception as e:
                 raise ValueError(
                     f"Failed to parse instruction at: 0x{position:x}"
@@ -411,7 +403,9 @@ class Event:
         return Event(instructions=instructions, data=data, labels=labels)
 
     @staticmethod
-    def from_script(input_stream: IO[str]) -> "Event":
+    def from_script(
+        input_stream: IO[str], character_encoding: CharacterEncoding
+    ) -> "Event":
         data: Optional[Any] = None
         instructions: List[Instruction] = []
         labels: LabelDict = {}
@@ -448,7 +442,7 @@ class Event:
                 assert instruction is not None
 
                 instructions.append(instruction)
-                current_instruction_ptr += instruction.length
+                current_instruction_ptr += instruction.length(character_encoding)
             else:
                 assert False
 
@@ -457,7 +451,9 @@ class Event:
 
         return Event(data=data, instructions=instructions, labels=labels)
 
-    def write_script(self, output_stream: IO[str]) -> None:
+    def write_script(
+        self, output_stream: IO[str], character_encoding: CharacterEncoding
+    ) -> None:
         output_stream.write(".data:\n")
         output_stream.write("    ")
         output_stream.write(bytes_repr(self.data))
@@ -479,7 +475,7 @@ class Event:
             output_stream.write(
                 "    " + instruction.to_script() + "\n",
             )
-            position += instruction.length
+            position += instruction.length(character_encoding)
 
         assert len(outputted_labels) == len(set(outputted_labels))
         if len(outputted_labels) != len(self.labels):
@@ -488,13 +484,17 @@ class Event:
                 f'Did not output labels: {", ".join(sorted(unprinted_labels))}\nStopped at: 0x{position:x}'
             )
 
-    def write_evt(self, output_stream: IO[bytes]) -> None:
+    def write_evt(
+        self, output_stream: IO[bytes], character_encoding: CharacterEncoding
+    ) -> None:
         output_stream.write(b"\x53\x43\x52\x00")
         output_stream.write(self.data)
         for instruction in self.instructions:
-            instruction.write_evt(output_stream, self.labels)
+            instruction.write_evt(output_stream, self.labels, character_encoding)
 
-    def get_instruction_at_ptr(self, pointer: int) -> Optional[Instruction]:
+    def get_instruction_at_ptr(
+        self, pointer: int, character_encoding: CharacterEncoding
+    ) -> Optional[Instruction]:
         start = 0x1004
         offsetted_pointer = pointer + start
 
@@ -503,6 +503,6 @@ class Event:
             if current_location == offsetted_pointer:
                 return instruction
 
-            current_location += instruction.length
+            current_location += instruction.length(character_encoding)
 
         return None

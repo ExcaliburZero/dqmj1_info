@@ -12,6 +12,8 @@ class TestRegressionDecompileEvtBasic(Util.TestRegression):
         rel_data("basic.evt"),
         "--output_directory",
         ".",
+        "--character_encoding",
+        "North America / Europe",
     ]
     expected_files = [("basic.evt.dqmj1_script", "r")]
     expected_status_code = 0

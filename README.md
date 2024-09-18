@@ -1,6 +1,8 @@
 # dqmj1_info
 A set of tools for extracting and working with data and files from the game *Dragon Quest Monsters: Joker*.
 
+![Screenshot of the file extraction GUI program.](img/extract_screenshot.png)
+
 ## Download
 Download the latest release of dqmj1_info for your operating system at the link below:
 

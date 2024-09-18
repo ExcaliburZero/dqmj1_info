@@ -22,7 +22,7 @@ def main(argv: List[str]):
 
     text = []
     for script_filepath in script_filepaths:
-        with open(script_filepath, "r") as input_stream:
+        with open(script_filepath, "r", encoding="utf-8") as input_stream:
             for i, line in enumerate(input_stream):
                 if "SpeakerName" in line:
                     instruction = Instruction.from_script(line)

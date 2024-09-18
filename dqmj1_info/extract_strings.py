@@ -25,8 +25,13 @@ def main(argv: List[str]):
     output_csv = pathlib.Path(args.output_csv)
 
     string_locations = REGION_CONFIGS[args.region].string_tables
-    # character_encoding = CHARACTER_ENCODINGS[args.character_encoding]
-    character_encoding = CHARACTER_ENCODINGS["North America / Europe"]
+    if args.character_encoding == "Japan":
+        logging.warning(
+            f'extract strings does not support "Japan" character encoding yet. Using "North America / Europe" instead.'
+        )
+        character_encoding = CHARACTER_ENCODINGS["North America / Europe"]
+    else:
+        character_encoding = CHARACTER_ENCODINGS[args.character_encoding]
 
     strings: List[Tuple[pathlib.Path, str, str, str, str]] = []
     for file_subpath, (offset, tables) in sorted(string_locations.items()):

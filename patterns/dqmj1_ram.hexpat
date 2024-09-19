@@ -102,4 +102,14 @@ struct unknown_struct_b {
 unknown_struct_b start_unknown_struct_b @ 0x223DF94;
 
 u32 pos_file_pointer @ 0x224B61C;
-u8 item_in_bag_counts[160] @ 0x20BE364; // at least when shopping...
+
+struct player_info {
+    u8 player_name[8];
+    u8 unknown_a[4];
+    u32 gold;
+    u8 atm_gold[4];
+    u8 items_in_hand[16];
+    u8 item_in_bag_counts[256];
+};
+
+player_info player_info @ 0x020BE340;

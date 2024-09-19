@@ -102,3 +102,4 @@ struct unknown_struct_b {
 unknown_struct_b start_unknown_struct_b @ 0x223DF94;
 
 u32 pos_file_pointer @ 0x224B61C;
+u8 item_in_bag_counts[160] @ 0x20BE364; // at least when shopping...

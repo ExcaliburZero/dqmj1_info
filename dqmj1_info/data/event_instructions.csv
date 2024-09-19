@@ -88,7 +88,7 @@ Id,Name,Arguments,Notes
 0x56,"Cmd_0x56","[]",
 0x57,"Cmd_0x57","[]",
 0x58,"Cmd_0x58","[]",
-0x59,"Cmd_0x59","[]",
+0x59,"GivePlayerItem","[]","First two entries of value pool 1 dictiate the item id and whether to add one or max the item count (1=add one, 0=max count)."
 0x5A,"Cmd_0x5A","[]",
 0x5B,"Cmd_0x5B","[]",
 0x5C,"Cmd_0x5C","[]",

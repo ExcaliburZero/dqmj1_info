@@ -319,19 +319,23 @@ class Instruction:
         return Instruction(instruction_type=instruction_type, arguments=arguments)
 
     def to_script(self) -> str:
-        start = f"{self.instruction_type.name:<12}"
-        end = ""
+        stream = io.StringIO()
+        stream.write(f"{self.instruction_type.name:<12}")
+
         if len(self.arguments) > 0:
-            end = " " + " ".join(
-                (
-                    Instruction.value_to_script_literal(a, t)
-                    for i, (a, t) in enumerate(
-                        zip(self.arguments, self.instruction_type.arguments)
+            stream.write(" ")
+            stream.write(
+                " ".join(
+                    (
+                        Instruction.value_to_script_literal(a, t)
+                        for i, (a, t) in enumerate(
+                            zip(self.arguments, self.instruction_type.arguments)
+                        )
                     )
                 )
             )
 
-        return (start + end).rstrip()
+        return stream.read().rstrip()
 
     @staticmethod
     def value_to_script_literal(
@@ -386,10 +390,10 @@ class Event:
         instructions = []
         labels = {}
         while True:
-            position = input_stream.tell()
             try:
                 result = Instruction.from_evt(input_stream, character_encoding)
             except Exception as e:
+                position = input_stream.tell()
                 raise ValueError(
                     f"Failed to parse instruction at: 0x{position:x}"
                 ) from e
@@ -472,9 +476,7 @@ class Event:
 
                 outputted_labels.append(label)
 
-            output_stream.write(
-                "    " + instruction.to_script() + "\n",
-            )
+            output_stream.write(f"    {instruction.to_script()}\n")
             position += instruction.length(character_encoding)
 
         assert len(outputted_labels) == len(set(outputted_labels))

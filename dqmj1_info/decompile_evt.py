@@ -9,7 +9,7 @@ from .character_encoding import CHARACTER_ENCODINGS
 from .evt import Event
 
 
-def main(argv: List[str]):
+def main(argv: List[str]) -> None:
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--evt_filepaths", required=True, nargs="+")

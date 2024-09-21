@@ -8,7 +8,7 @@ import pandas as pd
 ENDIANESS: Literal["little"] = "little"
 
 
-def main(argv: List[str]):
+def main(argv: List[str]) -> None:
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--strings_csv", required=True)
@@ -23,7 +23,10 @@ def main(argv: List[str]):
     item_names = strings[strings["table_name"] == "item_names"]
 
     def get_item_name(item_id: int) -> str:
-        return item_names[item_names["index_dec"] == item_id]["string"].iloc[0]
+        name = item_names[item_names["index_dec"] == item_id]["string"].iloc[0]
+        assert isinstance(name, str)
+
+        return name
 
     def get_item_category(category: int) -> str:
         if category == 0:

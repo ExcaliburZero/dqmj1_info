@@ -9,7 +9,7 @@ import pandas as pd
 ENDIANESS = "little"
 
 
-def main(argv: List[str]):
+def main(argv: List[str]) -> None:
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--strings_csv", required=True)
@@ -30,12 +30,18 @@ def main(argv: List[str]):
     skill_names = strings[strings["table_name"] == "skill_names"]
 
     def get_skill_set_name(skill_set_id: int) -> str:
-        return skill_set_names[skill_set_names["index_dec"] == skill_set_id][
+        name = skill_set_names[skill_set_names["index_dec"] == skill_set_id][
             "string"
         ].iloc[0]
+        assert isinstance(name, str)
+
+        return name
 
     def get_skill_name(skill_id: int) -> str:
-        return skill_names[skill_names["index_dec"] == skill_id]["string"].iloc[0]
+        name = skill_names[skill_names["index_dec"] == skill_id]["string"].iloc[0]
+        assert isinstance(name, str)
+
+        return name
 
     data_raw = []
     for _, row in skill_tbl.iterrows():

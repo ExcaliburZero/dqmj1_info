@@ -57,7 +57,7 @@ class SkillSet:
         return entries
 
 
-def main(argv: List[str]):
+def main(argv: List[str]) -> None:
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--table_filepath", required=True)

@@ -79,7 +79,7 @@ ABOUT_MENU = {
 }
 
 
-@gooey.Gooey(
+@gooey.Gooey(  # type: ignore [misc]
     program_name="DQMJ1 Unofficial File Extractor",
     default_size=(800, 500),
     progress_regex=r"^INFO> \((?P<current>\d+)/(?P<total>\d+)\)",
@@ -140,7 +140,7 @@ def setup_logging(log_filepath: pathlib.Path) -> None:
     log.addHandler(file_handler)
 
 
-def main(argv: List[str], mode: UiMode):
+def main(argv: List[str], mode: UiMode) -> int:
     if mode == UiMode.GUI:
         parser = gui_parser()
     else:
@@ -428,9 +428,9 @@ def main(argv: List[str], mode: UiMode):
     return SUCCESS
 
 
-def main_cli() -> None:
+def main_cli() -> int:
     return main(sys.argv[1:], mode=UiMode.CLI)
 
 
-def main_gui() -> None:
+def main_gui() -> int:
     return main(sys.argv[1:], mode=UiMode.GUI)

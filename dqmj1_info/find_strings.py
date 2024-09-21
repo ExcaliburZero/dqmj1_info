@@ -35,7 +35,7 @@ class StringPattern:
         return StringPattern(string=string, pattern=pattern)
 
 
-def main(argv: List[str]):
+def main(argv: List[str]) -> None:
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--files", nargs="+", required=True)

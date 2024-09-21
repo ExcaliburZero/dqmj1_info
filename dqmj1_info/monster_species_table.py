@@ -9,7 +9,7 @@ import pandas as pd
 ENDIANESS = "little"
 
 
-def main(argv: List[str]):
+def main(argv: List[str]) -> None:
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--strings_csv", required=True)
@@ -57,18 +57,27 @@ def main(argv: List[str]):
     }
 
     def get_monster_name(species_id: int) -> str:
-        return monster_names[monster_names["index_dec"] == species_id]["string"].iloc[0]
+        name = monster_names[monster_names["index_dec"] == species_id]["string"].iloc[0]
+        assert isinstance(name, str)
+
+        return name
 
     def get_trait_name(trait_id: int) -> str:
         try:
-            return trait_names[trait_names["index_dec"] == trait_id]["string"].iloc[0]
+            name = trait_names[trait_names["index_dec"] == trait_id]["string"].iloc[0]
         except IndexError:
             raise ValueError(f"Failed to find trait for id: {trait_id}")
 
+        assert isinstance(name, str)
+        return name
+
     def get_skill_set_name(skill_set_id: int) -> str:
-        return skill_set_names[skill_set_names["index_dec"] == skill_set_id][
+        name = skill_set_names[skill_set_names["index_dec"] == skill_set_id][
             "string"
         ].iloc[0]
+        assert isinstance(name, str)
+
+        return name
 
     def get_weapons(row: Any) -> List[str]:
         weapons = []

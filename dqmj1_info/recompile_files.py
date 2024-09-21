@@ -43,7 +43,7 @@ def cli_parser() -> argparse.ArgumentParser:
     return parser
 
 
-@gooey.Gooey(program_name="DQMJ1 Unofficial File Recompiler")
+@gooey.Gooey(program_name="DQMJ1 Unofficial File Recompiler")  # type: ignore [misc]
 def gui_parser() -> gooey.GooeyParser:
     parser = gooey.GooeyParser(
         description="Program that recompiles extracted data files from Dragon Quest Monsters: Joker."
@@ -87,7 +87,7 @@ def setup_logging(log_filepath: pathlib.Path) -> None:
     log.addHandler(file_handler)
 
 
-def main(argv: List[str], mode: UiMode):
+def main(argv: List[str], mode: UiMode) -> int:
     if mode == UiMode.GUI:
         parser = gui_parser()
     else:
@@ -137,9 +137,9 @@ def main(argv: List[str], mode: UiMode):
     return SUCCESS
 
 
-def main_cli() -> None:
+def main_cli() -> int:
     return main(sys.argv[1:], mode=UiMode.CLI)
 
 
-def main_gui() -> None:
+def main_gui() -> int:
     return main(sys.argv[1:], mode=UiMode.GUI)

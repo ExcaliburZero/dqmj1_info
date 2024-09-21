@@ -10,7 +10,7 @@ import pandas as pd
 from .region_configs.region_configs import REGION_CONFIGS
 
 
-def main(argv: List[str]):
+def main(argv: List[str]) -> None:
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--data_directory", required=True)

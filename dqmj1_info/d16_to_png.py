@@ -8,7 +8,7 @@ import sys
 from .d16 import D16Image
 
 
-def main(argv: List[str]):
+def main(argv: List[str]) -> None:
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--d16_filepaths", required=True, nargs="+")

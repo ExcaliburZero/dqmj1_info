@@ -6,7 +6,7 @@ import sys
 import numpy as np
 
 
-def main(argv: List[str]):
+def main(argv: List[str]) -> None:
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--seed", default=42, type=int)

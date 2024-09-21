@@ -335,7 +335,7 @@ class Instruction:
                 )
             )
 
-        return stream.read().rstrip()
+        return stream.getvalue().rstrip()
 
     @staticmethod
     def value_to_script_literal(

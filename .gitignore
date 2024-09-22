@@ -182,4 +182,8 @@ poetry.toml
 # LSP config files
 pyrightconfig.json
 
+# Scalene
+/profile.html
+/profile.json
+
 # End

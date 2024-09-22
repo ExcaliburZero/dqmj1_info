@@ -20,7 +20,7 @@ def main(argv: List[str]) -> None:
 
     args = parser.parse_args(argv)
 
-    strings = pd.read_csv(args.strings_csv)
+    strings = pd.read_csv(args.strings_csv, keep_default_na=False)
     enmy_kind_tbl = pd.read_csv(args.enmy_kind_tbl_csv)
     region = args.region
 

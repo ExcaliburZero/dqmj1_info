@@ -12,6 +12,7 @@ dqmj1_compile_evt = "dqmj1_info:compile_evt.main_without_args"
 dqmj1_decompile_evt = "dqmj1_info:decompile_evt.main_without_args"
 d16_to_png = "dqmj1_info:d16_to_png.main_without_args"
 dqmj1_simulate_event = "dqmj1_info:simulate_event.main_without_args"
+dqmj1_summaraize_save_file = "dqmj1_info:summaraize_save_file.main_without_args"
 
 [tool.setuptools]
 packages = ["dqmj1_info", "dqmj1_info.region_configs"]

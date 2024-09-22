@@ -83,8 +83,6 @@ partial_monster monster_in_battle @ 0x02238FD8;
 u32 first_evt_file_ptr @ 0x223DF9C;
 u32 first_evt_file_data_start @ 0x223DFA0;
 
-u32 num_times_synthesized @ 0x20BE5A0;
-
 struct unknown_struct_b {
     u8 unknown_a[3];
     u8 unknown_index;
@@ -107,9 +105,12 @@ struct player_info {
     u8 player_name[8];
     u8 unknown_a[4];
     u32 gold;
-    u8 atm_gold[4];
+    u32 atm_gold;
     u8 items_in_hand[16];
     u8 item_in_bag_counts[256];
+    u8 unknown_b[8];
+    u8 unknown_c[308];
+    u32 num_times_synthesized;
 };
 
 player_info player_info @ 0x020BE340;

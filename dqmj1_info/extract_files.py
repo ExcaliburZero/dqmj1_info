@@ -354,7 +354,7 @@ def main(argv: List[str], mode: UiMode) -> int:
     ###
     # Extract dialogue
     ###
-    event_dialogue_csv = output_directory / "scripts" / "dialogue.csv"
+    event_dialogue_csv = output_directory / "dialogue.csv"
     extract_script_dialogue.main(
         [
             "--script_filepaths",

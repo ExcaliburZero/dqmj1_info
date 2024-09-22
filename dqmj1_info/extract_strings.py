@@ -25,13 +25,7 @@ def main(argv: List[str]) -> None:
     output_csv = pathlib.Path(args.output_csv)
 
     string_locations = REGION_CONFIGS[args.region].string_tables
-    if args.character_encoding == "Japan":
-        logging.warning(
-            'extract strings does not support "Japan" character encoding yet. Using "North America / Europe" instead.'
-        )
-        character_encoding = CHARACTER_ENCODINGS["North America / Europe"]
-    else:
-        character_encoding = CHARACTER_ENCODINGS[args.character_encoding]
+    character_encoding = CHARACTER_ENCODINGS[args.character_encoding]
 
     strings: List[Tuple[pathlib.Path, str, str, str, str]] = []
     for file_subpath, (offset, tables) in sorted(string_locations.items()):
@@ -49,15 +43,15 @@ def main(argv: List[str]) -> None:
                 length = table.end - table.start
 
                 num_before = len(strings)
-                buffer: List[str] = []
+                buffer: List[int] = []
                 for i, byte in enumerate(file_bytes[start : start + length]):
                     # Note: The skipping of 0x0A at possible string start is due to an edge case I
                     # saw at 0x0207d792
                     if (byte == 0x00 or byte == 0x0A) and len(buffer) == 0:
                         continue
-                    # Note: The check against 0xFE is due ot an edge case at 0x02079c16.
+                    # Note: The check against 0xFE is due to an edge case at 0x02079c16.
                     elif byte == 0xFF or byte == 0xFE:
-                        string = "".join(buffer)
+                        string = character_encoding.bytes_to_string(buffer)
                         j = i - len(buffer)
 
                         buffer = []
@@ -71,8 +65,7 @@ def main(argv: List[str]) -> None:
                             )
                         )
                     else:
-                        char = character_encoding.bytes_to_string([byte])
-                        buffer.append(char)
+                        buffer.append(byte)
 
                 num_after = len(strings)
                 logging.debug(f"Read {num_after - num_before} strings from table.")

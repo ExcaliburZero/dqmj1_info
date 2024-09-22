@@ -380,6 +380,8 @@ def main(argv: List[str], mode: UiMode) -> int:
             str(enmy_kind_tbl_csv),
             "--output_csv",
             str(monster_species_table_csv),
+            "--region",
+            args.region,
         ]
     )
     steps_completed += 1
@@ -399,6 +401,8 @@ def main(argv: List[str], mode: UiMode) -> int:
             str(skill_tbl_csv),
             "--output_csv",
             str(skill_set_table_csv),
+            "--region",
+            args.region,
         ]
     )
     steps_completed += 1
@@ -418,6 +422,8 @@ def main(argv: List[str], mode: UiMode) -> int:
             str(item_tbl_csv),
             "--output_csv",
             str(item_table_csv),
+            "--region",
+            args.region,
         ]
     )
     steps_completed += 1

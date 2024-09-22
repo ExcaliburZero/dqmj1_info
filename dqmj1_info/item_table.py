@@ -1,6 +1,7 @@
 from typing import List, Literal
 
 import argparse
+import logging
 import sys
 
 import pandas as pd
@@ -14,11 +15,19 @@ def main(argv: List[str]) -> None:
     parser.add_argument("--strings_csv", required=True)
     parser.add_argument("--item_tbl_csv", required=True)
     parser.add_argument("--output_csv", required=True)
+    parser.add_argument("--region", required=True)
 
     args = parser.parse_args(argv)
 
     strings = pd.read_csv(args.strings_csv)
     item_tbl = pd.read_csv(args.item_tbl_csv)
+    region = args.region
+
+    if region == "Japan":
+        logging.warning(
+            "Item table creation does not currently support the Japan region. Skipping."
+        )
+        return
 
     item_names = strings[strings["table_name"] == "item_names"]
 

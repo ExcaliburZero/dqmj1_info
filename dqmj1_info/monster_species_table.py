@@ -2,6 +2,7 @@ from typing import Any, List
 
 import argparse
 import ast
+import logging
 import sys
 
 import pandas as pd
@@ -15,11 +16,19 @@ def main(argv: List[str]) -> None:
     parser.add_argument("--strings_csv", required=True)
     parser.add_argument("--enmy_kind_tbl_csv", required=True)
     parser.add_argument("--output_csv", required=True)
+    parser.add_argument("--region", required=True)
 
     args = parser.parse_args(argv)
 
     strings = pd.read_csv(args.strings_csv)
     enmy_kind_tbl = pd.read_csv(args.enmy_kind_tbl_csv)
+    region = args.region
+
+    if region == "Japan":
+        logging.warning(
+            "Monster species table creation does not currently support the Japan region. Skipping."
+        )
+        return
 
     enmy_kind_tbl["traits"] = enmy_kind_tbl["traits"].apply(
         lambda x: ast.literal_eval(x)

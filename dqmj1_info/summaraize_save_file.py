@@ -23,7 +23,7 @@ def main(argv: List[str]) -> None:
     args = parser.parse_args(argv)
 
     save_data_filepaths: List[pathlib.Path] = [
-        filepath
+        pathlib.Path(filepath)
         for filepath_pattern in args.save_data_filepaths
         for filepath in sorted(glob.glob(str(filepath_pattern)))
     ]

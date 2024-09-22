@@ -39,7 +39,7 @@ REGION_CONFIGS["Japan"] = RegionConfig(
                 StringAddressTable("unknown_d", 0x0208CCD8, 0x0208D0D8),
                 StringAddressTable("unknown_e", 0x0208D0D8, 0x0208D4D8),
                 StringAddressTable("skill_set_names", 0x0208D4D8, 0x0208D8DC),
-                StringAddressTable("unknown_g", 0x0208D8DC, 0x0208DCE0),
+                StringAddressTable("item_names", 0x0208D8DC, 0x0208DCE0),
                 StringAddressTable("skill_names", 0x0208DCE0, 0x0208E0E8),
                 StringAddressTable("unknown_h", 0x0208E0E8, 0x0208E8E8),
                 StringAddressTable("monster_species_names", 0x0208E8E8, 0x0208F0E8),

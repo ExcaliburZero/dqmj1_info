@@ -1,10 +1,21 @@
 #include "monster.hexpat"
 
+import std.io;
+
+fn format_playtime(u32 raw) {
+    u32 remaining = raw & 0b111111;
+    u32 seconds = (raw >> 6) & 0b111111;
+    u32 minutes = (raw >> 12) & 0b111111;
+    u32 hours = raw >> 18;
+
+    return std::format("{}:{:0>2}:{:0>2} ({})", hours, minutes, seconds, remaining);
+};
+
 u24 magic @ 0x00;
 u32 extra_magic[0x02] @ 0x04;
 u32 checksum @ 0x0C;
 
-u32 playtime @ 0x2C; // 6bits for subseconds, 6bits for seconds, 6bits for minutes, rest for hours?
+u32 playtime @ 0x2C [[format("format_playtime")]]; // 6bits for subseconds, 6bits for seconds, 6bits for minutes, rest for hours?
 u8 player_name[0x09] @ 0x32;
 u32 gold @ 0x184; // TODO: confirm size
 u32 atm @ 0x188;

@@ -65,19 +65,14 @@ class D16Image:
         width = int.from_bytes(input_stream.read(2), ENDIANESS)
         height = int.from_bytes(input_stream.read(2), ENDIANESS)
 
-        pixel_bytes = input_stream.read(2 * height * width)
-        pixels: List[List[Color16Bit]] = [
-            [
-                Color16Bit.from_bgr(
-                    int.from_bytes(
-                        pixel_bytes[(row + column) * 2 : (row + column) * 2 + 1],
-                        ENDIANESS,
-                    )
-                )
-                for column in range(0, width)
-            ]
-            for row in range(0, height)
-        ]
+        pixels: List[List[Color16Bit]] = []
+        for _ in range(0, height):
+            pixels.append([])
+            for _ in range(0, width):
+                color_value = int.from_bytes(input_stream.read(2), ENDIANESS)
+
+                color = Color16Bit.from_bgr(color_value)
+                pixels[-1].append(color)
 
         return D16Image(pixels=pixels)
 

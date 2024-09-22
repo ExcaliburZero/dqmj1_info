@@ -12,15 +12,15 @@ REGION_CONFIGS["Japan"] = RegionConfig(
         pathlib.Path("arm9.bin"): (
             0x02000000,
             [
-                # TODO: correct the end locations, should point to next address after end
-                StringTable("strings_a", 0x02083674, 0x02084CA3),
-                StringTable("strings_b", 0x02084CA9, 0x02086828),  # already fixed end
+                StringTable("strings_a", 0x02083674, 0x02084CA4),
+                StringTable("strings_b", 0x02084CA9, 0x02086828),
                 StringTable("strings_c", 0x02086830, 0x0208886B),
-                StringTable("strings_d", 0x0208888C, 0x020890BF),
-                StringTable("strings_e", 0x020890D4, 0x02089B53),
-                StringTable("strings_f", 0x02089B84, 0x0208A54F),
-                StringTable("strings_g", 0x0208A56C, 0x0208AACB),
-                StringTable("strings_h", 0x0208AAEC, 0x0208AF1B),
+                StringTable("strings_d", 0x0208888C, 0x02089020),
+                StringTable("strings_e", 0x02089034, 0x020890C0),
+                StringTable("strings_f", 0x020890D4, 0x02089B54),
+                StringTable("strings_g", 0x02089B84, 0x0208A550),
+                StringTable("strings_h", 0x0208A56C, 0x0208AACC),
+                StringTable("strings_i", 0x0208AAEC, 0x0208AF1C),
             ],
         ),
         pathlib.Path("overlay")

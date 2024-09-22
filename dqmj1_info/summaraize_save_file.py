@@ -2,6 +2,7 @@ from typing import List
 
 import argparse
 import csv
+import glob
 import logging
 import pathlib
 import sys
@@ -21,7 +22,11 @@ def main(argv: List[str]) -> None:
 
     args = parser.parse_args(argv)
 
-    save_data_filepaths: List[pathlib.Path] = args.save_data_filepaths
+    save_data_filepaths: List[pathlib.Path] = [
+        filepath
+        for filepath_pattern in args.save_data_filepaths
+        for filepath in sorted(glob.glob(str(filepath_pattern)))
+    ]
     output_filepath: pathlib.Path = args.output_filepath
 
     character_encoding = CHARACTER_ENCODINGS[args.character_encoding]
@@ -34,7 +39,7 @@ def main(argv: List[str]) -> None:
 
         save_data_list.append((save_data_filepath, save_data, raw))
 
-    columns = ["Filepath", "Player name", "Party"]
+    columns = ["Filepath", "Player name", "Playtime", "Party", "Gold", "Atm"]
     with open(output_filepath, "w", encoding="utf-8") as output_stream:
         writer = csv.DictWriter(output_stream, fieldnames=columns)
         writer.writeheader()
@@ -44,12 +49,15 @@ def main(argv: List[str]) -> None:
                 {
                     "Filepath": filepath,
                     "Player name": save_data.player_name,
+                    "Playtime": f"{save_data.playtime.hours}:{save_data.playtime.minutes:0>2}:{save_data.playtime.seconds:0>2}",
                     "Party": ", ".join(
                         [
                             f"{preview.name} lv.{preview.level}"
                             for preview in save_data.party_previews
                         ]
                     ),
+                    "Gold": save_data.gold,
+                    "Atm": save_data.atm_gold,
                 }
             )
 

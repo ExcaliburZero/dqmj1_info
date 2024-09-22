@@ -80,9 +80,31 @@ class MonsterPreview:
 
 
 @dataclass
+class Playtime:
+    hours: int
+    minutes: int
+    seconds: int
+    remaining: int
+
+    @staticmethod
+    def from_int(raw: int) -> "Playtime":
+        remaining = raw & 0b111111
+        seconds = (raw >> 6) & 0b111111
+        minutes = (raw >> 12) & 0b111111
+        hours = raw >> 18
+
+        return Playtime(
+            hours=hours, minutes=minutes, seconds=seconds, remaining=remaining
+        )
+
+
+@dataclass
 class SaveData:
+    playtime: Playtime
     player_name: str
     party_previews: List[MonsterPreview]
+    gold: int
+    atm_gold: int
 
     @staticmethod
     def from_sav(
@@ -96,7 +118,9 @@ class SaveData:
     def from_raw(raw: SaveDataRaw, character_encoding: CharacterEncoding) -> "SaveData":
         input_stream = io.BytesIO(raw.raw)
 
-        input_stream.read(48)
+        input_stream.read(44)
+        playtime = Playtime.from_int(int.from_bytes(input_stream.read(4), ENDIANESS))
+
         num_party_monsters = int.from_bytes(input_stream.read(1))
 
         input_stream.read(1)
@@ -106,7 +130,17 @@ class SaveData:
             input_stream, character_encoding
         )[0:num_party_monsters]
 
-        return SaveData(player_name=player_name, party_previews=party_previews)
+        input_stream.read(281)
+        gold = int.from_bytes(input_stream.read(4), ENDIANESS)
+        atm_gold = int.from_bytes(input_stream.read(4), ENDIANESS)
+
+        return SaveData(
+            playtime=playtime,
+            player_name=player_name,
+            party_previews=party_previews,
+            gold=gold,
+            atm_gold=atm_gold,
+        )
 
 
 if __name__ == "__main__":

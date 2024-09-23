@@ -7,6 +7,7 @@ import logging
 import pathlib
 import sys
 
+import colored
 import gooey  # type: ignore
 
 from . import ability_tbl
@@ -85,6 +86,7 @@ ABOUT_MENU = {
     progress_regex=r"^INFO> \((?P<current>\d+)/(?P<total>\d+)\)",
     progress_expr="current / total * 100",
     menu=[ABOUT_MENU],
+    richtext_controls=True,
 )
 def gui_parser() -> gooey.GooeyParser:
     parser = gooey.GooeyParser(
@@ -123,11 +125,41 @@ def gui_parser() -> gooey.GooeyParser:
     return parser
 
 
+class CustomFormatter(logging.Formatter):
+
+    grey = "\x1b[38;20m"
+    yellow = "\x1b[33;20m"
+    red = "\x1b[31;20m"
+    bold_red = "\x1b[31;1m"
+    reset = "\x1b[0m"
+    format = "%(levelname)s> %(message)s"
+
+    COLORS = {
+        logging.DEBUG: "black",
+        logging.INFO: "black",
+        logging.WARNING: "yellow",
+        logging.ERROR: "red",
+        logging.CRITICAL: "red",
+    }
+    FORMATS = {
+        logging.DEBUG: grey + format + reset,
+        logging.INFO: grey + format + reset,
+        logging.WARNING: yellow + format + reset,
+        logging.ERROR: red + format + reset,
+        logging.CRITICAL: bold_red + format + reset,
+    }
+
+    def format(self, record):
+        color = self.COLORS.get(record.levelno)
+        formatter = logging.Formatter(self.format)
+        return colored.styleize(formatter.format(record), colored.fg(color))
+
+
 def setup_logging(log_filepath: pathlib.Path) -> None:
     log = logging.getLogger()
     log.setLevel(logging.DEBUG)
 
-    formatter = logging.Formatter("%(levelname)s> %(message)s")
+    formatter = CustomFormatter()  # logging.Formatter("%(levelname)s> %(message)s")
 
     stream_handler = logging.StreamHandler()
     stream_handler.setLevel(logging.INFO)

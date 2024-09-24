@@ -25,8 +25,11 @@ REGION_CONFIGS["Japan"] = RegionConfig(
         ),
         pathlib.Path("overlay")
         / "overlay_0000.bin": (
-            0x021A0A00,
-            [],
+            0x0219DEC0,
+            [
+                StringTable("strings_1", 0x021F52B8, 0x021F566B),
+                StringTable("strings_2", 0x021F5704, 0x021F5B60),
+            ],
         ),
     },
     string_address_tables={
@@ -43,6 +46,15 @@ REGION_CONFIGS["Japan"] = RegionConfig(
                 StringAddressTable("skill_names", 0x0208DCE0, 0x0208E0E8),
                 StringAddressTable("unknown_h", 0x0208E0E8, 0x0208E8E8),
                 StringAddressTable("monster_species_names", 0x0208E8E8, 0x0208F0E8),
+            ],
+        ),
+        pathlib.Path("overlay")
+        / "overlay_0000.bin": (
+            0x0219DEC0,
+            [
+                StringAddressTable("unknown_1", 0x021F566C, 0x021F5704),
+                StringAddressTable("unknown_2", 0x021F5B60, 0x021F5CC4),
+                StringAddressTable("unknown_3", 0x021F8090, 0x021F8890),
             ],
         ),
     },

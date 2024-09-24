@@ -74,5 +74,14 @@ REGION_CONFIGS["North America"] = RegionConfig(
                 StringAddressTable("unknown_k", 0x02083EBC, 0x02083EFC),
             ],
         ),
+        pathlib.Path("overlay")
+        / "overlay_0000.bin": (
+            0x021A0A00,
+            [
+                StringAddressTable(
+                    "monster_species_descriptions", 0x021F78C0, 0x021F80C0
+                ),  # special case, they appear as two tables in ROM, but are actually one
+            ],
+        ),
     },
 )

@@ -50,7 +50,9 @@ def main(argv: List[str]) -> None:
                     if (byte == 0x00 or byte == 0x0A) and len(buffer) == 0:
                         continue
                     # Note: The check against 0xFE is due to an edge case at 0x02079c16.
-                    elif byte == 0xFF or byte == 0xFE:
+                    elif byte == 0xFF or (
+                        byte == 0xFE and file_bytes[start + i + 1] == 0x0
+                    ):
                         string = character_encoding.bytes_to_string(buffer)
                         j = i - len(buffer)
 

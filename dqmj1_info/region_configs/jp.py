@@ -29,6 +29,9 @@ REGION_CONFIGS["Japan"] = RegionConfig(
             [
                 StringTable("strings_1", 0x021F52B8, 0x021F566B),
                 StringTable("strings_2", 0x021F5704, 0x021F5B60),
+                StringTable("strings_3", 0x021F5CC8, 0x021F8090),
+                StringTable("strings_4", 0x021F8890, 0x021F8E38),
+                StringTable("strings_5", 0x021F8EC4, 0x021F96B0),
             ],
         ),
     },
@@ -54,7 +57,10 @@ REGION_CONFIGS["Japan"] = RegionConfig(
             [
                 StringAddressTable("unknown_1", 0x021F566C, 0x021F5704),
                 StringAddressTable("unknown_2", 0x021F5B60, 0x021F5CC4),
-                StringAddressTable("unknown_3", 0x021F8090, 0x021F8890),
+                StringAddressTable(
+                    "monster_species_descriptions", 0x021F8090, 0x021F8890
+                ),
+                StringAddressTable("unknown_4", 0x021F8E38, 0x021F8EC4),
             ],
         ),
     },

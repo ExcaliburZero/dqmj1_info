@@ -33,7 +33,7 @@ REGION_CONFIGS["Japan"] = RegionConfig(
         pathlib.Path("arm9.bin"): (
             0x02000000,
             [
-                StringAddressTable("unknown_a", 0x0208C0D8, 0x0208C4D8),
+                StringAddressTable("skill_descriptions", 0x0208C0D8, 0x0208C4D8),
                 StringAddressTable("unknown_b", 0x0208C4D8, 0x0208C8D8),
                 StringAddressTable("unknown_c", 0x0208C8D8, 0x0208CCD8),
                 StringAddressTable("unknown_d", 0x0208CCD8, 0x0208D0D8),

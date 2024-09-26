@@ -30,6 +30,11 @@ REGION_CONFIGS["North America"] = RegionConfig(
                 StringTable("strings_m", 0x021FCB10, 0x021FD2A0),
                 StringTable("strings_n", 0x021FD2F8, 0x021FD45C),
                 StringTable("strings_o", 0x021FD588, 0x021FD874),
+                StringTable("strings_5", 0x0220533C, 0x02205444),
+                StringTable("strings_6", 0x02205450, 0x02205498),
+                StringTable("strings_7", 0x02205524, 0x022057D8),
+                StringTable("strings_8", 0x02205814, 0x022059F4),
+                StringTable("strings_9", 0x0220663C, 0x02207FB8),
             ],
         ),
     },
@@ -81,6 +86,11 @@ REGION_CONFIGS["North America"] = RegionConfig(
                 StringAddressTable(
                     "monster_species_descriptions", 0x021F78C0, 0x021F80C0
                 ),  # special case, they appear as two tables in ROM, but are actually one
+                StringAddressTable("swear_words", 0x022059F8, 0x0220663C),
+                StringAddressTable("unknown_aw", 0x02205448, 0x02205450),
+                StringAddressTable("unknown_ax", 0x0220549C, 0x02205524),
+                StringAddressTable("unknown_ay", 0x0220549C, 0x02205524),
+                StringAddressTable("unknown_az", 0x022057DC, 0x02205814),
             ],
         ),
     },

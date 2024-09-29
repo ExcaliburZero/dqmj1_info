@@ -11,6 +11,11 @@ fn format_playtime(u32 raw) {
     return std::format("{}:{:0>2}:{:0>2} ({})", hours, minutes, seconds, remaining);
 };
 
+struct party_monster_name {
+    u8 name[9];
+    u8 unknown[3];
+};
+
 u24 magic @ 0x00;
 u32 extra_magic[0x02] @ 0x04;
 u32 checksum @ 0x0C;
@@ -27,12 +32,13 @@ monster second_monster @ 0x7F0;
 monster third_monster @ 0x984;
 
 // Probably the versions displayed on the save file window when starting the game
-u8 first_party_monster_name[9] @ 0x3E;
-u8 second_party_monster_name[9] @ 0x4A;
-u8 third_party_monster_name[9] @ 0x56;
+party_monster_name party_monster_names[3] @ 0x3E;
 
-u8 first_party_monster_level @ 0x68;
-u8 second_party_monster_level @ 0x69;
-u8 third_party_monster_level @ 0x6A;
+u16 party_monster_species_ids[3] @ 0x62;
+u8 party_monster_levels[3] @ 0x68;
 
 u8 num_party_monsters @ 0x30;
+
+u8 unknown_a[16] @ 0x10;
+u8 unknown_b[12] @ 0x20;
+u8 unknown_c @ 0x31;

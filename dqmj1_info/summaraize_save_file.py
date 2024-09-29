@@ -39,7 +39,15 @@ def main(argv: List[str]) -> None:
 
         save_data_list.append((save_data_filepath, save_data, raw))
 
-    columns = ["Filepath", "Player name", "Playtime", "Party", "Gold", "Atm"]
+    columns = [
+        "Filepath",
+        "Player name",
+        "Playtime",
+        "Party",
+        "Gold",
+        "Atm",
+        "unknown_b",
+    ]
     with open(output_filepath, "w", encoding="utf-8") as output_stream:
         writer = csv.DictWriter(output_stream, fieldnames=columns)
         writer.writeheader()
@@ -58,6 +66,7 @@ def main(argv: List[str]) -> None:
                     ),
                     "Gold": save_data.gold,
                     "Atm": save_data.atm_gold,
+                    "unknown_b": save_data.unknown_b,
                 }
             )
 

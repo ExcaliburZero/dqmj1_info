@@ -103,7 +103,7 @@ class SaveData:
     playtime: Playtime
     player_name: str
     party_previews: List[MonsterPreview]
-    unknown_b: int
+    num_darkonium_times_5: int
     gold: int
     atm_gold: int
 
@@ -130,7 +130,7 @@ class SaveData:
         party_previews = MonsterPreview.multiple_from_raw(
             input_stream, character_encoding
         )[0:num_party_monsters]
-        unknown_b = int.from_bytes(input_stream.read(1))
+        num_darkonium_times_5 = int.from_bytes(input_stream.read(1))
 
         input_stream.read(280)
         gold = int.from_bytes(input_stream.read(4), ENDIANESS)
@@ -140,7 +140,7 @@ class SaveData:
             playtime=playtime,
             player_name=player_name,
             party_previews=party_previews,
-            unknown_b=unknown_b,
+            num_darkonium_times_5=num_darkonium_times_5,
             gold=gold,
             atm_gold=atm_gold,
         )

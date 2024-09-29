@@ -46,7 +46,7 @@ def main(argv: List[str]) -> None:
         "Party",
         "Gold",
         "Atm",
-        "unknown_b",
+        "Num darkonium times 5",
     ]
     with open(output_filepath, "w", encoding="utf-8") as output_stream:
         writer = csv.DictWriter(output_stream, fieldnames=columns)
@@ -66,7 +66,7 @@ def main(argv: List[str]) -> None:
                     ),
                     "Gold": save_data.gold,
                     "Atm": save_data.atm_gold,
-                    "unknown_b": save_data.unknown_b,
+                    "Num darkonium times 5": save_data.num_darkonium_times_5,
                 }
             )
 

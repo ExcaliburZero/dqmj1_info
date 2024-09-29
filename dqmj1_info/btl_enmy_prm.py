@@ -20,6 +20,7 @@ class BtlEnmyPrmEntry:
     defense: int
     agility: int
     wisdom: int
+    skill_set_ids: List[int]
 
     @staticmethod
     def from_bin(input_stream: IO[bytes]) -> "BtlEnmyPrmEntry":
@@ -50,6 +51,7 @@ class BtlEnmyPrmEntry:
             defense=defense,
             agility=agility,
             wisdom=wisdom,
+            skill_set_ids=skill_set_ids,
         )
 
 
@@ -59,7 +61,7 @@ class BtlEnmyPrm:
 
     @staticmethod
     def from_bin(input_stream: IO[bytes]) -> "BtlEnmyPrm":
-        magic = int.from_bytes(input_stream.read(4), ENDIANESS)
+        int.from_bytes(input_stream.read(4), ENDIANESS)
         length = int.from_bytes(input_stream.read(4), ENDIANESS)
 
         entries = []
@@ -67,7 +69,7 @@ class BtlEnmyPrm:
         for i in range(0, length):
             entries.append(BtlEnmyPrmEntry.from_bin(input_stream))
 
-        return entries
+        return BtlEnmyPrm(entries)
 
 
 def main(argv: List[str]) -> None:
@@ -81,9 +83,9 @@ def main(argv: List[str]) -> None:
     with open(args.table_filepath, "rb") as input_stream:
         table = BtlEnmyPrm.from_bin(input_stream)
 
-    logging.debug(f"Read {len(table)} entries from: {args.table_filepath}")
+    logging.debug(f"Read {len(table.entries)} entries from: {args.table_filepath}")
 
-    pd.DataFrame(table).to_csv(args.output_csv, index=False)
+    pd.DataFrame(table.entries).to_csv(args.output_csv, index=False)
 
 
 if __name__ == "__main__":

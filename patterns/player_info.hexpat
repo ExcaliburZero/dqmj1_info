@@ -13,7 +13,8 @@ struct player_info {
     u32 unknown_b;
     u32 playtime;
     u8 num_party_monsters;
-    u8 unknown_c[307];
+    u8 num_monsters;
+    u8 unknown_c[306];
     u32 num_times_synthesized;
     u8 unknown[640];
 };

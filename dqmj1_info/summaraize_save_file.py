@@ -7,6 +7,8 @@ import logging
 import pathlib
 import sys
 
+import pandas as pd
+
 from .character_encoding import CHARACTER_ENCODINGS
 from .save_data import SaveData
 
@@ -17,6 +19,7 @@ def main(argv: List[str]) -> None:
     parser.add_argument(
         "--save_data_filepaths", required=True, nargs="+", type=pathlib.Path
     )
+    parser.add_argument("--strings_csv", required=True)
     parser.add_argument("--output_filepath", required=True, type=pathlib.Path)
     parser.add_argument("--character_encoding", required=True)
 
@@ -27,9 +30,20 @@ def main(argv: List[str]) -> None:
         for filepath_pattern in args.save_data_filepaths
         for filepath in sorted(glob.glob(str(filepath_pattern)))
     ]
+    strings = pd.read_csv(args.strings_csv, keep_default_na=False)
     output_filepath: pathlib.Path = args.output_filepath
 
     character_encoding = CHARACTER_ENCODINGS[args.character_encoding]
+
+    monster_species_names = strings[strings["table_name"] == "monster_species_names"]
+
+    def get_monster_species_name(species_id: int) -> str:
+        name = monster_species_names[monster_species_names["index_dec"] == species_id][
+            "string"
+        ].iloc[0]
+        assert isinstance(name, str)
+
+        return name
 
     save_data_list = []
     for save_data_filepath in save_data_filepaths:
@@ -58,6 +72,7 @@ def main(argv: List[str]) -> None:
 
             header = save_data.header
             summary = save_data.summary
+            player_info = save_data.player_info
 
             calculated_checksum = raw.checksum
             checksum_check_string = (
@@ -92,9 +107,24 @@ def main(argv: List[str]) -> None:
                             summary.player_name,
                         ),
                         (
+                            "Party",
+                            [
+                                f"{party_monster.name} lv.{party_monster.level} ({get_monster_species_name(party_monster.species_id)})"
+                                for party_monster in summary.party_monsters
+                            ],
+                        ),
+                        (
                             "Num darkonium",
                             f"{int(summary.num_darkonium_times_5 / 5)} ({summary.num_darkonium_times_5})",
                         ),
+                    ],
+                ),
+                (
+                    "Player info",
+                    [
+                        ("Player name", player_info.player_name),
+                        ("Gold", str(player_info.gold)),
+                        ("ATM gold", str(player_info.atm_gold)),
                     ],
                 ),
             ]
@@ -102,7 +132,12 @@ def main(argv: List[str]) -> None:
             for section, section_data in data:
                 print(f"{section}:")
                 for field, value in section_data:
-                    print(f"  {field}: {value}")
+                    if isinstance(value, list):
+                        print(f"  {field}:")
+                        for v in value:
+                            print(f"    {v}")
+                    else:
+                        print(f"  {field}: {value}")
 
             writer.writerow(
                 {
@@ -112,7 +147,7 @@ def main(argv: List[str]) -> None:
                     "Party": ", ".join(
                         [
                             f"{preview.name} lv.{preview.level}"
-                            for preview in save_data.summary.party_previews
+                            for preview in save_data.summary.party_monsters
                         ]
                     ),
                     "Gold": save_data.player_info.gold,

@@ -59,6 +59,7 @@ class SaveDataRaw:
 @dataclass
 class MonsterPreview:
     name: str
+    species_id: int
     level: int
 
     @staticmethod
@@ -70,12 +71,16 @@ class MonsterPreview:
             input_stream.read(3)
             names.append(character_encoding.bytes_to_string(input_stream.read(9)))
 
-        input_stream.read(9)
+        input_stream.read(3)
 
+        species_ids = [
+            int.from_bytes(input_stream.read(2), ENDIANESS) for _ in range(0, 3)
+        ]
         levels = [int.from_bytes(input_stream.read(1)) for _ in range(0, 3)]
 
         return [
-            MonsterPreview(name=name, level=level) for name, level in zip(names, levels)
+            MonsterPreview(name=name, species_id=species_id, level=level)
+            for name, species_id, level in zip(names, species_ids, levels)
         ]
 
 
@@ -121,7 +126,7 @@ class Header:
 class Summary:
     playtime: Playtime
     player_name: str
-    party_previews: List[MonsterPreview]
+    party_monsters: List[MonsterPreview]
     num_darkonium_times_5: int
 
     @staticmethod
@@ -136,15 +141,17 @@ class Summary:
         input_stream.read(1)
         player_name = character_encoding.bytes_to_string(input_stream.read(9))
 
-        party_previews = MonsterPreview.multiple_from_raw(
+        party_monsters = MonsterPreview.multiple_from_raw(
             input_stream, character_encoding
         )[0:num_party_monsters]
         num_darkonium_times_5 = int.from_bytes(input_stream.read(1))
 
+        input_stream.read(268)
+
         return Summary(
             playtime=playtime,
             player_name=player_name,
-            party_previews=party_previews,
+            party_monsters=party_monsters,
             num_darkonium_times_5=num_darkonium_times_5,
         )
 
@@ -222,8 +229,6 @@ class SaveData:
 
         header = Header.from_sav(input_stream)
         summary = Summary.from_sav(input_stream, character_encoding)
-
-        input_stream.read(268)
         player_info = PlayerInfo.from_sav(input_stream, character_encoding)
 
         return SaveData(

@@ -53,20 +53,71 @@ def main(argv: List[str]) -> None:
         writer.writeheader()
 
         for filepath, save_data, raw in save_data_list:
+            print("=================")
+            print(f"[{filepath}]")
+
+            header = save_data.header
+            summary = save_data.summary
+
+            calculated_checksum = raw.checksum
+            checksum_check_string = (
+                "(✓)"
+                if calculated_checksum == header.checksum
+                else f"(Incorrect, {hex(calculated_checksum)})"
+            )
+
+            data = [
+                (
+                    "Header",
+                    [
+                        (
+                            "Magic",
+                            f"{hex(header.magic_1)} {hex(header.magic_2)} {hex(header.magic_3)}",
+                        ),
+                        (
+                            "Checksum",
+                            f"{hex(header.checksum)} {checksum_check_string}",
+                        ),
+                    ],
+                ),
+                (
+                    "Summary",
+                    [
+                        (
+                            "Playtime",
+                            f"{summary.playtime.hours}:{summary.playtime.minutes:0>2}:{summary.playtime.seconds:0>2}",
+                        ),
+                        (
+                            "Player name",
+                            summary.player_name,
+                        ),
+                        (
+                            "Num darkonium",
+                            f"{int(summary.num_darkonium_times_5 / 5)} ({summary.num_darkonium_times_5})",
+                        ),
+                    ],
+                ),
+            ]
+
+            for section, section_data in data:
+                print(f"{section}:")
+                for field, value in section_data:
+                    print(f"  {field}: {value}")
+
             writer.writerow(
                 {
                     "Filepath": filepath,
-                    "Player name": save_data.player_name,
-                    "Playtime": f"{save_data.playtime.hours}:{save_data.playtime.minutes:0>2}:{save_data.playtime.seconds:0>2}",
+                    "Player name": save_data.summary.player_name,
+                    "Playtime": f"{save_data.summary.playtime.hours}:{save_data.summary.playtime.minutes:0>2}:{save_data.summary.playtime.seconds:0>2}",
                     "Party": ", ".join(
                         [
                             f"{preview.name} lv.{preview.level}"
-                            for preview in save_data.party_previews
+                            for preview in save_data.summary.party_previews
                         ]
                     ),
                     "Gold": save_data.player_info.gold,
                     "Atm": save_data.player_info.atm_gold,
-                    "Num darkonium times 5": save_data.num_darkonium_times_5,
+                    "Num darkonium times 5": save_data.summary.num_darkonium_times_5,
                 }
             )
 

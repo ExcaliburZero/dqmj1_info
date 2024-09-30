@@ -99,6 +99,57 @@ class Playtime:
 
 
 @dataclass
+class Header:
+    magic_1: int
+    magic_2: int
+    magic_3: int
+    checksum: int
+
+    @staticmethod
+    def from_sav(input_stream: IO[bytes]) -> "Header":
+        magic_1 = int.from_bytes(input_stream.read(4), ENDIANESS)
+        magic_2 = int.from_bytes(input_stream.read(4), ENDIANESS)
+        magic_3 = int.from_bytes(input_stream.read(4), ENDIANESS)
+        checksum = int.from_bytes(input_stream.read(4), ENDIANESS)
+
+        return Header(
+            magic_1=magic_1, magic_2=magic_2, magic_3=magic_3, checksum=checksum
+        )
+
+
+@dataclass
+class Summary:
+    playtime: Playtime
+    player_name: str
+    party_previews: List[MonsterPreview]
+    num_darkonium_times_5: int
+
+    @staticmethod
+    def from_sav(
+        input_stream: IO[bytes], character_encoding: CharacterEncoding
+    ) -> "Summary":
+        input_stream.read(28)
+        playtime = Playtime.from_int(int.from_bytes(input_stream.read(4), ENDIANESS))
+
+        num_party_monsters = int.from_bytes(input_stream.read(1))
+
+        input_stream.read(1)
+        player_name = character_encoding.bytes_to_string(input_stream.read(9))
+
+        party_previews = MonsterPreview.multiple_from_raw(
+            input_stream, character_encoding
+        )[0:num_party_monsters]
+        num_darkonium_times_5 = int.from_bytes(input_stream.read(1))
+
+        return Summary(
+            playtime=playtime,
+            player_name=player_name,
+            party_previews=party_previews,
+            num_darkonium_times_5=num_darkonium_times_5,
+        )
+
+
+@dataclass
 class PlayerInfo:
     player_name: str
     gold: int
@@ -153,10 +204,8 @@ class PlayerInfo:
 
 @dataclass
 class SaveData:
-    playtime: Playtime
-    player_name: str
-    party_previews: List[MonsterPreview]
-    num_darkonium_times_5: int
+    header: Header
+    summary: Summary
     player_info: PlayerInfo
 
     @staticmethod
@@ -171,27 +220,15 @@ class SaveData:
     def from_raw(raw: SaveDataRaw, character_encoding: CharacterEncoding) -> "SaveData":
         input_stream = io.BytesIO(raw.raw)
 
-        input_stream.read(44)
-        playtime = Playtime.from_int(int.from_bytes(input_stream.read(4), ENDIANESS))
-
-        num_party_monsters = int.from_bytes(input_stream.read(1))
-
-        input_stream.read(1)
-        player_name = character_encoding.bytes_to_string(input_stream.read(9))
-
-        party_previews = MonsterPreview.multiple_from_raw(
-            input_stream, character_encoding
-        )[0:num_party_monsters]
-        num_darkonium_times_5 = int.from_bytes(input_stream.read(1))
+        header = Header.from_sav(input_stream)
+        summary = Summary.from_sav(input_stream, character_encoding)
 
         input_stream.read(268)
         player_info = PlayerInfo.from_sav(input_stream, character_encoding)
 
         return SaveData(
-            playtime=playtime,
-            player_name=player_name,
-            party_previews=party_previews,
-            num_darkonium_times_5=num_darkonium_times_5,
+            header=header,
+            summary=summary,
             player_info=player_info,
         )
 

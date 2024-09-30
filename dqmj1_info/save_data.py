@@ -99,13 +99,65 @@ class Playtime:
 
 
 @dataclass
+class PlayerInfo:
+    player_name: str
+    gold: int
+    atm_gold: int
+    items_in_hand: List[int]  # List of 16 ids
+    item_in_bag_counts: List[int]  # List of counts (256 entries)
+    num_darkonuium_times_5: int
+    playtime: Playtime
+    num_party_monsters: int
+    num_monsters: int
+    num_monsters_scouted: int
+    num_battles_won: int
+    num_times_synthesized: int
+
+    @staticmethod
+    def from_sav(
+        input_stream: IO[bytes], character_encoding: CharacterEncoding
+    ) -> "PlayerInfo":
+        player_name = character_encoding.bytes_to_string(input_stream.read(12))
+        gold = int.from_bytes(input_stream.read(4), ENDIANESS)
+        atm_gold = int.from_bytes(input_stream.read(4), ENDIANESS)
+        items_in_hand = [b for b in input_stream.read(16)]
+        item_in_bag_counts = [b for b in input_stream.read(256)]
+        num_darkonuium_times_5 = int.from_bytes(input_stream.read(1))
+        input_stream.read(3)
+        playtime = Playtime.from_int(int.from_bytes(input_stream.read(4), ENDIANESS))
+        num_party_monsters = int.from_bytes(input_stream.read(1))
+        num_monsters = int.from_bytes(input_stream.read(1))
+        input_stream.read(290)
+        num_monsters_scouted = int.from_bytes(input_stream.read(4), ENDIANESS)
+        input_stream.read(4)
+        input_stream.read(4)
+        num_battles_won = int.from_bytes(input_stream.read(4), ENDIANESS)
+        num_times_synthesized = int.from_bytes(input_stream.read(4), ENDIANESS)
+        input_stream.read(640)
+
+        return PlayerInfo(
+            player_name=player_name,
+            gold=gold,
+            atm_gold=atm_gold,
+            items_in_hand=items_in_hand,
+            item_in_bag_counts=item_in_bag_counts,
+            num_darkonuium_times_5=num_darkonuium_times_5,
+            playtime=playtime,
+            num_party_monsters=num_party_monsters,
+            num_monsters=num_monsters,
+            num_monsters_scouted=num_monsters_scouted,
+            num_battles_won=num_battles_won,
+            num_times_synthesized=num_times_synthesized,
+        )
+
+
+@dataclass
 class SaveData:
     playtime: Playtime
     player_name: str
     party_previews: List[MonsterPreview]
     num_darkonium_times_5: int
-    gold: int
-    atm_gold: int
+    player_info: PlayerInfo
 
     @staticmethod
     def from_sav(
@@ -132,17 +184,15 @@ class SaveData:
         )[0:num_party_monsters]
         num_darkonium_times_5 = int.from_bytes(input_stream.read(1))
 
-        input_stream.read(280)
-        gold = int.from_bytes(input_stream.read(4), ENDIANESS)
-        atm_gold = int.from_bytes(input_stream.read(4), ENDIANESS)
+        input_stream.read(268)
+        player_info = PlayerInfo.from_sav(input_stream, character_encoding)
 
         return SaveData(
             playtime=playtime,
             player_name=player_name,
             party_previews=party_previews,
             num_darkonium_times_5=num_darkonium_times_5,
-            gold=gold,
-            atm_gold=atm_gold,
+            player_info=player_info,
         )
 
 

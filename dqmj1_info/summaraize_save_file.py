@@ -64,8 +64,8 @@ def main(argv: List[str]) -> None:
                             for preview in save_data.party_previews
                         ]
                     ),
-                    "Gold": save_data.gold,
-                    "Atm": save_data.atm_gold,
+                    "Gold": save_data.player_info.gold,
+                    "Atm": save_data.player_info.atm_gold,
                     "Num darkonium times 5": save_data.num_darkonium_times_5,
                 }
             )

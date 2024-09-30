@@ -28,7 +28,7 @@ name party_monster_names[3] @ 0x3E;
 
 u16 party_monster_species_ids[3] @ 0x62;
 u8 party_monster_levels[3] @ 0x68;
-u8 unknown_cdc @ 0x6B;
+u8 num_darkonium_times_5 @ 0x6B;
 u8 unknown_cdcc @ 0x6C;
 u8 unknown_cdccc @ 0x6D;
 u16 unknown_cdcccc @ 0x6E;

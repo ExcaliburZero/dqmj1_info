@@ -125,6 +125,24 @@ def main(argv: List[str]) -> None:
                         ("Player name", player_info.player_name),
                         ("Gold", str(player_info.gold)),
                         ("ATM gold", str(player_info.atm_gold)),
+                        (
+                            "Items in hand",
+                            f"{len([item_id for item_id in player_info.items_in_hand if item_id != 0])}",
+                        ),
+                        (
+                            "Items in bag",
+                            f"{sum(player_info.item_in_bag_counts)} (total)",
+                        ),
+                        (
+                            "Num darkonium",
+                            f"{int(player_info.num_darkonium_times_5 / 5)} ({player_info.num_darkonium_times_5})",
+                        ),
+                        (
+                            "Playtime",
+                            f"{player_info.playtime.hours}:{player_info.playtime.minutes:0>2}:{player_info.playtime.seconds:0>2}",
+                        ),
+                        ("Num party monsters", str(player_info.num_party_monsters)),
+                        ("Num monsters", str(player_info.num_monsters)),
                     ],
                 ),
             ]

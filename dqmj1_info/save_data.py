@@ -163,7 +163,7 @@ class PlayerInfo:
     atm_gold: int
     items_in_hand: List[int]  # List of 16 ids
     item_in_bag_counts: List[int]  # List of counts (256 entries)
-    num_darkonuium_times_5: int
+    num_darkonium_times_5: int
     playtime: Playtime
     num_party_monsters: int
     num_monsters: int
@@ -180,7 +180,7 @@ class PlayerInfo:
         atm_gold = int.from_bytes(input_stream.read(4), ENDIANESS)
         items_in_hand = [b for b in input_stream.read(16)]
         item_in_bag_counts = [b for b in input_stream.read(256)]
-        num_darkonuium_times_5 = int.from_bytes(input_stream.read(1))
+        num_darkonium_times_5 = int.from_bytes(input_stream.read(1))
         input_stream.read(3)
         playtime = Playtime.from_int(int.from_bytes(input_stream.read(4), ENDIANESS))
         num_party_monsters = int.from_bytes(input_stream.read(1))
@@ -199,7 +199,7 @@ class PlayerInfo:
             atm_gold=atm_gold,
             items_in_hand=items_in_hand,
             item_in_bag_counts=item_in_bag_counts,
-            num_darkonuium_times_5=num_darkonuium_times_5,
+            num_darkonium_times_5=num_darkonium_times_5,
             playtime=playtime,
             num_party_monsters=num_party_monsters,
             num_monsters=num_monsters,

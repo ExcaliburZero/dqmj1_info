@@ -15,7 +15,10 @@ struct player_info {
     u32 playtime;
     u8 num_party_monsters;
     u8 num_monsters;
-    u8 unknown_c[306];
+    u8 unknown_c[290];
+    u32 num_monsters_scouted;
+    u8 unknown_d[8];
+    u32 num_battles_won;
     u32 num_times_synthesized;
     u8 unknown[640];
 };

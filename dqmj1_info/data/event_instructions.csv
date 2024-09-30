@@ -90,7 +90,7 @@ Id,Name,Arguments,Notes
 0x58,"GivePlayerOneItem","[]",
 0x59,"GivePlayerMaxItem","[]",
 0x5A,"Cmd_0x5A","[]",
-0x5B,"Cmd_0x5B","[]",
+0x5B,"IncreaseAndGetNumDarkoniumX5","[]",
 0x5C,"Cmd_0x5C","[]",
 0x5D,"Cmd_0x5D","[]",
 0x5E,"Cmd_0x5E","[]",

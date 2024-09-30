@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 import argparse
 import csv
@@ -81,7 +81,7 @@ def main(argv: List[str]) -> None:
                 else f"(Incorrect, {hex(calculated_checksum)})"
             )
 
-            data = [
+            data: List[Tuple[str, List[Tuple[str, str | List[str]]]]] = [
                 (
                     "Header",
                     [

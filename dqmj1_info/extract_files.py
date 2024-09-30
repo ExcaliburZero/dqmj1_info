@@ -10,6 +10,7 @@ import sys
 import gooey  # type: ignore
 
 from . import ability_tbl
+from . import battle_enemy_parameters_table
 from . import btl_enmy_prm
 from . import character_encoding
 from . import d16_to_png
@@ -172,7 +173,7 @@ def main(argv: List[str], mode: UiMode) -> int:
         )
         return FAILURE
 
-    total_steps = 15
+    total_steps = 16
     steps_completed = 0
 
     ###
@@ -447,6 +448,27 @@ def main(argv: List[str], mode: UiMode) -> int:
     steps_completed += 1
     logging.info(
         f"({steps_completed}/{total_steps}) Finished creating item set table: {item_table_csv}"
+    )
+
+    ###
+    # Create battle enemy parameters table
+    ###
+    battle_enemy_parameters_table_csv = output_directory / "battle_enemy_parameters.csv"
+    battle_enemy_parameters_table.main(
+        [
+            "--strings_csv",
+            str(strings_by_table_csv),
+            "--btl_enmy_prm_csv",
+            str(btl_enmy_prm_csv),
+            "--output_csv",
+            str(battle_enemy_parameters_table_csv),
+            "--region",
+            args.region,
+        ]
+    )
+    steps_completed += 1
+    logging.info(
+        f"({steps_completed}/{total_steps}) Finished creating battle enemy parameters table: {battle_enemy_parameters_table_csv}"
     )
 
     return SUCCESS

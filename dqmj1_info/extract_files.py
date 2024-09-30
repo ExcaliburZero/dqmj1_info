@@ -10,6 +10,7 @@ import sys
 import gooey  # type: ignore
 
 from . import ability_tbl
+from . import btl_enmy_prm
 from . import character_encoding
 from . import d16_to_png
 from . import decompile_evt
@@ -171,7 +172,7 @@ def main(argv: List[str], mode: UiMode) -> int:
         )
         return FAILURE
 
-    total_steps = 14
+    total_steps = 15
     steps_completed = 0
 
     ###
@@ -310,7 +311,24 @@ def main(argv: List[str], mode: UiMode) -> int:
     )
     steps_completed += 1
     logging.info(
-        f"({steps_completed}/{total_steps}) Finished extracting ItemTbl.bin to: {skill_tbl_csv}"
+        f"({steps_completed}/{total_steps}) Finished extracting ItemTbl.bin to: {item_tbl_csv}"
+    )
+
+    ###
+    # Extract BtlEnmyPrm
+    ###
+    btl_enmy_prm_csv = output_directory / "BtlEnmyPrm.csv"
+    btl_enmy_prm.main(
+        [
+            "--table_filepath",
+            str(input_directory / "data" / "BtlEnmyPrm.bin"),
+            "--output_csv",
+            str(btl_enmy_prm_csv),
+        ]
+    )
+    steps_completed += 1
+    logging.info(
+        f"({steps_completed}/{total_steps}) Finished extracting BtlEnmyPrm.bin to: {btl_enmy_prm_csv}"
     )
 
     ###

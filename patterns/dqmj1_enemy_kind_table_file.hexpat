@@ -1,6 +1,6 @@
 // data/EnmyKindTbl.bin
 
-struct monster_data {
+struct species {
     u32 unknown_a;
     
     u8 rank_and_family; // Lower 4 bits are the rank (0x0F), higher 4 bits are the family (0xF0)
@@ -42,5 +42,10 @@ struct monster_data {
     u8 unknown[75];
 };
 
-u32 magic @ 0x0;
-monster_data monster_data[352] @ 0x8;
+struct enmy_kind_tbl {
+    u32 magic;
+    u32 size;
+    species species[size];
+};
+
+enmy_kind_tbl enmy_kind_tbl @ 0x0;

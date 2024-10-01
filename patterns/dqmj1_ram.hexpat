@@ -1,8 +1,7 @@
 #include "monster.hexpat"
+#include "player_info.hexpat"
 
 // Note: Need to set base address to 0x02000000 before loading this pattern file
-
-monster party_monsters[7] @ 0x020B3D8C; // TODO: is this all player's monsters?
 
 u32 rng_counter @ 0x020BEC98;
 u32 rng_value @ 0x020BEC9C;
@@ -101,16 +100,6 @@ unknown_struct_b start_unknown_struct_b @ 0x223DF94;
 
 u32 pos_file_pointer @ 0x224B61C;
 
-struct player_info {
-    u8 player_name[8];
-    u8 unknown_a[4];
-    u32 gold;
-    u32 atm_gold;
-    u8 items_in_hand[16];
-    u8 item_in_bag_counts[256];
-    u8 unknown_b[8];
-    u8 unknown_c[308];
-    u32 num_times_synthesized;
-};
-
 player_info player_info @ 0x020BE340;
+monster player_monsters[100] @ 0x20B3D8C;
+monster incarnus @ 0x020B2DBC;

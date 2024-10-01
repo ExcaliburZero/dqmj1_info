@@ -1,3 +1,13 @@
+import std.io;
+
+fn format_playtime(u32 raw) {
+    u32 remaining = raw & 0b111111;
+    u32 seconds = (raw >> 6) & 0b111111;
+    u32 minutes = (raw >> 12) & 0b111111;
+    u32 hours = raw >> 18;
+
+    return std::format("{}:{:0>2}:{:0>2} ({})", hours, minutes, seconds, remaining);
+};
 
 struct name {
     u8 name[9];
@@ -7,12 +17,12 @@ struct name {
 struct player_info {
     name name;
     u32 gold;
-    u32 atm;
+    u32 atm_gold;
     u8 items_in_hand[16];
     u8 item_in_bag_counts[256];
     u8 num_darkonium_times_5;
     u8 unknown_b[3];
-    u32 playtime;
+    u32 playtime [[format("format_playtime")]];
     u8 num_party_monsters;
     u8 num_monsters;
     u8 unknown_c[290];

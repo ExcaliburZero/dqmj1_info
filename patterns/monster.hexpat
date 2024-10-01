@@ -73,15 +73,14 @@ struct monster {
     u8 third_set_num_unlocked_skills;
 
     u8 unknown_20;
-    u16 unallocated_skill_points; // TODO: confirm size
+    u16 unallocated_skill_points;
     u8 skills[0x1E]; // TODO: confirm size
     u8 traits[0x1F]; // TODO: confirm size
-    // TODO: find exact location and size of third skill set skills
     u8 unknown_21[10];
     u8 level_when_hashed;
     u16 hash;
     u16 unknown_22;
     u8 scout_name[12];
     parent_monster parents[2];
-    parent_monster grandparents[4];
+    parent_monster grandparents[4]; // These have no name or scout name info
 };

@@ -30,7 +30,7 @@ class StringTable:
 
         tables = {
             MONSTER_SPECIES_NAME: list(
-                strings[strings["table_name"] == "monster_species_names"]["string"]
+                strings[strings["table_name"] == MONSTER_SPECIES_NAME]["string"]
             ),
         }
 

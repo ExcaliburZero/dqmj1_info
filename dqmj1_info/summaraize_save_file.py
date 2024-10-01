@@ -85,6 +85,9 @@ def summarize_save_file_to_cli_output(
     header = save_data.header
     summary = save_data.summary
     player_info = save_data.player_info
+    monsters = save_data.monsters
+    incarnus = save_data.incarnus
+    other = save_data.other
 
     calculated_checksum = raw.checksum
     checksum_check_string = (
@@ -158,6 +161,34 @@ def summarize_save_file_to_cli_output(
                 ("Num monsters scouted", str(player_info.num_monsters_scouted)),
                 ("Num battles won", str(player_info.num_battles_won)),
                 ("Num times synthesized", str(player_info.num_times_synthesized)),
+            ],
+        ),
+        (
+            "Monsters",
+            [
+                (
+                    str(i),
+                    f"{monsters[i].name} lv. {monsters[i].level} ({strings.get_monster_species_name(monsters[i].species_id)})",
+                )
+                for i in range(0, player_info.num_monsters)
+            ],
+        ),
+        (
+            "Incarnus",
+            [
+                (
+                    str(0),
+                    f"{incarnus.name} lv. {incarnus.level} ({strings.get_monster_species_name(incarnus.species_id)})",
+                )
+            ],
+        ),
+        (
+            "Other",
+            [
+                (
+                    "Battle enemy parameters id",
+                    str(other.battle_enemy_parameters_id),
+                )
             ],
         ),
     ]

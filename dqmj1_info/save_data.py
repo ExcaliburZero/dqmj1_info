@@ -12,6 +12,8 @@ DATA_SIZE = 10613
 DATA_CHECKSUM_START = 0xC
 DATA_CHECKSUM_END = 0xF
 
+MAX_NUM_MONSTERS = 100
+
 ENDIANESS: Literal["little"] = "little"
 
 
@@ -210,10 +212,144 @@ class PlayerInfo:
 
 
 @dataclass
+class Stats:
+    max_hp: int
+    max_mp: int
+    attack: int
+    defense: int
+    agility: int
+    wisdom: int
+
+
+@dataclass
+class SkillSet:
+    id: int
+    num_points: int
+    num_unlocked_skills: int
+
+
+@dataclass
+class Monster:
+    name: str
+    species_id: int
+    rank: int
+    family: int
+    sex: int
+    synthesis_plus_number: int
+    level: int
+    level_limit: int
+    base_stats: Stats
+    current_hp: int
+    current_mp: int
+    adjusted_stats: Stats
+    exp: int
+    tactic: int
+    equipment: int
+
+    @staticmethod
+    def from_sav(
+        input_stream: IO[bytes], character_encoding: CharacterEncoding
+    ) -> "Monster":
+        name = character_encoding.bytes_to_string(input_stream.read(12))
+        species_id = int.from_bytes(input_stream.read(2), ENDIANESS)
+        rank = int.from_bytes(input_stream.read(1))
+        family = int.from_bytes(input_stream.read(1))
+        sex = int.from_bytes(input_stream.read(1))
+        input_stream.read(3)
+        synthesis_plus_number = int.from_bytes(input_stream.read(1))
+        input_stream.read(4)
+        input_stream.read(24)
+        input_stream.read(29)
+        input_stream.read(2)
+        input_stream.read(29)
+        input_stream.read(5)
+        level = int.from_bytes(input_stream.read(1))
+        level_limit = int.from_bytes(input_stream.read(1))
+
+        base_stats = Stats(
+            max_hp=int.from_bytes(input_stream.read(2), ENDIANESS),
+            max_mp=int.from_bytes(input_stream.read(2), ENDIANESS),
+            attack=int.from_bytes(input_stream.read(2), ENDIANESS),
+            defense=int.from_bytes(input_stream.read(2), ENDIANESS),
+            agility=int.from_bytes(input_stream.read(2), ENDIANESS),
+            wisdom=int.from_bytes(input_stream.read(2), ENDIANESS),
+        )
+
+        current_hp = int.from_bytes(input_stream.read(2), ENDIANESS)
+        adjusted_max_hp = int.from_bytes(input_stream.read(2), ENDIANESS)
+        current_mp = int.from_bytes(input_stream.read(2), ENDIANESS)
+        adjusted_max_mp = int.from_bytes(input_stream.read(2), ENDIANESS)
+        adjusted_stats = Stats(
+            max_hp=adjusted_max_hp,
+            max_mp=adjusted_max_mp,
+            attack=int.from_bytes(input_stream.read(2), ENDIANESS),
+            defense=int.from_bytes(input_stream.read(2), ENDIANESS),
+            agility=int.from_bytes(input_stream.read(2), ENDIANESS),
+            wisdom=int.from_bytes(input_stream.read(2), ENDIANESS),
+        )
+
+        exp = int.from_bytes(input_stream.read(4), ENDIANESS)
+        tactic = int.from_bytes(input_stream.read(1))
+        input_stream.read(6)
+        input_stream.read(4)
+        equipment = int.from_bytes(input_stream.read(1))
+
+        input_stream.read(3 * 3)
+
+        input_stream.read(1)
+        input_stream.read(2)
+        input_stream.read(0x1E)
+        input_stream.read(0x1F)
+        input_stream.read(10)
+        input_stream.read(1)
+        input_stream.read(2)
+        input_stream.read(2)
+        input_stream.read(11)
+        input_stream.read(1)
+
+        input_stream.read(2 * (2 + 11 + 11))
+        input_stream.read(0x60)
+
+        return Monster(
+            name=name,
+            species_id=species_id,
+            rank=rank,
+            family=family,
+            sex=sex,
+            synthesis_plus_number=synthesis_plus_number,
+            level=level,
+            level_limit=level_limit,
+            base_stats=base_stats,
+            current_hp=current_hp,
+            current_mp=current_mp,
+            adjusted_stats=adjusted_stats,
+            exp=exp,
+            tactic=tactic,
+            equipment=equipment,
+        )
+
+
+@dataclass
+class Other:
+    battle_enemy_parameters_id: int
+
+    @staticmethod
+    def from_sav(input_stream: IO[bytes]) -> "Other":
+        input_stream.read(64)
+        input_stream.read(64)
+        battle_enemy_parameters_id = int.from_bytes(input_stream.read(4), ENDIANESS)
+
+        return Other(battle_enemy_parameters_id=battle_enemy_parameters_id)
+
+
+@dataclass
 class SaveData:
     header: Header
     summary: Summary
     player_info: PlayerInfo
+    monsters: List[Monster]
+    incarnus: Monster
+    other: Other
 
     @staticmethod
     def from_sav(
@@ -230,11 +366,20 @@ class SaveData:
         header = Header.from_sav(input_stream)
         summary = Summary.from_sav(input_stream, character_encoding)
         player_info = PlayerInfo.from_sav(input_stream, character_encoding)
+        monsters = [
+            Monster.from_sav(input_stream, character_encoding)
+            for _ in range(0, MAX_NUM_MONSTERS)
+        ]
+        incarnus = Monster.from_sav(input_stream, character_encoding)
+        other = Other.from_sav(input_stream)
 
         return SaveData(
             header=header,
             summary=summary,
             player_info=player_info,
+            monsters=monsters,
+            incarnus=incarnus,
+            other=other,
         )
 
 

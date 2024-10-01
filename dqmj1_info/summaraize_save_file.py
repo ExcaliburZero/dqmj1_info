@@ -155,6 +155,9 @@ def summarize_save_file_to_cli_output(
                 ),
                 ("Num party monsters", str(player_info.num_party_monsters)),
                 ("Num monsters", str(player_info.num_monsters)),
+                ("Num monsters scouted", str(player_info.num_monsters_scouted)),
+                ("Num battles won", str(player_info.num_battles_won)),
+                ("Num times synthesized", str(player_info.num_times_synthesized)),
             ],
         ),
     ]

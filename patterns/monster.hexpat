@@ -6,8 +6,7 @@ struct parent_monster {
 };
 
 struct monster {
-    u8 monster_name[0x09];
-    u8 unkown_a[0x3];
+    u8 monster_name[12];
     u16 species; // Confirmed, but does not appear to auto update rank + traits + resistances, does update family
     u8 rank; // 1=F, 2=E, 3=D, 4=C, 5=B, 6=A, 7=S, 8=X, 9=???
     u8 family;
@@ -47,7 +46,7 @@ struct monster {
     u16 base_agility;
     u16 base_wisdom;
     u16 current_hp; // This appears to be healed right after loading the game (at least at a centre)
-    u16 adjusted_max_h;
+    u16 adjusted_max_hp;
     u16 current_mp; // This appears to be healed right after loading the game (at least at a centre)
     u16 adjusted_max_mp;
     u16 adjusted_attack;
@@ -82,8 +81,7 @@ struct monster {
     u8 level_when_hashed;
     u16 hash;
     u16 unknown_22;
-    u8 scout_name[11];
-    u8 unknown_23;
+    u8 scout_name[12];
     parent_monster parents[2];
-    u8 unknown_last[0x60];
+    parent_monster grandparents[4];
 };

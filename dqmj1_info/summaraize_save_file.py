@@ -1,8 +1,10 @@
+from dataclasses import asdict
 from typing import List, Tuple
 
 import argparse
 import csv
 import glob
+import json
 import logging
 import pathlib
 import sys
@@ -19,7 +21,8 @@ def main(argv: List[str]) -> None:
         "--save_data_filepaths", required=True, nargs="+", type=pathlib.Path
     )
     parser.add_argument("--strings_csv", required=True)
-    parser.add_argument("--output_filepath", required=True, type=pathlib.Path)
+    parser.add_argument("--output_csv_filepath", required=True, type=pathlib.Path)
+    parser.add_argument("--output_json_directory", required=True, type=pathlib.Path)
     parser.add_argument("--character_encoding", required=True)
 
     args = parser.parse_args(argv)
@@ -31,11 +34,14 @@ def main(argv: List[str]) -> None:
     ]
     with open(args.strings_csv, "r", encoding="utf-8") as input_stream:
         strings = StringTable.from_csv(input_stream)
-    output_filepath: pathlib.Path = args.output_filepath
+    output_json_directory: pathlib.Path = args.output_json_directory
+    output_csv_filepath: pathlib.Path = args.output_csv_filepath
 
     character_encoding = CHARACTER_ENCODINGS[args.character_encoding]
 
-    save_data_list = []
+    output_json_directory.mkdir(exist_ok=True, parents=True)
+
+    save_data_list: List[Tuple[pathlib.Path, SaveData, SaveDataRaw]] = []
     for save_data_filepath in save_data_filepaths:
         logging.debug(f"Looking at save data file: {save_data_filepath}")
         with open(save_data_filepath, "rb") as input_stream:
@@ -52,12 +58,11 @@ def main(argv: List[str]) -> None:
         "Atm",
         "Num darkonium times 5",
     ]
-    with open(output_filepath, "w", encoding="utf-8") as output_stream:
+    with open(output_csv_filepath, "w", encoding="utf-8") as output_stream:
         writer = csv.DictWriter(output_stream, fieldnames=columns)
         writer.writeheader()
 
         for filepath, save_data, raw in save_data_list:
-
             cli_output = summarize_save_file_to_cli_output(save_data, raw, strings)
             print_cli_output(filepath, cli_output)
 
@@ -77,6 +82,13 @@ def main(argv: List[str]) -> None:
                     "Num darkonium times 5": save_data.summary.num_darkonium_times_5,
                 }
             )
+
+            with open(
+                output_json_directory / filepath.with_suffix(".json").name,
+                "w",
+                encoding="utf-8",
+            ) as output_stream:
+                json.dump(asdict(save_data), output_stream, indent=4)
 
 
 def summarize_save_file_to_cli_output(

@@ -91,18 +91,16 @@ class Playtime:
     hours: int
     minutes: int
     seconds: int
-    remaining: int
+    frames: int
 
     @staticmethod
     def from_int(raw: int) -> "Playtime":
-        remaining = raw & 0b111111
+        frames = raw & 0b111111
         seconds = (raw >> 6) & 0b111111
         minutes = (raw >> 12) & 0b111111
         hours = raw >> 18
 
-        return Playtime(
-            hours=hours, minutes=minutes, seconds=seconds, remaining=remaining
-        )
+        return Playtime(hours=hours, minutes=minutes, seconds=seconds, frames=frames)
 
 
 @dataclass
@@ -224,8 +222,43 @@ class Stats:
 @dataclass
 class SkillSet:
     id: int
-    num_points: int
+    points: int
     num_unlocked_skills: int
+
+    @staticmethod
+    def multiple_from_sav(input_stream: IO[bytes]) -> List["SkillSet"]:
+        ids = [int.from_bytes(input_stream.read(1)) for _ in range(0, 3)]
+        nums_points = [int.from_bytes(input_stream.read(1)) for _ in range(0, 3)]
+        nums_unlocked_skills = [
+            int.from_bytes(input_stream.read(1)) for _ in range(0, 3)
+        ]
+
+        return [
+            SkillSet(
+                id=ids[i],
+                points=nums_points[i],
+                num_unlocked_skills=nums_unlocked_skills[i],
+            )
+            for i in range(0, 3)
+        ]
+
+
+@dataclass
+class ParentMonster:
+    species_id: int
+    name: str
+    scout_name: str
+
+    @staticmethod
+    def from_sav(
+        input_stream: IO[bytes], character_encoding: CharacterEncoding
+    ) -> "ParentMonster":
+        species_id = int.from_bytes(input_stream.read(2), ENDIANESS)
+        name = character_encoding.bytes_to_string(input_stream.read(9))
+        input_stream.read(2)
+        scout_name = character_encoding.bytes_to_string(input_stream.read(11))
+
+        return ParentMonster(species_id=species_id, name=name, scout_name=scout_name)
 
 
 @dataclass
@@ -245,6 +278,15 @@ class Monster:
     exp: int
     tactic: int
     equipment: int
+    skill_sets: List[SkillSet]
+    unallocated_skill_points: int
+    skills: List[int]
+    traits: List[int]
+    level_when_hashed: int
+    hash: int
+    scout_name: str
+    parents: List[ParentMonster]
+    grandparents: List[ParentMonster]
 
     @staticmethod
     def from_sav(
@@ -294,21 +336,28 @@ class Monster:
         input_stream.read(4)
         equipment = int.from_bytes(input_stream.read(1))
 
-        input_stream.read(3 * 3)
+        skill_sets = SkillSet.multiple_from_sav(input_stream)
 
         input_stream.read(1)
-        input_stream.read(2)
-        input_stream.read(0x1E)
-        input_stream.read(0x1F)
+        unallocated_skill_points = int.from_bytes(input_stream.read(2), ENDIANESS)
+        skills = list(input_stream.read(30))
+        traits = list(input_stream.read(31))
         input_stream.read(10)
-        input_stream.read(1)
+        level_when_hashed = int.from_bytes(input_stream.read(1))
+        monster_hash = int.from_bytes(input_stream.read(2), ENDIANESS)
         input_stream.read(2)
-        input_stream.read(2)
-        input_stream.read(11)
-        input_stream.read(1)
+        scout_name = character_encoding.bytes_to_string(input_stream.read(12))
 
-        input_stream.read(2 * (2 + 11 + 11))
-        input_stream.read(0x60)
+        parents = [
+            ParentMonster.from_sav(input_stream, character_encoding),
+            ParentMonster.from_sav(input_stream, character_encoding),
+        ]
+        grandparents = [
+            ParentMonster.from_sav(input_stream, character_encoding),
+            ParentMonster.from_sav(input_stream, character_encoding),
+            ParentMonster.from_sav(input_stream, character_encoding),
+            ParentMonster.from_sav(input_stream, character_encoding),
+        ]
 
         return Monster(
             name=name,
@@ -326,6 +375,15 @@ class Monster:
             exp=exp,
             tactic=tactic,
             equipment=equipment,
+            skill_sets=skill_sets,
+            unallocated_skill_points=unallocated_skill_points,
+            skills=skills,
+            traits=traits,
+            level_when_hashed=level_when_hashed,
+            hash=monster_hash,
+            scout_name=scout_name,
+            parents=parents,
+            grandparents=grandparents,
         )
 
 

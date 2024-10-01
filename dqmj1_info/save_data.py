@@ -389,15 +389,15 @@ class Monster:
 
 @dataclass
 class Other:
-    battle_enemy_parameters_id: int
+    battle_enemy_parameters_value: int
 
     @staticmethod
     def from_sav(input_stream: IO[bytes]) -> "Other":
         input_stream.read(64)
         input_stream.read(64)
-        battle_enemy_parameters_id = int.from_bytes(input_stream.read(4), ENDIANESS)
+        battle_enemy_parameters_value = int.from_bytes(input_stream.read(4), ENDIANESS)
 
-        return Other(battle_enemy_parameters_id=battle_enemy_parameters_id)
+        return Other(battle_enemy_parameters_value=battle_enemy_parameters_value)
 
 
 @dataclass

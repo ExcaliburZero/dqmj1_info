@@ -198,8 +198,8 @@ def summarize_save_file_to_cli_output(
             "Other",
             [
                 (
-                    "Battle enemy parameters id",
-                    str(other.battle_enemy_parameters_id),
+                    "Battle enemy parameters value",
+                    str(other.battle_enemy_parameters_value),
                 )
             ],
         ),

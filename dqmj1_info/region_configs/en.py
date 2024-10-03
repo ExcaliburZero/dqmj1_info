@@ -93,6 +93,9 @@ REGION_CONFIGS["North America"] = RegionConfig(
                 StringAddressTable("skill_targeting_types", 0x02074A28, 0x02074A3C),
                 StringAddressTable("unknown_h", 0x02074AE8, 0x02074B2C),
                 StringAddressTable("unknown_i", 0x02074BE0, 0x02074C60),
+                StringAddressTable(
+                    "unused_gun_minigame_battle_text", 0x02083E7C, 0x02083EBC
+                ),
                 StringAddressTable("unknown_6", 0x02083F48, 0x02083F98),
                 StringAddressTable("unknown_7", 0x02083F98, 0x02084018),
                 StringAddressTable("unknown_j", 0x02084018, 0x02084118),

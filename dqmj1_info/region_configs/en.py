@@ -19,8 +19,21 @@ REGION_CONFIGS["North America"] = RegionConfig(
                 StringTable("strings_0x0208C9E8", 0x0208C9E8, 0x0208D498),
                 StringTable("strings_0x0208D6E8", 0x0208D6E8, 0x0208E718),
                 StringTable("strings_0x0208EA58", 0x0208EA58, 0x0208F9DC),
-                StringTable("strings_0x0209072C", 0x0209072C, 0x02091753),
                 StringTable("strings_0x0208FB98", 0x0208FB98, 0x020903C0),
+                StringTable("strings_0x0209072C", 0x0209072C, 0x02091754),
+                StringTable("strings_0x02091958", 0x02091958, 0x020925A4),
+                StringTable("strings_0x020929a8", 0x020929A8, 0x02093004),
+                StringTable("strings_0x02093274", 0x02093274, 0x02093D08),
+                StringTable("strings_0x02094270", 0x02094270, 0x02094E50),
+                StringTable("strings_0x02094e94", 0x02094E94, 0x02094F20),
+                StringTable("strings_0x020950a0", 0x020950A0, 0x020959A0),
+                StringTable("strings_0x02095a50", 0x02095A50, 0x02095A78),
+                StringTable("strings_0x02095a9c", 0x02095A9C, 0x02095B9C),
+                StringTable("strings_0x02095c00", 0x02095C00, 0x02095D7C),
+                StringTable("strings_0x02095da8", 0x02095DA8, 0x02096024),
+                StringTable("strings_0x0209642c", 0x0209642C, 0x02096B7C),
+                StringTable("strings_0x02096e84", 0x02096E84, 0x02097EEC),
+                StringTable("strings_0x020994e0", 0x020994E0, 0x0209B22C),
             ],
         ),
         pathlib.Path("overlay")
@@ -112,6 +125,30 @@ REGION_CONFIGS["North America"] = RegionConfig(
                 StringAddressTable("unknown_0x0208E71C", 0x0208E71C, 0x0208EA58),
                 StringAddressTable("unknown_0x0208F9E0", 0x0208F9E0, 0x0208FB98),
                 StringAddressTable("unknown_0x020903C4", 0x020903C4, 0x0209072C),
+                StringAddressTable("unknown_0x02091760", 0x02091760, 0x02091778),
+                StringAddressTable("unknown_0x02091778", 0x02091778, 0x02091798),
+                StringAddressTable("unknown_0x02091798", 0x02091798, 0x02091958),
+                StringAddressTable(
+                    "real_life_and_ingame_locations", 0x020925A8, 0x020929A8
+                ),
+                StringAddressTable("plural_item_names", 0x02093008, 0x02093274),
+                StringAddressTable(
+                    "plural_monster_species_names", 0x02093D0C, 0x02094270
+                ),
+                StringAddressTable("unknown_0x02094e58", 0x02094E58, 0x02094E5C),
+                StringAddressTable("unknown_0x02094e5c", 0x02094E5C, 0x02094E60),
+                StringAddressTable("unknown_0x02094e64", 0x02094E64, 0x02094E94),
+                StringAddressTable("unknown_0x02094f24", 0x02094F24, 0x020950A0),
+                StringAddressTable("unknown_0x020959a4", 0x020959A4, 0x02095A50),
+                StringAddressTable("unknown_0x02095a7c", 0x02095A7C, 0x02095A80),
+                StringAddressTable("keyboards", 0x02095A80, 0x02095A9C),
+                StringAddressTable("unknown_0x02095ba0", 0x02095BA0, 0x02095C00),
+                StringAddressTable("unknown_0x02095d80", 0x02095D80, 0x02095DA8),
+                StringAddressTable("item_names_abbreviated", 0x02096028, 0x0209642C),
+                StringAddressTable(
+                    "skill_set_names_abbreviated", 0x02096B80, 0x02096E84
+                ),
+                StringAddressTable("default_monster_names", 0x02097EF0, 0x020994E0),
             ],
         ),
         pathlib.Path("overlay")

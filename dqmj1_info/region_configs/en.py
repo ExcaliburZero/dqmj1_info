@@ -15,6 +15,7 @@ REGION_CONFIGS["North America"] = RegionConfig(
                 StringTable("strings_0x020735F0", 0x020735F0, 0x020749E8),
                 StringTable("strings_0x0207805C", 0x0207805C, 0x02083DE3),
                 StringTable("strings_0x02084B18", 0x02084B18, 0x0208A7B8),
+                StringTable("strings_0x0208AA60", 0x0208AA60, 0x0208C768),
                 StringTable("strings_0x0208C7AD", 0x0208C7AD, 0x0208C824),
                 StringTable("strings_0x0208C9E8", 0x0208C9E8, 0x0208D498),
                 StringTable("strings_0x0208D6E8", 0x0208D6E8, 0x0208E718),
@@ -120,6 +121,9 @@ REGION_CONFIGS["North America"] = RegionConfig(
                 StringAddressTable("unknown_0x02084018", 0x2084018, 0x2084118),
                 StringAddressTable("unknown_0x02084118", 0x2084118, 0x2084318),
                 StringAddressTable("battle_messages", 0x2084318, 0x2084B18),
+                StringAddressTable(
+                    "item_names_and_descriptions", 0x208A7E0, 0x0208AA60
+                ),
                 StringAddressTable("unknown_0x0208C824", 0x208C824, 0x208C9E8),
                 StringAddressTable("unknown_0x0208D498", 0x208D498, 0x208D6E8),
                 StringAddressTable("unknown_0x0208E71C", 0x208E71C, 0x208EA58),

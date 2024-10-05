@@ -184,7 +184,7 @@ REGION_CONFIGS["North America"] = RegionConfig(
                 StringAddressTable("unknown_0x02204420", 0x02204420, 0x02204458),
                 StringAddressTable("unknown_0x02204608", 0x02204608, 0x0220468C),
                 StringAddressTable("unknown_0x02204994", 0x02204994, 0x02204A70),
-                StringAddressTable("unknown_0x022050B4", 0x022050B4, 0x022050D4),
+                StringAddressTable("locations", 0x022050B4, 0x022050D4),
                 StringAddressTable("unknown_0x02205148", 0x02205148, 0x02205174),
                 StringAddressTable("unknown_0x02205304", 0x02205304, 0x0220533C),
                 StringAddressTable("unknown_0x02205448", 0x02205448, 0x02205450),

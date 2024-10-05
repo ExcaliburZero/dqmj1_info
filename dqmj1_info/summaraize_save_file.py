@@ -57,6 +57,7 @@ def main(argv: List[str]) -> None:
         "Gold",
         "Atm",
         "Num darkonium times 5",
+        "Current island",
     ]
     with open(output_csv_filepath, "w", encoding="utf-8") as output_stream:
         writer = csv.DictWriter(output_stream, fieldnames=columns)
@@ -80,6 +81,7 @@ def main(argv: List[str]) -> None:
                     "Gold": save_data.player_info.gold,
                     "Atm": save_data.player_info.atm_gold,
                     "Num darkonium times 5": save_data.summary.num_darkonium_times_5,
+                    "Current island": save_data.summary.current_island,
                 }
             )
 
@@ -128,6 +130,10 @@ def summarize_save_file_to_cli_output(
                 (
                     "Playtime",
                     f"{summary.playtime.hours}:{summary.playtime.minutes:0>2}:{summary.playtime.seconds:0>2}",
+                ),
+                (
+                    "Current island",
+                    f"{strings.get_location(summary.current_island - 1)} ({summary.current_island})",
                 ),
                 (
                     "Player name",

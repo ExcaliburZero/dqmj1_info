@@ -125,6 +125,7 @@ class Header:
 @dataclass
 class Summary:
     playtime: Playtime
+    current_island: int
     player_name: str
     party_monsters: List[MonsterPreview]
     num_darkonium_times_5: int
@@ -138,7 +139,7 @@ class Summary:
 
         num_party_monsters = int.from_bytes(input_stream.read(1))
 
-        input_stream.read(1)
+        current_island = int.from_bytes(input_stream.read(1))
         player_name = character_encoding.bytes_to_string(input_stream.read(9))
 
         party_monsters = MonsterPreview.multiple_from_raw(
@@ -150,6 +151,7 @@ class Summary:
 
         return Summary(
             playtime=playtime,
+            current_island=current_island,
             player_name=player_name,
             party_monsters=party_monsters,
             num_darkonium_times_5=num_darkonium_times_5,

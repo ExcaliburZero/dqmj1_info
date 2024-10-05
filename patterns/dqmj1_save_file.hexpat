@@ -25,7 +25,7 @@ struct summary {
     u8 unknown_b[12];
     u32 playtime [[format("format_playtime")]];
     u8 num_party_monsters;
-    u8 unknown_c;
+    u8 current_island;
     u8 player_name[9];
     monster_previews party_monster_previews;
     u8 num_darkonium_times_5;

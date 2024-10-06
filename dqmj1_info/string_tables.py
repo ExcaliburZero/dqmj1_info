@@ -4,6 +4,8 @@ import pandas as pd
 
 MONSTER_SPECIES_NAME = "monster_species_names"
 LOCATION = "locations"
+ITEM = "item_names"
+SKILL_SET = "skill_set_names"
 
 
 class StringTable:
@@ -15,12 +17,24 @@ class StringTable:
             MONSTER_SPECIES_NAME, "monster species", species_id
         )
 
+    def get_item_name(self, item: int) -> str:
+        return self.__get_from_table(ITEM, "item", item)
+
+    def get_skill_set_name(self, skill_set: int) -> str:
+        return self.__get_from_table(SKILL_SET, "skill set", skill_set)
+
     def get_location(self, location: int) -> str:
         return self.__get_from_table(LOCATION, "location", location)
 
     def __get_from_table(
         self, table_name: str, table_description: str, index: int
     ) -> str:
+        if table_name not in self.tables:
+            raise ValueError(
+                f'Could not find table "{table_name}". Known tables are:\n\t'
+                + "\n\t".join(sorted(self.tables.keys()))
+            )
+
         if len(self.tables[table_name]) == 0:
             raise ValueError(f'String table "{table_name}" has no entries.')
 
@@ -41,6 +55,8 @@ class StringTable:
         tables = {
             MONSTER_SPECIES_NAME: extract_table(MONSTER_SPECIES_NAME),
             LOCATION: extract_table(LOCATION),
+            ITEM: extract_table(ITEM),
+            SKILL_SET: extract_table(SKILL_SET),
         }
 
         return StringTable(tables)

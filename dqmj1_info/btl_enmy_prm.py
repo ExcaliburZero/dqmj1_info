@@ -11,8 +11,24 @@ ENDIANESS: Literal["little"] = "little"
 
 
 @dataclass
+class ItemDrop:
+    item_id: int
+    chance_denominator_2_power: int
+
+    @staticmethod
+    def from_bin(input_stream: IO[bytes]) -> "ItemDrop":
+        item_id = int.from_bytes(input_stream.read(2), ENDIANESS)
+        chance_denominator_2_power = int.from_bytes(input_stream.read(2), ENDIANESS)
+
+        return ItemDrop(
+            item_id=item_id, chance_denominator_2_power=chance_denominator_2_power
+        )
+
+
+@dataclass
 class BtlEnmyPrmEntry:
     species_id: int
+    item_drops: List[ItemDrop]
     level: int
     max_hp: int
     max_mp: int
@@ -26,7 +42,12 @@ class BtlEnmyPrmEntry:
     def from_bin(input_stream: IO[bytes]) -> "BtlEnmyPrmEntry":
         species_id = int.from_bytes(input_stream.read(2), ENDIANESS)
 
-        input_stream.read(46)
+        input_stream.read(30)
+        item_drops = [
+            ItemDrop.from_bin(input_stream),
+            ItemDrop.from_bin(input_stream),
+        ]
+        input_stream.read(8)
         level = int.from_bytes(input_stream.read(2), ENDIANESS)
 
         input_stream.read(2)
@@ -44,6 +65,7 @@ class BtlEnmyPrmEntry:
 
         return BtlEnmyPrmEntry(
             species_id=species_id,
+            item_drops=item_drops,
             level=level,
             max_hp=max_hp,
             max_mp=max_mp,

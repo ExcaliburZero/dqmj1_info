@@ -29,6 +29,8 @@ class ItemDrop:
 class BtlEnmyPrmEntry:
     species_id: int
     item_drops: List[ItemDrop]
+    gold: int
+    exp: int
     level: int
     max_hp: int
     max_mp: int
@@ -47,7 +49,10 @@ class BtlEnmyPrmEntry:
             ItemDrop.from_bin(input_stream),
             ItemDrop.from_bin(input_stream),
         ]
-        input_stream.read(8)
+        gold = int.from_bytes(input_stream.read(2), ENDIANESS)
+        input_stream.read(2)
+        exp = int.from_bytes(input_stream.read(2), ENDIANESS)
+        input_stream.read(2)
         level = int.from_bytes(input_stream.read(2), ENDIANESS)
 
         input_stream.read(2)
@@ -66,6 +71,8 @@ class BtlEnmyPrmEntry:
         return BtlEnmyPrmEntry(
             species_id=species_id,
             item_drops=item_drops,
+            gold=gold,
+            exp=exp,
             level=level,
             max_hp=max_hp,
             max_mp=max_mp,

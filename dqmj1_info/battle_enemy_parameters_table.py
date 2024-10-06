@@ -61,6 +61,8 @@ def main(argv: List[str]) -> None:
                     if not pd.isnull(strings.get_skill_set_name(t))
                     and strings.get_skill_set_name(t) != ""
                 ],
+                row["gold"],
+                row["exp"],
                 ", ".join(
                     [
                         " ".join(
@@ -91,6 +93,8 @@ def main(argv: List[str]) -> None:
             "agility",
             "wisdom",
             "skill_sets",
+            "gold",
+            "exp",
             "item_drops",
         ],
     )

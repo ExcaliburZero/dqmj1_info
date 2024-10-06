@@ -10,7 +10,10 @@ struct BtlEnmyPrmEntry {
     u16 species_id;
     u8 unknown_a[30];
     item_drop item_drops[2];
-    u8 unknown_ab[8];
+    u16 gold;
+    u16 unknown_ab;
+    u16 exp;
+    u8 unknown_abb[2];
     u16 level;
     u8 unknown_b[2];
     u16 max_hp;

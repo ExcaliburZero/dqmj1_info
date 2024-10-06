@@ -356,7 +356,7 @@ def main(argv: List[str], mode: UiMode) -> int:
     decompile_evt.main(
         [
             "--evt_filepaths",
-            *sorted(glob.glob(str(input_directory / "data" / "*.evt"))),
+            *sorted(glob.glob(str(input_directory / "data" / "*.ev*"))),
             *sorted(glob.glob(str(fpk_extracted_files_dir / "*.ev*"))),
             "--output_directory",
             str(scripts_dir),

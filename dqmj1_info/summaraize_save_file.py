@@ -176,6 +176,26 @@ def summarize_save_file_to_cli_output(
                 ),
                 ("Num party monsters", str(player_info.num_party_monsters)),
                 ("Num monsters", str(player_info.num_monsters)),
+                (
+                    "Party monsters indicies",
+                    ", ".join((str(i) for i in player_info.party_monster_indicies)),
+                ),
+                (
+                    "Num species encountered",
+                    str(sum((1 if b else 0 for b in player_info.species_encountered))),
+                ),
+                (
+                    "Num species defeated",
+                    str(sum((1 if b else 0 for b in player_info.species_defeated))),
+                ),
+                (
+                    "Num species obtained",
+                    str(sum((1 if b else 0 for b in player_info.species_obtained))),
+                ),
+                (
+                    "Player skills",
+                    ", ".join((str(i) for i in player_info.player_skills)),
+                ),
                 ("Num monsters scouted", str(player_info.num_monsters_scouted)),
                 ("Num battles won", str(player_info.num_battles_won)),
                 ("Num times synthesized", str(player_info.num_times_synthesized)),

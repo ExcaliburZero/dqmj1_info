@@ -25,7 +25,14 @@ struct player_info {
     u32 playtime [[format("format_playtime")]];
     u8 num_party_monsters;
     u8 num_monsters;
-    u8 unknown_c[290];
+    u8 party_monster_indicies[3];
+    u8 species_encountered[45];
+    u8 species_defeated[45];
+    u8 species_obtained[45];
+    u8 skill_library[121];
+    u8 unknown_c[10];
+    u8 player_skills;
+    u8 unknown_cd[20];
     u32 num_monsters_scouted;
     u8 unknown_d[8];
     u32 num_battles_won;

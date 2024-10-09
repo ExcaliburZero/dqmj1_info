@@ -169,6 +169,12 @@ class PlayerInfo:
     playtime: Playtime
     num_party_monsters: int
     num_monsters: int
+    party_monster_indicies: List[int]
+    species_encountered: List[bool]
+    species_defeated: List[bool]
+    species_obtained: List[bool]
+    skill_library: List[int]
+    player_skills: List[bool]
     num_monsters_scouted: int
     num_battles_won: int
     num_times_synthesized: int
@@ -187,7 +193,14 @@ class PlayerInfo:
         playtime = Playtime.from_int(int.from_bytes(input_stream.read(4), ENDIANESS))
         num_party_monsters = int.from_bytes(input_stream.read(1))
         num_monsters = int.from_bytes(input_stream.read(1))
-        input_stream.read(290)
+        party_monster_indicies = [b for b in input_stream.read(3)]
+        species_encountered = PlayerInfo.bits_from_bytes(input_stream.read(45), 360)
+        species_defeated = PlayerInfo.bits_from_bytes(input_stream.read(45), 360)
+        species_obtained = PlayerInfo.bits_from_bytes(input_stream.read(45), 360)
+        skill_library = [b for b in input_stream.read(121)]
+        input_stream.read(10)
+        player_skills = PlayerInfo.bits_from_bytes(input_stream.read(1), 4)
+        input_stream.read(20)
         num_monsters_scouted = int.from_bytes(input_stream.read(4), ENDIANESS)
         input_stream.read(4)
         input_stream.read(4)
@@ -205,10 +218,26 @@ class PlayerInfo:
             playtime=playtime,
             num_party_monsters=num_party_monsters,
             num_monsters=num_monsters,
+            party_monster_indicies=party_monster_indicies,
+            species_encountered=species_encountered,
+            species_defeated=species_defeated,
+            species_obtained=species_obtained,
+            skill_library=skill_library,
+            player_skills=player_skills,
             num_monsters_scouted=num_monsters_scouted,
             num_battles_won=num_battles_won,
             num_times_synthesized=num_times_synthesized,
         )
+
+    @staticmethod
+    def bits_from_bytes(bs: bytes, num_bits: int) -> List[bool]:
+        def get_bit(b: int, x: int) -> bool:
+            mask = 2**x
+            masked: int = b & mask
+            shifted = masked >> x
+            return shifted == 1
+
+        return [get_bit(bs[int(i / 8)], i % 8) for i in range(0, num_bits)]
 
 
 @dataclass

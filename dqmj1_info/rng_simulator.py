@@ -81,15 +81,17 @@ def main(argv: List[str]) -> int:
 
     args = parser.parse_args(argv)
 
+    num_iterations = 10000000
+
     rng = Rng(value=args.start_value, counter=args.start_counter)
-    monobit_results = monobit_test(rng, 1000000, 100000)
+    monobit_results = monobit_test(rng, num_iterations, int(num_iterations / 10))
     print("monobit:", monobit_results[0])
     for i, r in monobit_results[1]:
         print(f"\t{i}\t{r}")
     print(rng)
 
     rng = Rng(value=args.start_value, counter=args.start_counter)
-    perbit_results = perbit_test(rng, 1000000)
+    perbit_results = perbit_test(rng, num_iterations)
     print("perbit:")
     for b in range(0, 32):
         print(f"{b}\t{perbit_results[b]}")

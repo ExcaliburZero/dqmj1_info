@@ -23,3 +23,7 @@ dqmj1_extract_files --input_directory ../NDS_UNPACK_DQMJ1 --output_directory cur
 
 ### Creating a new release
 For instructions on how to create a new release, see: [RELEASE.md](RELEASE.md)
+
+## Thanks
+* Friks and Bonnford from the DQMJ Speedrunning Discord server for helping to interpret extracted game data and many other things.
+* axx1611 for the work that they did on an open source Japanese save editor for DQMJ1. They identified many parts of the save file format that I did not figure out. ([original repo](https://github.com/axx1611/dqmjse), [fork with additional info and a compiled exe](https://github.com/ExcaliburZero/dqmjse))

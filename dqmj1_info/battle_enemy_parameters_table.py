@@ -2,7 +2,6 @@ from typing import List
 
 import argparse
 import ast
-import logging
 import sys
 
 import pandas as pd
@@ -18,7 +17,6 @@ def main(argv: List[str]) -> None:
     parser.add_argument("--strings_csv", required=True)
     parser.add_argument("--btl_enmy_prm_csv", required=True)
     parser.add_argument("--output_csv", required=True)
-    parser.add_argument("--region", required=True)
 
     args = parser.parse_args(argv)
 
@@ -26,13 +24,6 @@ def main(argv: List[str]) -> None:
         strings = StringTable.from_csv(input_stream)
 
     btl_enmy_prm = pd.read_csv(args.btl_enmy_prm_csv)
-    region = args.region
-
-    if region == "Japan":
-        logging.warning(
-            "Battle enemy parameters table creation does not currently support the Japan region. Skipping."
-        )
-        return
 
     btl_enmy_prm["skill_set_ids"] = btl_enmy_prm["skill_set_ids"].apply(
         lambda x: ast.literal_eval(x)

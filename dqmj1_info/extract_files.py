@@ -462,8 +462,6 @@ def main(argv: List[str], mode: UiMode) -> int:
             str(btl_enmy_prm_csv),
             "--output_csv",
             str(battle_enemy_parameters_table_csv),
-            "--region",
-            args.region,
         ]
     )
     steps_completed += 1

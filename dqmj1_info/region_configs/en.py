@@ -82,8 +82,8 @@ REGION_CONFIGS["North America"] = RegionConfig(
         / "overlay_0002.bin": (
             0x021A0A00,
             [
-                StringTable("strings_0x02209f70", 0x02209F70, 0x0220BC2C),
                 StringTable("strings_0x02209be8", 0x02209BE8, 0x02209CC4),
+                StringTable("strings_0x02209f70", 0x02209F70, 0x0220BC2C),
             ],
         ),
     },

@@ -13,8 +13,13 @@ struct monster {
     u8 sex; // 0=+, 1=-, 2=+-
     u8 unknown_d[3];
     u8 synthesis_plus_number;
-    u8 unknown_de[4];
-    u8 unknown_e[24];
+    u8 experience_indicies[4];
+    u8 max_hp_indicies[4];
+    u8 max_mp_indicies[4];
+    u8 attack_indicies[4];
+    u8 defense_indicies[4];
+    u8 agility_indicies[4];
+    u8 wisdom_indicies[4];
     u8 unknown_f;
     u8 base_resistances[31];
     u8 adjusted_resistances[31];
@@ -73,7 +78,7 @@ struct monster {
     u16 unallocated_skill_points;
     u8 skills[30];
     u8 traits[40];
-    u8 unknown_21;
+    u8 is_invalid;
     u8 level_when_hashed;
     u16 hash;
     u16 unknown_22;

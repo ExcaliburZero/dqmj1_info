@@ -78,6 +78,14 @@ REGION_CONFIGS["North America"] = RegionConfig(
                 StringTable("strings_0x0220663C", 0x0220663C, 0x02207FB8),
             ],
         ),
+        pathlib.Path("overlay")
+        / "overlay_0002.bin": (
+            0x021A0A00,
+            [
+                StringTable("strings_0x02209f70", 0x02209F70, 0x0220BC2C),
+                StringTable("strings_0x02209be8", 0x02209BE8, 0x02209CC4),
+            ],
+        ),
     },
     string_address_tables={
         pathlib.Path("arm9.bin"): (
@@ -218,6 +226,14 @@ REGION_CONFIGS["North America"] = RegionConfig(
                     "monster_and_skill_library_interface", 0x0220549C, 0x02205524
                 ),
                 StringAddressTable("saving", 0x022057DC, 0x02205814),
+            ],
+        ),
+        pathlib.Path("overlay")
+        / "overlay_0002.bin": (
+            0x021A0A00,
+            [
+                StringAddressTable("unknown_0x02209ccc", 0x02209CCC, 0x02209CEC),
+                StringAddressTable("unknown_0x02209cec", 0x02209CEC, 0x02209F70),
             ],
         ),
     },

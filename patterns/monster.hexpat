@@ -15,10 +15,11 @@ struct monster {
     u8 synthesis_plus_number;
     u8 unknown_de[4];
     u8 unknown_e[24];
-    u8 unknown_f[29];
-    u8 unknown_f2[2];
-    u8 unknown_g[29];
-    u8 unknown_g2[5];
+    u8 unknown_f;
+    u8 base_resistances[31];
+    u8 adjusted_resistances[31];
+    u8 source;
+    u8 status;
     
     u8 level; // Confirmed
     u8 level_limit;
@@ -57,26 +58,22 @@ struct monster {
     u32 exp; // TODO: confirm the size
     // Note: Exp to next level is not stored, it is re-calculated based on the monster's level
     u8 tactic;
-    u8 unknown_17[0x6];
-    u8 unknown_18[0x4];
+    u8 unknown_17[3];
+    u8 growth_type;
+    u8 growth_level[2];
+    u32 ability_mask;
     u8 equipment;
 
-    // Skill sets // TODO: change to arrays of 3 elements
-    u8 first_skill_set_id;
-    u8 second_skill_set_id;
-    u8 third_skill_set_id;
-    u8 first_skill_set_points;
-    u8 second_skill_set_points;
-    u8 third_skill_set_points;
-    u8 first_set_num_unlocked_skills;
-    u8 second_set_num_unlocked_skills;
-    u8 third_set_num_unlocked_skills;
+    // Skill sets
+    u8 skill_set_ids[3];
+    u8 skill_set_points[3];
+    u8 set_num_unlocked_skills[3];
 
     u8 unknown_20;
     u16 unallocated_skill_points;
-    u8 skills[0x1E]; // TODO: confirm size
-    u8 traits[0x1F]; // TODO: confirm size
-    u8 unknown_21[10];
+    u8 skills[30];
+    u8 traits[40];
+    u8 unknown_21;
     u8 level_when_hashed;
     u16 hash;
     u16 unknown_22;

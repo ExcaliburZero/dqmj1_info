@@ -95,6 +95,20 @@ struct unknown_struct_b {
     u32 unknown_3[268]; // size unclear
 };
 
+struct monster_info_mini {
+    u16 species_id;
+    u16 sex;
+    u16 max_hp;
+    u16 max_mp;
+    u16 attack;
+    u16 defense;
+    u16 agility;
+    u16 wisdom;
+    u16 tactic;
+    u16 equipment;
+};
+
+monster_info_mini monster_info_unknown[3] @ 0x0206ba1c;
 
 unknown_struct_b start_unknown_struct_b @ 0x223DF94;
 

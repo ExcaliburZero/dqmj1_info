@@ -6,6 +6,8 @@ MONSTER_SPECIES_NAME = "monster_species_names"
 LOCATION = "locations"
 ITEM = "item_names"
 SKILL_SET = "skill_set_names"
+SKILL = "skill_names"
+TRAIT = "trait_names"
 
 
 class StringTable:
@@ -22,6 +24,12 @@ class StringTable:
 
     def get_skill_set_name(self, skill_set: int) -> str:
         return self.__get_from_table(SKILL_SET, "skill set", skill_set)
+
+    def get_skill_name(self, skill: int) -> str:
+        return self.__get_from_table(SKILL, "skill", skill)
+
+    def get_trait_name(self, trait: int) -> str:
+        return self.__get_from_table(TRAIT, "trait", trait)
 
     def get_location(self, location: int) -> str:
         return self.__get_from_table(LOCATION, "location", location)
@@ -57,6 +65,8 @@ class StringTable:
             LOCATION: extract_table(LOCATION),
             ITEM: extract_table(ITEM),
             SKILL_SET: extract_table(SKILL_SET),
+            SKILL: extract_table(SKILL),
+            TRAIT: extract_table(TRAIT),
         }
 
         return StringTable(tables)

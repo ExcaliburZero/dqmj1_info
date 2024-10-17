@@ -15,6 +15,7 @@ class SkillSet:
     skill_set_id: int
     skill_point_requirements: List[int]
     skill_ids: List[int]
+    trait_ids: List[List[int]]
 
     @staticmethod
     def from_bin(i: int, input_stream: IO[bytes]) -> "SkillSet":
@@ -38,12 +39,20 @@ class SkillSet:
 
             skill_ids.append(skill_id)
 
-        input_stream.read(0x4C)
+        trait_ids = []
+        for _ in range(0, 10):
+            trait_id_list = [int.from_bytes(input_stream.read(1)) for _ in range(0, 4)]
+            trait_id_list = [i for i in trait_id_list if i != 0]
+
+            trait_ids.append(trait_id_list)
+
+        input_stream.read(36)
 
         return SkillSet(
             skill_set_id=i,
             skill_point_requirements=skill_point_requirements,
             skill_ids=skill_ids,
+            trait_ids=trait_ids,
         )
 
     @staticmethod

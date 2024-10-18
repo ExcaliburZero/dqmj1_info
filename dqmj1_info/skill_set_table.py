@@ -33,6 +33,9 @@ def main(argv: List[str]) -> None:
         )
         return
 
+    skill_tbl["species_learnt_by"] = skill_tbl["species_learnt_by"].apply(
+        lambda x: ast.literal_eval(x)
+    )
     skill_tbl["skill_point_requirements"] = skill_tbl["skill_point_requirements"].apply(
         lambda x: ast.literal_eval(x)
     )
@@ -45,6 +48,17 @@ def main(argv: List[str]) -> None:
             (
                 row["skill_set_id"],
                 strings.get_skill_set_name(row["skill_set_id"]),
+                "Yes" if row["can_upgrade"] > 0 else "No",
+                row["category"],
+                row["max_skill_points"],
+                [
+                    (
+                        strings.get_monster_species_name(species_id)
+                        if species_id != 0
+                        else ""
+                    )
+                    for species_id in row["species_learnt_by"]
+                ],
                 row["skill_point_requirements"],
                 row["skill_ids"],
                 [
@@ -70,6 +84,10 @@ def main(argv: List[str]) -> None:
         columns=[
             "id",
             "name",
+            "can_upgrade",
+            "category",
+            "max_skill_points",
+            "species_learnt_by",
             "skill_point_requirements",
             "skill_ids",
             "skill_names",

@@ -13,14 +13,20 @@ ENDIANESS: Literal["little"] = "little"
 @dataclass
 class SkillSet:
     skill_set_id: int
+    can_upgrade: int
+    category: int
+    max_skill_points: int
     skill_point_requirements: List[int]
     skill_ids: List[List[int]]
     trait_ids: List[List[int]]
+    species_learnt_by: List[int]
 
     @staticmethod
     def from_bin(i: int, input_stream: IO[bytes]) -> "SkillSet":
+        can_upgrade = int.from_bytes(input_stream.read(1))
+        category = int.from_bytes(input_stream.read(1))
+        max_skill_points = int.from_bytes(input_stream.read(1))
         input_stream.read(1)
-        input_stream.read(3)
 
         skill_point_requirements = []
         for _ in range(0, 10):
@@ -47,13 +53,23 @@ class SkillSet:
 
             trait_ids.append(trait_id_list)
 
-        input_stream.read(36)
+        input_stream.read(2)  # Skill set id
+        input_stream.read(2)
+        species_learnt_by = [
+            int.from_bytes(input_stream.read(2), ENDIANESS) for _ in range(0, 6)
+        ]
+        species_learnt_by = [i for i in species_learnt_by if i != 0]
+        input_stream.read(20)
 
         return SkillSet(
             skill_set_id=i,
+            can_upgrade=can_upgrade,
+            category=category,
+            max_skill_points=max_skill_points,
             skill_point_requirements=skill_point_requirements,
             skill_ids=skill_ids,
             trait_ids=trait_ids,
+            species_learnt_by=species_learnt_by,
         )
 
     @staticmethod

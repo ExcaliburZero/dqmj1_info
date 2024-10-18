@@ -42,12 +42,22 @@ def main(argv: List[str]) -> None:
     skill_tbl["skill_ids"] = skill_tbl["skill_ids"].apply(lambda x: ast.literal_eval(x))
     skill_tbl["trait_ids"] = skill_tbl["trait_ids"].apply(lambda x: ast.literal_eval(x))
 
+    def extract_skill_set_description(name_and_description: str) -> str:
+        parts = name_and_description.split("\\n")
+        if len(parts) < 2:
+            return name_and_description
+
+        return " ".join(parts[1:])
+
     data_raw = []
     for _, row in skill_tbl.iterrows():
         data_raw.append(
             (
                 row["skill_set_id"],
                 strings.get_skill_set_name(row["skill_set_id"]),
+                extract_skill_set_description(
+                    strings.get_skill_set_description(row["skill_set_id"])
+                ),
                 "Yes" if row["can_upgrade"] > 0 else "No",
                 row["category"],
                 row["max_skill_points"],
@@ -84,6 +94,7 @@ def main(argv: List[str]) -> None:
         columns=[
             "id",
             "name",
+            "description",
             "can_upgrade",
             "category",
             "max_skill_points",

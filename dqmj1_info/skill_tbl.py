@@ -14,7 +14,7 @@ ENDIANESS: Literal["little"] = "little"
 class SkillSet:
     skill_set_id: int
     skill_point_requirements: List[int]
-    skill_ids: List[int]
+    skill_ids: List[List[int]]
     trait_ids: List[List[int]]
 
     @staticmethod
@@ -31,13 +31,14 @@ class SkillSet:
 
         skill_ids = []
         for _ in range(0, 10):
-            skill_id = int.from_bytes(input_stream.read(2), ENDIANESS)
-            input_stream.read(2)
-            input_stream.read(2)
-            input_stream.read(2)
+            skill_ids_list = [
+                int.from_bytes(input_stream.read(2), ENDIANESS) for _ in range(0, 4)
+            ]
+            skill_ids_list = [i for i in skill_ids_list if i != 0]
+
             input_stream.read(4)
 
-            skill_ids.append(skill_id)
+            skill_ids.append(skill_ids_list)
 
         trait_ids = []
         for _ in range(0, 10):

@@ -48,8 +48,11 @@ def main(argv: List[str]) -> None:
                 row["skill_point_requirements"],
                 row["skill_ids"],
                 [
-                    strings.get_skill_name(skill_id) if skill_id != 0 else ""
-                    for skill_id in row["skill_ids"]
+                    [
+                        strings.get_skill_name(skill_id) if skill_id != 0 else ""
+                        for skill_id in skill_ids
+                    ]
+                    for skill_ids in row["skill_ids"]
                 ],
                 row["trait_ids"],
                 [

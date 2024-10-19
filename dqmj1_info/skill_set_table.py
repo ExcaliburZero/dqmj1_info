@@ -47,7 +47,7 @@ def main(argv: List[str]) -> None:
         if len(parts) < 2:
             return name_and_description
 
-        return " ".join(parts[1:])
+        return " ".join(parts[1:]).replace("  ", " ")
 
     data_raw = []
     for _, row in skill_tbl.iterrows():

@@ -1,4 +1,4 @@
-from typing import List, Tuple, Union
+from typing import List, Set, Tuple
 
 import argparse
 import ast
@@ -52,18 +52,27 @@ def main(argv: List[str]) -> None:
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--skill_sets_csv", required=True)
+    parser.add_argument("--string_tables_csv", required=True)
     parser.add_argument("--output_directory", type=pathlib.Path, required=True)
 
     args = parser.parse_args(argv)
 
     skill_sets = pd.read_csv(args.skill_sets_csv)
+    string_tables = pd.read_csv(args.string_tables_csv)
     output_directory = args.output_directory
 
     assert isinstance(output_directory, pathlib.Path)
 
     output_directory.mkdir(exist_ok=True, parents=True)
 
+    monster_names = {
+        str(name).lower()
+        for name in string_tables[
+            string_tables["table_name"] == "monster_species_names"
+        ]["string"]
+    }
     skill_sets["can_upgrade"] = skill_sets["can_upgrade"] == "Yes"
+    skill_sets["name"] = [str(name) for name in skill_sets["name"]]
 
     columns_to_parse = ["skill_point_requirements", "skill_names", "trait_names"]
     for column in columns_to_parse:
@@ -101,7 +110,10 @@ def main(argv: List[str]) -> None:
                 clean_page(
                     template.substitute(
                         name=sanitize_name(row["name"]),
-                        name_escaped=sanitize_name(row["name"]) + "$",
+                        name_escaped=deregex(
+                            sanitize_name(deconflict_name(row["name"], monster_names))
+                        )
+                        + "$",
                         id=i,
                         id_with_suffix=add_number_suffix(i),
                         description=row["description"],
@@ -125,16 +137,33 @@ def main(argv: List[str]) -> None:
                         skill_9=get_skill_or_trait(skills_and_traits, 8, 1),
                         points_10=get_skill_or_trait(skills_and_traits, 9, 0),
                         skill_10=get_skill_or_trait(skills_and_traits, 9, 1),
-                        first_skillset=sanitize_name(skillset_line[0]),
-                        second_skillset=sanitize_name(skillset_line[1]),
-                        third_skillset=sanitize_name(skillset_line[2]),
+                        first_skillset=sanitize_name(
+                            deconflict_name(skillset_line[0], monster_names)
+                        ),
+                        second_skillset=sanitize_name(
+                            deconflict_name(skillset_line[1], monster_names)
+                        ),
+                        third_skillset=sanitize_name(
+                            deconflict_name(skillset_line[2], monster_names)
+                        ),
                     )
                 )
             )
 
 
-def sanitize_name(name: Union[str, int]) -> str:
+def deconflict_name(name: str, deconflict_names: Set[str]) -> str:
+    if name.lower() in deconflict_names:
+        return f"{name} (skill)"
+
+    return name
+
+
+def sanitize_name(name: str) -> str:
     return str(name).replace("Ⅱ", "II").replace("Ⅲ", "III")
+
+
+def deregex(name: str) -> str:
+    return name.replace("(", "\\(").replace(")", "\\)")
 
 
 def get_skillset_line(skill_sets: pd.DataFrame, i: int) -> Tuple[str, str, str]:

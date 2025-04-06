@@ -23,44 +23,75 @@ class Item:
     max_mp_increase: int
 
     @staticmethod
-    def from_bin(i: int, input_stream: IO[bytes]) -> "Item":
-        category = int.from_bytes(input_stream.read(1), ENDIANESS)
+    def from_bin(i: int, input_stream: IO[bytes], region: str) -> "Item":
+        if region == "Japan":
+            category = int.from_bytes(input_stream.read(1), ENDIANESS)
 
-        input_stream.read(7)
-        input_stream.read(1)
+            input_stream.read(7)
+            input_stream.read(1)
 
-        weapon_type = int.from_bytes(input_stream.read(1), ENDIANESS)
+            weapon_type = int.from_bytes(input_stream.read(1), ENDIANESS)
 
-        input_stream.read(16)
+            input_stream.read(16)
 
-        attack_increase = int.from_bytes(input_stream.read(1), ENDIANESS)
-        defense_increase = int.from_bytes(input_stream.read(1), ENDIANESS)
-        agility_increase = int.from_bytes(input_stream.read(1), ENDIANESS)
-        wisdom_increase = int.from_bytes(input_stream.read(1), ENDIANESS)
-        max_hp_increase = int.from_bytes(input_stream.read(1), ENDIANESS)
-        max_mp_increase = int.from_bytes(input_stream.read(1), ENDIANESS)
+            attack_increase = int.from_bytes(input_stream.read(1), ENDIANESS)
+            defense_increase = int.from_bytes(input_stream.read(1), ENDIANESS)
+            agility_increase = int.from_bytes(input_stream.read(1), ENDIANESS)
+            wisdom_increase = int.from_bytes(input_stream.read(1), ENDIANESS)
+            max_hp_increase = int.from_bytes(input_stream.read(1), ENDIANESS)
+            max_mp_increase = int.from_bytes(input_stream.read(1), ENDIANESS)
 
-        input_stream.read(76)
+            input_stream.read(36)
 
-        return Item(
-            item_id=i,
-            category=category,
-            weapon_type=weapon_type,
-            attack_increase=attack_increase,
-            defense_increase=defense_increase,
-            agility_increase=agility_increase,
-            wisdom_increase=wisdom_increase,
-            max_hp_increase=max_hp_increase,
-            max_mp_increase=max_mp_increase,
-        )
+            return Item(
+                item_id=i,
+                category=category,
+                weapon_type=weapon_type,
+                attack_increase=attack_increase,
+                defense_increase=defense_increase,
+                agility_increase=agility_increase,
+                wisdom_increase=wisdom_increase,
+                max_hp_increase=max_hp_increase,
+                max_mp_increase=max_mp_increase,
+            )
+        else:
+            category = int.from_bytes(input_stream.read(1), ENDIANESS)
+
+            input_stream.read(7)
+            input_stream.read(1)
+
+            weapon_type = int.from_bytes(input_stream.read(1), ENDIANESS)
+
+            input_stream.read(16)
+
+            attack_increase = int.from_bytes(input_stream.read(1), ENDIANESS)
+            defense_increase = int.from_bytes(input_stream.read(1), ENDIANESS)
+            agility_increase = int.from_bytes(input_stream.read(1), ENDIANESS)
+            wisdom_increase = int.from_bytes(input_stream.read(1), ENDIANESS)
+            max_hp_increase = int.from_bytes(input_stream.read(1), ENDIANESS)
+            max_mp_increase = int.from_bytes(input_stream.read(1), ENDIANESS)
+
+            input_stream.read(76)
+
+            return Item(
+                item_id=i,
+                category=category,
+                weapon_type=weapon_type,
+                attack_increase=attack_increase,
+                defense_increase=defense_increase,
+                agility_increase=agility_increase,
+                wisdom_increase=wisdom_increase,
+                max_hp_increase=max_hp_increase,
+                max_mp_increase=max_mp_increase,
+            )
 
     @staticmethod
-    def read_bin(input_stream: IO[bytes]) -> List["Item"]:
+    def read_bin(input_stream: IO[bytes], region: str) -> List["Item"]:
         entries = []
 
         input_stream.read(8)
         for i in range(0, 160):
-            entries.append(Item.from_bin(i, input_stream))
+            entries.append(Item.from_bin(i, input_stream, region=region))
 
         return entries
 
@@ -70,11 +101,12 @@ def main(argv: List[str]) -> None:
 
     parser.add_argument("--table_filepath", required=True)
     parser.add_argument("--output_csv", required=True)
+    parser.add_argument("--region", required=True)
 
     args = parser.parse_args(argv)
 
     with open(args.table_filepath, "rb") as input_stream:
-        table = Item.read_bin(input_stream)
+        table = Item.read_bin(input_stream, region=args.region)
 
     logging.debug(f"Read {len(table)} entries from: {args.table_filepath}")
 

@@ -308,6 +308,8 @@ def main(argv: List[str], mode: UiMode) -> int:
             str(input_directory / "data" / "ItemTbl.bin"),
             "--output_csv",
             str(item_tbl_csv),
+            "--region",
+            args.region,
         ]
     )
     steps_completed += 1

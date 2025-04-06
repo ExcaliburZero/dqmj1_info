@@ -23,12 +23,6 @@ def main(argv: List[str]) -> None:
     item_tbl = pd.read_csv(args.item_tbl_csv)
     region = args.region
 
-    if region == "Japan":
-        logging.warning(
-            "Item table creation does not currently support the Japan region. Skipping."
-        )
-        return
-
     item_names = strings[strings["table_name"] == "item_names"]
 
     def get_item_name(item_id: int) -> str:

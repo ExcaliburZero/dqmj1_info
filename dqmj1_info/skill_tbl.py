@@ -22,7 +22,7 @@ class SkillSet:
     species_learnt_by: List[int]
 
     @staticmethod
-    def from_bin(i: int, input_stream: IO[bytes]) -> "SkillSet":
+    def from_bin(i: int, input_stream: IO[bytes], region: str) -> "SkillSet":
         can_upgrade = int.from_bytes(input_stream.read(1))
         category = int.from_bytes(input_stream.read(1))
         max_skill_points = int.from_bytes(input_stream.read(1))
@@ -59,7 +59,9 @@ class SkillSet:
             int.from_bytes(input_stream.read(2), ENDIANESS) for _ in range(0, 6)
         ]
         species_learnt_by = [i for i in species_learnt_by if i != 0]
-        input_stream.read(20)
+
+        if region != "Japan":
+            input_stream.read(20)
 
         return SkillSet(
             skill_set_id=i,
@@ -73,12 +75,12 @@ class SkillSet:
         )
 
     @staticmethod
-    def read_bin(input_stream: IO[bytes]) -> List["SkillSet"]:
+    def read_bin(input_stream: IO[bytes], region: str) -> List["SkillSet"]:
         entries = []
 
         input_stream.read(8)
         for i in range(0, 0xC2):
-            entries.append(SkillSet.from_bin(i, input_stream))
+            entries.append(SkillSet.from_bin(i, input_stream, region))
 
         return entries
 
@@ -88,11 +90,12 @@ def main(argv: List[str]) -> None:
 
     parser.add_argument("--table_filepath", required=True)
     parser.add_argument("--output_csv", required=True)
+    parser.add_argument("--region", required=True)
 
     args = parser.parse_args(argv)
 
     with open(args.table_filepath, "rb") as input_stream:
-        table = SkillSet.read_bin(input_stream)
+        table = SkillSet.read_bin(input_stream, region=args.region)
 
     logging.debug(f"Read {len(table)} entries from: {args.table_filepath}")
 

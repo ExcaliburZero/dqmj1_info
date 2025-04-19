@@ -291,6 +291,8 @@ def main(argv: List[str], mode: UiMode) -> int:
             str(input_directory / "data" / "SkillTbl.bin"),
             "--output_csv",
             str(skill_tbl_csv),
+            "--region",
+            str(args.region),
         ]
     )
     steps_completed += 1

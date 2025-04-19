@@ -1,5 +1,5 @@
 Id,Name,Arguments,Notes
-0x00,"Cmd_0x00","[]",
+0x00,"Nop0","[]",
 0x01,"Cmd_0x01","[Bytes]",TODO: figure out arguments
 0x02,"Exit","[U32]",Argument seems to be unused and is always 0x0
 0x03,"Cmd_0x03","[Bytes]",TODO: figure out arguments
@@ -14,8 +14,8 @@ Id,Name,Arguments,Notes
 0x0C,"Jump","[InstructionLocation]",
 0x0D,"Cmd_0x0D","[Bytes]",TODO: figure out arguments
 0x0E,"JumpIfTrue","[InstructionLocation]",TODO: confirm this is indeed a "true" check. Which commands change that flag/value?
-0x0F,"Cmd_0x0F","[ValueLocation, U32, ValueLocation, U32]",
-0x10,"Cmd_0x10","[ValueLocation, U32, ValueLocation, U32]",
+0x0F,"SetFlagFalse","[ValueLocation, U32, ValueLocation, U32]",Parameters appear to have no effect
+0x10,"SetFlagTrue","[ValueLocation, U32, ValueLocation, U32]",Parameters appear to have no effect
 0x11,"Cmd_0x11","[ValueLocation, U32, ValueLocation, U32]",
 0x12,"Cmd_0x12","[ValueLocation, U32, ValueLocation, U32]",
 0x13,"Cmd_0x13","[ValueLocation, U32, ValueLocation, U32]",
@@ -169,7 +169,7 @@ Id,Name,Arguments,Notes
 0xA7,"Cmd_0xA7","[]",
 0xA8,"Cmd_0xA8","[]",
 0xA9,"Cmd_0xA9","[]",
-0xAA,"Nop","[Bytes]","Seems to have no effect other than updating the command pointer and setting return value to 0. Can have a value, but does not have to."
+0xAA,"NopAA","[Bytes]","Seems to have no effect other than updating the command pointer and setting return value to 0. Can have a value, but does not have to."
 0xAB,"Cmd_0xAB","[]",Does something with player monsters species'. Maybe the party monsters? Maybe it counts the number that have a matching rank or family (can't tell which).
 0xAC,"Cmd_0xAC","[]",
 0xAD,"Cmd_0xAD","[]",

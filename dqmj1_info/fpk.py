@@ -4,7 +4,7 @@ from typing import IO, Literal, Optional, OrderedDict
 import collections
 
 ENDIANESS: Literal["little"] = "little"
-FPK_MAGIC = b"\x46\x50\x4B\x00"
+FPK_MAGIC = b"\x46\x50\x4b\x00"
 
 
 @dataclass(frozen=True)

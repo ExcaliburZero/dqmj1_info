@@ -29,9 +29,8 @@ def main(argv: List[str]) -> None:
 
     if region == "Japan":
         logging.warning(
-            "Skill set table creation does not currently support the Japan region. Skipping."
+            "Skill set table creation only partially supports the Japan region."
         )
-        return
 
     skill_tbl["species_learnt_by"] = skill_tbl["species_learnt_by"].apply(
         lambda x: ast.literal_eval(x)
@@ -55,8 +54,12 @@ def main(argv: List[str]) -> None:
             (
                 row["skill_set_id"],
                 strings.get_skill_set_name(row["skill_set_id"]),
-                extract_skill_set_description(
-                    strings.get_skill_set_description(row["skill_set_id"])
+                (
+                    extract_skill_set_description(
+                        strings.get_skill_set_description(row["skill_set_id"])
+                    )
+                    if region != "Japan"
+                    else "???"
                 ),
                 "Yes" if row["can_upgrade"] > 0 else "No",
                 row["category"],
@@ -79,13 +82,17 @@ def main(argv: List[str]) -> None:
                     for skill_ids in row["skill_ids"]
                 ],
                 row["trait_ids"],
-                [
+                (
                     [
-                        strings.get_trait_name(trait_id) if trait_id != 0 else ""
-                        for trait_id in trait_ids
+                        [
+                            strings.get_trait_name(trait_id) if trait_id != 0 else ""
+                            for trait_id in trait_ids
+                        ]
+                        for trait_ids in row["trait_ids"]
                     ]
-                    for trait_ids in row["trait_ids"]
-                ],
+                    if region != "Japan"
+                    else "???"
+                ),
             )
         )
 

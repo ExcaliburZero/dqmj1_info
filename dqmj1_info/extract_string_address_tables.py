@@ -26,6 +26,11 @@ def main(argv: List[str]) -> None:
 
     mined_strings = pd.read_csv(mined_strings_csv)
 
+    # Pull out to allow faster querying
+    mined_strings_dict = {
+        row["global_address"]: row for _, row in mined_strings.iterrows()
+    }
+
     string_locations = REGION_CONFIGS[args.region].string_address_tables
 
     strings: List[Tuple[pathlib.Path, str, int, str, str, str, str, Any]] = []
@@ -56,12 +61,10 @@ def main(argv: List[str]) -> None:
                             + buffer[2] * 0x10000
                             + buffer[3] * 0x1000000
                         )
-                        matches = mined_strings[
-                            mined_strings["global_address"] == string_address
-                        ]["string"]
+                        matches = mined_strings_dict.get(string_address)
                         string = (
-                            matches.iloc[0]
-                            if len(matches) > 0
+                            matches["string"]
+                            if matches is not None
                             else "ADDRESS_NOT_FOUND_DURING_DATA_MINING"
                         )
                         strings.append(

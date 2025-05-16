@@ -26,8 +26,22 @@ class ItemDrop:
 
 
 @dataclass
+class EnemySkillEntry:
+    unknown_a: int
+    skill_id: int
+
+    @staticmethod
+    def from_bin(input_stream: IO[bytes]) -> "EnemySkillEntry":
+        unknown_a = int.from_bytes(input_stream.read(2), ENDIANESS)
+        skill_id = int.from_bytes(input_stream.read(2), ENDIANESS)
+
+        return EnemySkillEntry(unknown_a=unknown_a, skill_id=skill_id)
+
+
+@dataclass
 class BtlEnmyPrmEntry:
     species_id: int
+    skills: List[EnemySkillEntry]
     item_drops: List[ItemDrop]
     gold: int
     exp: int
@@ -44,7 +58,8 @@ class BtlEnmyPrmEntry:
     def from_bin(input_stream: IO[bytes]) -> "BtlEnmyPrmEntry":
         species_id = int.from_bytes(input_stream.read(2), ENDIANESS)
 
-        input_stream.read(30)
+        input_stream.read(6)
+        skills = [EnemySkillEntry.from_bin(input_stream) for _ in range(0, 6)]
         item_drops = [
             ItemDrop.from_bin(input_stream),
             ItemDrop.from_bin(input_stream),
@@ -53,7 +68,8 @@ class BtlEnmyPrmEntry:
         input_stream.read(2)
         exp = int.from_bytes(input_stream.read(2), ENDIANESS)
         input_stream.read(2)
-        level = int.from_bytes(input_stream.read(2), ENDIANESS)
+        level = int.from_bytes(input_stream.read(1), ENDIANESS)
+        input_stream.read(1)
 
         input_stream.read(2)
         max_hp = int.from_bytes(input_stream.read(2), ENDIANESS)
@@ -70,6 +86,7 @@ class BtlEnmyPrmEntry:
 
         return BtlEnmyPrmEntry(
             species_id=species_id,
+            skills=skills,
             item_drops=item_drops,
             gold=gold,
             exp=exp,

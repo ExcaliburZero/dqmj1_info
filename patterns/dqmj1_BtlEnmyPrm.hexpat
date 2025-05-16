@@ -5,10 +5,15 @@ struct item_drop {
     u16 chance_denominator_2_power;
 };
 
+struct Skill {
+    u16 unknown;
+    u16 skill_id;
+};
 
 struct BtlEnmyPrmEntry {
     u16 species_id;
-    u8 unknown_a[30];
+    u8 unknown_a[6];
+    Skill skills[6];
     item_drop item_drops[2];
     u16 gold;
     u16 unknown_ab;

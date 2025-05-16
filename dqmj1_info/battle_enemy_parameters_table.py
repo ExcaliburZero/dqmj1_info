@@ -25,6 +25,7 @@ def main(argv: List[str]) -> None:
 
     btl_enmy_prm = pd.read_csv(args.btl_enmy_prm_csv)
 
+    btl_enmy_prm["skills"] = btl_enmy_prm["skills"].apply(lambda x: ast.literal_eval(x))
     btl_enmy_prm["skill_set_ids"] = btl_enmy_prm["skill_set_ids"].apply(
         lambda x: ast.literal_eval(x)
     )
@@ -51,6 +52,12 @@ def main(argv: List[str]) -> None:
                     for t in row["skill_set_ids"]
                     if not pd.isnull(strings.get_skill_set_name(t))
                     and strings.get_skill_set_name(t) != ""
+                ],
+                [
+                    strings.get_skill_name(t["skill_id"])
+                    for t in row["skills"]
+                    if not pd.isnull(strings.get_skill_name(t["skill_id"]))
+                    and strings.get_skill_set_name(t["skill_id"]) != ""
                 ],
                 row["gold"],
                 row["exp"],
@@ -84,6 +91,7 @@ def main(argv: List[str]) -> None:
             "agility",
             "wisdom",
             "skill_sets",
+            "skills",
             "gold",
             "exp",
             "item_drops",

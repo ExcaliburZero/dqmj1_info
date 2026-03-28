@@ -1,25 +1,25 @@
 Id,Name,Arguments,Notes
 0x00,"Nop0","[]",
-0x01,"Cmd_0x01","[Bytes]",TODO: figure out arguments
+0x01,"UNUSED_0x01","[Bytes]",
 0x02,"Exit","[U32]",Argument seems to be unused and is always 0x0
-0x03,"Cmd_0x03","[Bytes]",TODO: figure out arguments
-0x04,"Cmd_0x04","[Bytes]",TODO: figure out arguments
-0x05,"Cmd_0x05","[Bytes]",TODO: figure out arguments
-0x06,"Cmd_0x06","[Bytes]",TODO: figure out arguments
-0x07,"Cmd_0x07","[Bytes]",TODO: figure out arguments
-0x08,"Cmd_0x08","[Bytes]",TODO: figure out arguments
-0x09,"JumpKeepBackPointer","[U32]",
+0x03,"UNUSED_0x03","[Bytes]",
+0x04,"UNUSED_0x04","[Bytes]",
+0x05,"UNUSED_0x05","[Bytes]",
+0x06,"UNUSED_0x06","[Bytes]",
+0x07,"UNUSED_0x07","[Bytes]",
+0x08,"UNUSED_0x08","[Bytes]",
+0x09,"JumpKeepBackPointer","[InstructionLocation]",
 0x0A,"StartEvent","[InstructionLocation, U32]",
 0x0B,"Cmd_0x0B","[ValueLocation, U32]",
 0x0C,"Jump","[InstructionLocation]",
-0x0D,"Cmd_0x0D","[Bytes]",TODO: figure out arguments
+0x0D,"JumpIfFalse","[InstructionLocation]",TODO: confirm this is indeed a "true" check. Which commands change that flag/value?
 0x0E,"JumpIfTrue","[InstructionLocation]",TODO: confirm this is indeed a "true" check. Which commands change that flag/value?
-0x0F,"SetFlagFalse","[ValueLocation, U32, ValueLocation, U32]",Parameters appear to have no effect
-0x10,"SetFlagTrue","[ValueLocation, U32, ValueLocation, U32]",Parameters appear to have no effect
-0x11,"Cmd_0x11","[ValueLocation, U32, ValueLocation, U32]",
-0x12,"Cmd_0x12","[ValueLocation, U32, ValueLocation, U32]",
-0x13,"Cmd_0x13","[ValueLocation, U32, ValueLocation, U32]",
-0x14,"Cmd_0x14","[ValueLocation, U32, ValueLocation, U32]",
+0x0F,"FloatsEq","[ValueLocation, U32, ValueLocation, U32]",TODO: confirm
+0x10,"FloatsNeq","[ValueLocation, U32, ValueLocation, U32]",TODO: confirm
+0x11,"FloatsGreater","[ValueLocation, U32, ValueLocation, U32]",TODO: confirm
+0x12,"FloatsLess","[ValueLocation, U32, ValueLocation, U32]",TODO: confirm
+0x13,"FloatsGreaterEq","[ValueLocation, U32, ValueLocation, U32]",TODO: confirm
+0x14,"FloatsLessEq","[ValueLocation, U32, ValueLocation, U32]",TODO: confirm
 0x15,"SetU32","[ValueLocation, U32, ValueLocation, U32]",
 0x16,"Cmd_0x16","[ValueLocation, U32, ValueLocation, U32, ValueLocation, U32]",
 0x17,"Cmd_0x17","[ValueLocation, U32, ValueLocation, U32, ValueLocation, U32]",
@@ -36,8 +36,8 @@ Id,Name,Arguments,Notes
 0x22,"Cmd_0x22","[]",
 0x23,"Cmd_0x23","[]",
 0x24,"Cmd_0x24","[]",
-0x25,"StartDialog","[]",
-0x26,"Cmd_0x26","[]",
+0x25,"StartDialog","[]","Maybe if Pool_1[0] == 1, then show text box arrow"
+0x26,"EndDialog","[]",
 0x27,"ShowDialog","[]",
 0x28,"Cmd_0x28","[]",
 0x29,"SetDialog","[String]",
@@ -83,7 +83,7 @@ Id,Name,Arguments,Notes
 0x51,"Cmd_0x51","[]",
 0x52,"Cmd_0x52","[]",
 0x53,"Cmd_0x53","[]",
-0x54,"Cmd_0x54","[]",
+0x54,"PromptYesNo","[]",
 0x55,"Cmd_0x55","[]",
 0x56,"Cmd_0x56","[]",
 0x57,"GetItemCount","[]",
@@ -134,7 +134,7 @@ Id,Name,Arguments,Notes
 0x84,"Cmd_0x84","[]",Seems to do something with a monster.
 0x85,"Cmd_0x85","[]",
 0x86,"LoadMap","[]",TODO: Confirm exact functionality
-0x87,"Cmd_0x87","[]",
+0x87,"LoadModelAndAnimations","[]",
 0x88,"Cmd_0x88","[]",
 0x89,"Cmd_0x89","[]",
 0x8A,"Cmd_0x8A","[]",
